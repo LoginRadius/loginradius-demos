@@ -1,0 +1,9 @@
+.main-container {
+  display: flex;
+  justify-content: center;
+  padding: 2rem;
+}
+
+#auth-container {
+  margin-top: 1rem;
+}

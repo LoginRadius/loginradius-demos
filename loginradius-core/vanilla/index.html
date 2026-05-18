@@ -1,0 +1,1120 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sign in — LoginRadius</title>
+    <style>
+      :root {
+        --primary: #1a73e8;
+        --primary-dark: #1557b0;
+        --primary-soft: #e8f0fe;
+        --error: #d93025;
+        --border: #dadce0;
+        --border-strong: #c0c4c9;
+        --text: #202124;
+        --text-light: #5f6368;
+        --bg-gray: #f1f3f4;
+        --shadow-sm: 0 1px 2px rgba(60, 64, 67, 0.08),
+          0 1px 3px rgba(60, 64, 67, 0.06);
+        --shadow-md: 0 2px 6px rgba(60, 64, 67, 0.1),
+          0 8px 24px rgba(60, 64, 67, 0.08);
+      }
+
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      body {
+        font-family: "Google Sans", "Inter", -apple-system, BlinkMacSystemFont,
+          Roboto, Arial, sans-serif;
+        background: radial-gradient(
+            1200px 600px at 50% -10%,
+            #eef3fd 0%,
+            transparent 60%
+          ),
+          #fafbfc;
+        min-height: 100vh;
+        display: grid;
+        place-items: center;
+        padding: 24px;
+        color: var(--text);
+      }
+
+      .login-container {
+        width: 100%;
+        max-width: 460px;
+        padding: 44px 40px 32px;
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        background: #fff;
+        box-shadow: var(--shadow-md);
+      }
+
+      .logo {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-bottom: 28px;
+      }
+
+      .logo svg {
+        height: 40px;
+        width: auto;
+      }
+
+      .title {
+        font-size: 26px;
+        font-weight: 500;
+        color: var(--text);
+        text-align: center;
+        margin-bottom: 8px;
+        letter-spacing: -0.2px;
+      }
+
+      .subtitle {
+        font-size: 15px;
+        color: var(--text-light);
+        text-align: center;
+        margin-bottom: 32px;
+      }
+
+      .input-group {
+        position: relative;
+        margin-bottom: 10px;
+      }
+
+      .input-group input {
+        width: 100%;
+        height: 56px;
+        padding: 10px 16px 6px;
+        font-size: 16px;
+        border: 1px solid var(--border);
+        border-radius: 6px;
+        outline: none;
+        background: transparent;
+        transition:
+          border-color 0.15s ease,
+          box-shadow 0.15s ease;
+        color: var(--text);
+      }
+
+      .input-group input:hover {
+        border-color: var(--border-strong);
+      }
+
+      .input-group input:focus {
+        border: 2px solid var(--primary);
+        padding: 19px 15px 5px;
+      }
+
+      .input-group input.error {
+        border-color: var(--error);
+      }
+
+      .input-group input.error:focus {
+        border-color: var(--error);
+      }
+
+      .input-group label {
+        position: absolute;
+        left: 12px;
+        top: 37%;
+        transform: translateY(-50%);
+        font-size: 14px;
+        color: var(--text-light);
+        pointer-events: none;
+        transition: all 0.15s ease-out;
+        background: #fff;
+        padding: 0 4px;
+      }
+
+      .input-group input:focus + label,
+      .input-group input:not(:placeholder-shown) + label {
+        top: 0;
+        transform: translateY(-50%);
+        font-size: 12px;
+        color: var(--primary);
+      }
+
+      .input-group input:not(:focus):not(:placeholder-shown) + label {
+        color: var(--text-light);
+      }
+
+      .input-group input.error + label,
+      .input-group input.error:focus + label {
+        color: var(--error);
+      }
+
+      .error-message {
+        color: var(--error);
+        font-size: 12px;
+        margin-top: 4px;
+        opacity: 0;
+        height: 16px;
+        transition: opacity 0.2s;
+      }
+
+      .error-message.show {
+        opacity: 1;
+      }
+
+      .helper-text {
+        font-size: 13px;
+        color: var(--text-light);
+        margin-bottom: 24px;
+        line-height: 1.5;
+      }
+
+      .helper-text a {
+        color: var(--primary);
+        text-decoration: none;
+        font-weight: 500;
+      }
+      .helper-text a:hover {
+        text-decoration: underline;
+      }
+
+      .forgot-link {
+        display: inline-block;
+        color: var(--primary);
+        font-size: 14px;
+        font-weight: 500;
+        text-decoration: none;
+        margin: 12px 0 24px;
+      }
+
+      .forgot-link:hover {
+        text-decoration: underline;
+      }
+
+      .btn-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 24px;
+      }
+
+      .create-account {
+        color: var(--primary);
+        font-weight: 500;
+        text-decoration: none;
+        font-size: 14px;
+      }
+
+      .create-account:hover {
+        text-decoration: underline;
+      }
+
+      .btn-next {
+        background: var(--primary);
+        color: #fff;
+        border: none;
+        padding: 11px 28px;
+        font-size: 14px;
+        font-weight: 500;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: all 0.18s ease;
+        letter-spacing: 0.2px;
+      }
+
+      .btn-next:hover:not(:disabled) {
+        background: var(--primary-dark);
+        box-shadow: 0 1px 3px rgba(26, 115, 232, 0.4);
+      }
+
+      .btn-next:disabled {
+        background: var(--border);
+        cursor: not-allowed;
+      }
+
+      .screen {
+        display: none;
+        animation: fadeIn 0.25s ease;
+      }
+      .screen.active {
+        display: block;
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(8px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .user-chip {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 4px 14px 4px 4px;
+        border: 1px solid var(--border);
+        border-radius: 20px;
+        font-size: 14px;
+        color: #3c4043;
+        margin-bottom: 24px;
+        cursor: pointer;
+        transition: background 0.18s;
+      }
+
+      .user-chip:hover {
+        background: var(--bg-gray);
+      }
+
+      .user-chip .avatar {
+        width: 26px;
+        height: 26px;
+        border-radius: 50%;
+        background: var(--primary);
+        color: #fff;
+        display: grid;
+        place-items: center;
+        font-weight: 500;
+        font-size: 13px;
+      }
+
+      .password-toggle {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-top: 8px;
+        font-size: 14px;
+        color: var(--text);
+        user-select: none;
+        cursor: pointer;
+      }
+
+      .password-toggle input[type="checkbox"] {
+        width: 18px;
+        height: 18px;
+        -webkit-appearance: checkbox;
+        cursor: pointer;
+        accent-color: var(--primary);
+      }
+
+      .loading,
+      .success-message {
+        text-align: center;
+        padding: 40px 20px;
+      }
+
+      .spinner {
+        width: 28px;
+        height: 28px;
+        border: 3px solid var(--border);
+        border-top-color: var(--primary);
+        border-radius: 50%;
+        animation: spin 0.9s linear infinite;
+        margin: 0 auto 16px;
+      }
+
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+
+      .success-message .icon {
+        width: 56px;
+        height: 56px;
+        background: #34a853;
+        border-radius: 50%;
+        margin: 0 auto 16px;
+        display: grid;
+        place-items: center;
+      }
+
+      .success-message .icon svg {
+        width: 30px;
+        height: 30px;
+        fill: #fff;
+      }
+
+      .signup-loading {
+        text-align: center;
+        padding: 20px;
+      }
+
+      #signup-fields .input-group,
+      #login-fields .input-group {
+        margin-bottom: 16px;
+      }
+
+      .field-row {
+        display: flex;
+        gap: 16px;
+      }
+
+      .field-row .input-group {
+        flex: 1;
+      }
+
+      .input-group select {
+        width: 100%;
+        height: 56px;
+        padding: 20px 16px 6px;
+        font-size: 16px;
+        border: 1px solid var(--border);
+        border-radius: 6px;
+        outline: none;
+        background: #fff;
+        cursor: pointer;
+        appearance: none;
+        -webkit-appearance: none;
+      }
+
+      .input-group select:focus {
+        border: 2px solid var(--primary);
+      }
+
+      .checkbox-group {
+        display: flex;
+        align-items: flex-start;
+        gap: 8px;
+        margin-bottom: 16px;
+        font-size: 14px;
+        color: var(--text);
+      }
+
+      .checkbox-group input[type="checkbox"] {
+        width: 18px;
+        height: 18px;
+        margin-top: 2px;
+        cursor: pointer;
+        accent-color: var(--primary);
+        -webkit-appearance: checkbox;
+      }
+
+      .checkbox-group label {
+        cursor: pointer;
+        line-height: 1.4;
+      }
+
+      .checkbox-group a {
+        color: var(--primary);
+      }
+
+      .footnote {
+        text-align: center;
+        font-size: 12px;
+        color: var(--text-light);
+        margin-top: 20px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="login-container">
+      <!-- LoginRadius Logo -->
+      <div class="logo">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 240 48"
+          width="240"
+          height="48"
+          role="img"
+          aria-label="LoginRadius"
+        >
+          <g>
+            <rect x="0" y="4" width="40" height="40" rx="10" fill="#1a73e8" />
+            <path
+              d="M12 13 L12 35 L28 35"
+              stroke="#fff"
+              stroke-width="3.5"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              fill="none"
+            />
+            <circle cx="30" cy="15" r="4.5" fill="#fff" />
+          </g>
+          <text
+            x="52"
+            y="32"
+            font-family="'Google Sans','Inter',system-ui,-apple-system,sans-serif"
+            font-weight="600"
+            font-size="22"
+            fill="#202124"
+            letter-spacing="-0.3"
+          >
+            Login<tspan fill="#1a73e8" font-weight="700">Radius</tspan>
+          </text>
+        </svg>
+      </div>
+
+      <!-- Email Screen -->
+      <div id="email-screen" class="screen active">
+        <h1 class="title">Sign in</h1>
+        <p class="subtitle">Use your credentials to continue</p>
+
+        <div class="input-group">
+          <input
+            type="email"
+            id="email-input"
+            placeholder=" "
+            autocomplete="email"
+            required
+          />
+          <label>Email or phone</label>
+          <div class="error-message" id="email-error"></div>
+        </div>
+
+        <p class="helper-text">
+          Not your computer? Use Guest mode to sign in privately.
+          <a href="#">Learn more</a>
+        </p>
+
+        <div class="btn-row">
+          <a href="#" class="create-account">Create account</a>
+          <button class="btn-next" id="email-next-btn">Next</button>
+        </div>
+      </div>
+
+      <!-- Password Screen (fields rendered from loginFormSchema) -->
+      <div id="password-screen" class="screen">
+        <h1 class="title">Welcome</h1>
+
+        <div class="user-chip" id="user-chip" tabindex="0" role="button">
+          <span class="avatar" id="user-avatar">U</span>
+          <span id="user-email">user@example.com</span>
+          <span class="arrow">▼</span>
+        </div>
+
+        <div id="login-fields">
+          <!-- Fallback (used until/if schema loads). Schema-driven fields will replace this. -->
+          <div class="input-group">
+            <input
+              type="password"
+              id="password-input"
+              name="password"
+              placeholder=" "
+              autocomplete="current-password"
+              required
+            />
+            <label>Enter your password</label>
+            <div class="error-message" id="password-error"></div>
+          </div>
+        </div>
+
+        <label class="password-toggle">
+          <input type="checkbox" id="show-password" /> Show password
+        </label>
+
+        <a href="#" class="forgot-link">Forgot password?</a>
+
+        <div class="btn-row">
+          <div></div>
+          <button class="btn-next" id="login-btn">Next</button>
+        </div>
+      </div>
+
+      <!-- Signup Screen -->
+      <div id="signup-screen" class="screen">
+        <h1 class="title">Create your Account</h1>
+        <p class="subtitle">Enter your details to sign up</p>
+
+        <div id="signup-fields">
+          <div class="signup-loading">
+            <div class="spinner"></div>
+            <p style="color: var(--text-light); font-size: 14px">
+              Loading form...
+            </p>
+          </div>
+        </div>
+
+        <div class="error-message" id="signup-error"></div>
+
+        <div class="btn-row">
+          <a href="#" class="create-account" id="back-to-login">Sign In</a>
+          <button class="btn-next" id="signup-btn" disabled>Sign up</button>
+        </div>
+      </div>
+
+      <!-- Loading -->
+      <div id="loading" class="screen loading">
+        <div class="spinner"></div>
+        <p style="color: var(--text-light)" id="loading-text">Signing in...</p>
+      </div>
+
+      <!-- Success -->
+      <div id="success" class="screen success-message">
+        <div class="icon">
+          <svg viewBox="0 0 24 24">
+            <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" />
+          </svg>
+        </div>
+        <h2>Welcome!</h2>
+        <p id="welcome-message">You have successfully signed in.</p>
+      </div>
+    </div>
+
+    <p class="footnote">Secured by LoginRadius CIAM</p>
+
+    <!-- Load the core SDK from npm via unpkg (or self-host from node_modules). -->
+    <script src="https://auth.lrcontent.com/LoginRadiusCore.js"></script>
+    <script>
+      // Replace placeholders with values from your LoginRadius app settings.
+      const LRClient = new LoginRadiusCore({
+        apiKey: "YOUR_API_KEY",
+        sott: "YOUR_SOTT",
+        callbackUrl: window.location.href,
+        debugMode: true,
+      });
+
+      const $ = (sel, el = document) => el.querySelector(sel);
+      const screens = {
+        email: $("#email-screen"),
+        password: $("#password-screen"),
+        signup: $("#signup-screen"),
+        loading: $("#loading"),
+        success: $("#success"),
+      };
+
+      const elements = {
+        emailInput: $("#email-input"),
+        emailError: $("#email-error"),
+        emailNext: $("#email-next-btn"),
+        loginFields: $("#login-fields"),
+        passwordInput: $("#password-input"),
+        passwordError: $("#password-error"),
+        loginBtn: $("#login-btn"),
+        showPass: $("#show-password"),
+        userChip: $("#user-chip"),
+        userEmail: $("#user-email"),
+        userAvatar: $("#user-avatar"),
+        welcomeMsg: $("#welcome-message"),
+        createAccount: $(".create-account"),
+        signupFields: $("#signup-fields"),
+        signupBtn: $("#signup-btn"),
+        signupError: $("#signup-error"),
+        backToLogin: $("#back-to-login"),
+        loadingText: $("#loading-text"),
+      };
+
+      let currentEmail = "";
+
+      const isValidEmail = (email) =>
+        /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim());
+
+      const showScreen = (name) => {
+        Object.values(screens).forEach((s) => s.classList.remove("active"));
+        screens[name].classList.add("active");
+      };
+
+      const setError = (input, errorEl, message) => {
+        if (input) input.classList.add("error");
+        if (errorEl) {
+          errorEl.textContent = message;
+          errorEl.classList.add("show");
+        }
+      };
+
+      const clearError = (input, errorEl) => {
+        if (input) input.classList.remove("error");
+        if (errorEl) errorEl.classList.remove("show");
+      };
+
+      // ============================================
+      // EMAIL → PASSWORD (with email availability check)
+      // ============================================
+      let emailCheckInProgress = false;
+
+      elements.emailNext.addEventListener("click", async () => {
+        if (emailCheckInProgress) return;
+
+        const email = elements.emailInput.value.trim();
+
+        if (!email) {
+          return setError(
+            elements.emailInput,
+            elements.emailError,
+            "Enter an email or phone number",
+          );
+        }
+        if (!isValidEmail(email)) {
+          return setError(
+            elements.emailInput,
+            elements.emailError,
+            "Enter a valid email address",
+          );
+        }
+
+        clearError(elements.emailInput, elements.emailError);
+        emailCheckInProgress = true;
+        elements.emailNext.disabled = true;
+        elements.emailNext.textContent = "Checking...";
+
+        try {
+          await LRClient.controller.checkEmailAvailability(
+            email,
+            (response) => {
+              if (response?.success && response?.data?.IsExist) {
+                currentEmail = email;
+                elements.userEmail.textContent = email;
+                elements.userAvatar.textContent = email[0].toUpperCase();
+                showScreen("password");
+                getCurrentPasswordInput()?.focus();
+              } else {
+                setError(
+                  elements.emailInput,
+                  elements.emailError,
+                  "Email not registered. Please create an account.",
+                );
+              }
+            },
+            (error) => {
+              console.error("Email check error:", error);
+              setError(
+                elements.emailInput,
+                elements.emailError,
+                error?.error || "Unable to verify email. Please try again.",
+              );
+            },
+          );
+        } catch (err) {
+          console.error("Email check failed:", err);
+          setError(
+            elements.emailInput,
+            elements.emailError,
+            "Unable to verify email. Please try again.",
+          );
+        } finally {
+          emailCheckInProgress = false;
+          elements.emailNext.disabled = false;
+          elements.emailNext.textContent = "Next";
+        }
+      });
+
+      // Back to email
+      elements.userChip.addEventListener("click", () => {
+        showScreen("email");
+        elements.emailInput.focus();
+      });
+
+      // Show password toggle (works on current rendered password input)
+      elements.showPass.addEventListener("change", () => {
+        const pwd = getCurrentPasswordInput();
+        if (pwd) pwd.type = elements.showPass.checked ? "text" : "password";
+      });
+
+      function getCurrentPasswordInput() {
+        return elements.loginFields.querySelector('input[type="password"], input[type="text"][name="password"]');
+      }
+
+      function getCurrentPasswordError(pwd) {
+        return pwd?.parentElement.querySelector(".error-message");
+      }
+
+      // ============================================
+      // LOGIN
+      // ============================================
+      let loginInProgress = false;
+
+      elements.loginBtn.addEventListener("click", async () => {
+        if (loginInProgress) return;
+        loginInProgress = true;
+
+        // Collect credentials from rendered login fields
+        const credentials = { emailid: currentEmail };
+        let hasError = false;
+        let firstInvalid = null;
+
+        elements.loginFields
+          .querySelectorAll("input, select")
+          .forEach((input) => {
+            const name = input.name;
+            if (!name) return;
+            const value =
+              input.type === "checkbox" ? input.checked : input.value.trim?.() ?? input.value;
+            const errorEl = input.parentElement.querySelector(".error-message");
+
+            if (input.required && !value) {
+              setError(input, errorEl, `${name} is required`);
+              hasError = true;
+              if (!firstInvalid) firstInvalid = input;
+              return;
+            }
+            clearError(input, errorEl);
+            credentials[name] = value;
+          });
+
+        if (hasError) {
+          loginInProgress = false;
+          firstInvalid?.focus();
+          return;
+        }
+
+        showScreen("loading");
+
+        try {
+          await LRClient.controller.login(
+            credentials,
+            (response) => {
+              const ok = response?.success || response?.IsPosted;
+              if (!ok) throw response;
+
+              const data = response.data || response.Data || {};
+              const accessToken = data.access_token;
+              if (accessToken) {
+                localStorage.setItem("lr_access_token", accessToken);
+                window.location.href = "profile.html";
+              } else {
+                elements.welcomeMsg.textContent = `Login Success!`;
+                showScreen("success");
+              }
+            },
+            (error) => {
+              showScreen("password");
+              const msg =
+                error?.data?.Description ||
+                error?.error ||
+                "Wrong password. Try again.";
+              const pwd = getCurrentPasswordInput();
+              const pwdErr = getCurrentPasswordError(pwd);
+              setError(pwd, pwdErr, msg);
+              if (pwd) {
+                pwd.value = "";
+                pwd.focus();
+              }
+            },
+          );
+        } catch (err) {
+          console.error("Login failed:", err);
+        } finally {
+          loginInProgress = false;
+        }
+      });
+
+      // Enter key support
+      elements.emailInput.addEventListener(
+        "keydown",
+        (e) => e.key === "Enter" && elements.emailNext.click(),
+      );
+      elements.loginFields.addEventListener("keydown", (e) => {
+        if (e.key === "Enter" && e.target.matches("input")) {
+          e.preventDefault();
+          elements.loginBtn.click();
+        }
+      });
+
+      // Initial focus
+      elements.emailInput.focus();
+
+      // ============================================
+      // SCHEMA-DRIVEN LOGIN FORM (loginFormSchema)
+      // ============================================
+      let loginSchema = null;
+
+      function loadLoginSchema() {
+        if (loginSchema) return;
+        LRClient.getSchema(
+          "loginFormSchema",
+          {},
+          (schema) => {
+            loginSchema = schema;
+            renderLoginFields(schema);
+          },
+          (error) => {
+            // Non-fatal: fallback static password field remains active.
+            console.warn("loginFormSchema unavailable, using fallback:", error);
+          },
+        );
+      }
+
+      function renderLoginFields(schema) {
+        let fields = [];
+        if (Array.isArray(schema)) fields = schema;
+        else if (schema.Inputs) fields = schema.Inputs;
+        else if (schema.fields) fields = schema.fields;
+
+        // Filter out fields already collected (email/loginid) and hidden fields.
+        fields = fields.filter((f) => {
+          if (!f || f.type === "hidden") return false;
+          if (f.Checked === false) return false;
+          const n = (f.name || "").toLowerCase();
+          if (
+            n === "emailid" ||
+            n === "email" ||
+            n.includes("email") ||
+            n === "loginid" ||
+            n === "username"
+          )
+            return false;
+          return true;
+        });
+
+        if (fields.length === 0) return; // keep fallback static password input
+
+        let html = "";
+        fields.forEach((f) => {
+          html += createFieldHTML(f);
+        });
+        elements.loginFields.innerHTML = html;
+
+        // Reset show-password toggle to match new input default state.
+        elements.showPass.checked = false;
+      }
+
+      // ============================================
+      // SIGNUP (registrationFormSchema)
+      // ============================================
+      let registrationSchema = null;
+
+      elements.createAccount.addEventListener("click", (e) => {
+        e.preventDefault();
+        showScreen("signup");
+        loadRegistrationSchema();
+      });
+
+      elements.backToLogin.addEventListener("click", (e) => {
+        e.preventDefault();
+        showScreen("email");
+        elements.emailInput.focus();
+      });
+
+      function loadRegistrationSchema() {
+        if (registrationSchema) {
+          renderSignupFields(registrationSchema);
+          return;
+        }
+
+        LRClient.getSchema(
+          "registrationFormSchema",
+          {},
+          (schema) => {
+            registrationSchema = schema;
+            renderSignupFields(schema);
+          },
+          (error) => {
+            console.error("Failed to load schema:", error);
+            elements.signupFields.innerHTML =
+              '<p style="color:var(--error);">Failed to load form. Please try again.</p>';
+          },
+        );
+      }
+
+      function renderSignupFields(schema) {
+        let html = "";
+
+        let fields = [];
+        if (Array.isArray(schema)) fields = schema;
+        else if (schema.Inputs) fields = schema.Inputs;
+        else if (schema.fields) fields = schema.fields;
+
+        if (!fields || fields.length === 0) {
+          elements.signupFields.innerHTML =
+            '<p style="color:var(--error);">No fields found in schema.</p>';
+          return;
+        }
+
+        fields.forEach((field) => {
+          if (field.type === "hidden") return;
+          if (field.Checked === false) return;
+          html += createFieldHTML(field);
+        });
+
+        elements.signupFields.innerHTML = html;
+        elements.signupBtn.disabled = false;
+
+        elements.signupFields
+          .querySelectorAll(
+            'input[type="text"], input[type="email"], input[type="password"]',
+          )
+          .forEach((input) => {
+            input.addEventListener("focus", () => {
+              input.classList.remove("error");
+              const errorEl =
+                input.parentElement.querySelector(".error-message");
+              if (errorEl) errorEl.classList.remove("show");
+            });
+          });
+      }
+
+      // Shared schema → HTML field renderer
+      function createFieldHTML(field) {
+        const name = field.name || "";
+        const display = field.display || field.name || "";
+        const type = field.type || "string";
+        const rules = field.rules || "";
+        const isRequired = rules.includes("required");
+        const requiredMark = isRequired ? " *" : "";
+
+        switch (type.toLowerCase()) {
+          case "password":
+            return `
+            <div class="input-group">
+              <input type="password" name="${name}" placeholder=" " ${
+                isRequired ? "required" : ""
+              }>
+              <label>${display}${requiredMark}</label>
+              <div class="error-message"></div>
+            </div>`;
+          case "email":
+          case "string": {
+            const inputType = name.toLowerCase().includes("email")
+              ? "email"
+              : "text";
+            return `
+            <div class="input-group">
+              <input type="${inputType}" name="${name}" placeholder=" " ${
+                isRequired ? "required" : ""
+              }>
+              <label>${display}${requiredMark}</label>
+              <div class="error-message"></div>
+            </div>`;
+          }
+          case "multi":
+          case "checkbox":
+            return `
+            <div class="checkbox-group">
+              <input type="checkbox" name="${name}" id="field-${name}" ${
+                isRequired ? "required" : ""
+              }>
+              <label for="field-${name}">${display}</label>
+            </div>`;
+
+          case "option": {
+            const options = field.options || [];
+            const optionsHtml = options
+              .map(
+                (opt) =>
+                  `<option value="${opt.value || opt}">${
+                    opt.text || opt
+                  }</option>`,
+              )
+              .join("");
+            return `
+            <div class="input-group">
+              <select name="${name}" ${isRequired ? "required" : ""}>
+                <option value="">${display}</option>
+                ${optionsHtml}
+              </select>
+              <div class="error-message"></div>
+            </div>`;
+          }
+          default:
+            return `
+            <div class="input-group">
+              <input type="text" name="${name}" placeholder=" " ${
+                isRequired ? "required" : ""
+              }>
+              <label>${display}${requiredMark}</label>
+              <div class="error-message"></div>
+            </div>`;
+        }
+      }
+
+      // ============================================
+      // SIGNUP submit
+      // ============================================
+      let signupInProgress = false;
+
+      elements.signupBtn.addEventListener("click", async () => {
+        if (signupInProgress) return;
+        signupInProgress = true;
+
+        const formData = {};
+        let hasError = false;
+
+        elements.signupFields
+          .querySelectorAll("input, select")
+          .forEach((input) => {
+            const name = input.name;
+            const value =
+              input.type === "checkbox" ? input.checked : input.value.trim();
+            const isRequired = input.required;
+            const errorEl = input.parentElement.querySelector(".error-message");
+
+            if (isRequired && !value) {
+              input.classList.add("error");
+              if (errorEl) {
+                errorEl.textContent = `${
+                  input.previousElementSibling?.textContent || name
+                } is required`;
+                errorEl.classList.add("show");
+              }
+              hasError = true;
+              return;
+            }
+
+            if (name.toLowerCase().includes("email") && value) {
+              formData.email = [{ type: "Primary", value: value }];
+            } else if (value) {
+              formData[name] = value;
+            }
+          });
+
+        if (hasError) {
+          signupInProgress = false;
+          return;
+        }
+
+        clearError(elements.signupBtn, elements.signupError);
+        elements.loadingText.textContent = "Creating account...";
+        showScreen("loading");
+
+        try {
+          LRClient.controller.register(
+            formData,
+            (response) => {
+              const ok = response?.success || response?.IsPosted;
+              const data = response?.data || response?.Data || {};
+              if (ok) {
+                const accessToken = data.access_token;
+                if (accessToken) {
+                  // Auto-login after registration: persist token and go to profile.
+                  localStorage.setItem("lr_access_token", accessToken);
+                  window.location.href = "profile.html";
+                } else {
+                  // Email verification required (no token issued).
+                  elements.welcomeMsg.textContent =
+                    "Account created. Please verify your email to sign in.";
+                  showScreen("success");
+                }
+              } else {
+                showScreen("signup");
+                const msg =
+                  response?.error ||
+                  data?.Message ||
+                  response?.Message ||
+                  "Registration failed. Please try again.";
+                setError(elements.signupBtn, elements.signupError, msg);
+              }
+            },
+            (error) => {
+              console.error("Registration error:", error);
+              showScreen("signup");
+              const msg =
+                error?.data?.Description ||
+                error?.data?.Message ||
+                error?.error ||
+                "Registration failed. Please try again.";
+              setError(elements.signupBtn, elements.signupError, msg);
+            },
+          );
+        } catch (err) {
+          console.error("Registration failed:", err);
+          showScreen("signup");
+          setError(
+            elements.signupBtn,
+            elements.signupError,
+            "An error occurred. Please try again.",
+          );
+        } finally {
+          signupInProgress = false;
+        }
+      });
+
+      // Kick off login schema fetch in the background (non-blocking).
+      if (LRClient.ready) {
+        LRClient.ready(() => loadLoginSchema());
+      } else {
+        loadLoginSchema();
+      }
+    </script>
+  </body>
+</html>
