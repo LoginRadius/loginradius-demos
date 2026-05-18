@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Profile - LoginRadius</title>
+  <!-- Load the core SDK CSS from npm via unpkg (or self-host from node_modules). -->
+  <link rel="stylesheet" href="https://unpkg.com/@loginradius/loginradius-core/dist/LoginRadiusCore.css">
+  <style>
+    :root {
+      --primary: #1a73e8;
+      --primary-dark: #1557b0;
+      --error: #d93025;
+      --success: #34a853;
+      --border: #dadce0;
+      --text: #202124;
+      --text-light: #5f6368;
+      --bg-gray: #f8f9fa;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    
+    body {
+      font-family: 'Google Sans', Roboto, Arial, sans-serif;
+      background: var(--bg-gray);
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 16px 24px;
+      background: #fff;
+      border-radius: 8px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+      margin-bottom: 24px;
+    }
+
+    .header h1 {
+      font-size: 24px;
+      font-weight: 400;
+      color: var(--text);
+    }
+
+    .btn {
+      background: var(--primary);
+      color: #fff;
+      border: none;
+      padding: 10px 24px;
+      font-size: 14px;
+      font-weight: 500;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .btn:hover {
+      background: var(--primary-dark);
+    }
+
+    .btn-outline {
+      background: transparent;
+      color: var(--primary);
+      border: 1px solid var(--border);
+    }
+
+    .btn-outline:hover {
+      background: var(--bg-gray);
+    }
+
+    .profile-card {
+      background: #fff;
+      border-radius: 8px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+      overflow: hidden;
+    }
+
+    .profile-header {
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+      padding: 32px 24px;
+      text-align: center;
+      color: #fff;
+    }
+
+    .avatar {
+      width: 96px;
+      height: 96px;
+      border-radius: 50%;
+      background: #fff;
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 36px;
+      font-weight: 500;
+      margin: 0 auto 16px;
+      border: 4px solid rgba(255,255,255,0.3);
+    }
+
+    .avatar img {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+
+    .profile-name {
+      font-size: 24px;
+      font-weight: 500;
+      margin-bottom: 4px;
+    }
+
+    .profile-email {
+      opacity: 0.9;
+      font-size: 14px;
+    }
+
+    .profile-body {
+      padding: 24px;
+    }
+
+    .section-title {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text-light);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 16px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .info-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 16px;
+    }
+
+    .info-item {
+      padding: 12px 16px;
+      background: var(--bg-gray);
+      border-radius: 8px;
+    }
+
+    .info-label {
+      font-size: 12px;
+      color: var(--text-light);
+      margin-bottom: 4px;
+    }
+
+    .info-value {
+      font-size: 14px;
+      color: var(--text);
+      word-break: break-all;
+    }
+
+    .info-value.empty {
+      color: var(--text-light);
+      font-style: italic;
+    }
+
+    /* Loading */
+    .loading {
+      text-align: center;
+      padding: 60px 20px;
+    }
+
+    .spinner {
+      width: 40px;
+      height: 40px;
+      border: 4px solid var(--border);
+      border-top-color: var(--primary);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin: 0 auto 16px;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    /* Error */
+    .error-state {
+      text-align: center;
+      padding: 60px 20px;
+    }
+
+    .error-icon {
+      width: 64px;
+      height: 64px;
+      background: #fce8e6;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 16px;
+      color: var(--error);
+      font-size: 32px;
+    }
+
+    .error-message {
+      color: var(--error);
+      margin-bottom: 16px;
+    }
+
+    /* Raw JSON */
+    .raw-data {
+      margin-top: 24px;
+    }
+
+    .raw-data summary {
+      cursor: pointer;
+      color: var(--primary);
+      font-size: 14px;
+      padding: 8px 0;
+    }
+
+    .raw-data pre {
+      background: #1e1e1e;
+      color: #d4d4d4;
+      padding: 16px;
+      border-radius: 8px;
+      overflow-x: auto;
+      font-size: 12px;
+      margin-top: 8px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>My Profile</h1>
+      <button class="btn btn-outline" id="logout-btn">Sign Out</button>
+    </div>
+
+    <div class="profile-card">
+      <!-- Loading State -->
+      <div id="loading-state" class="loading">
+        <div class="spinner"></div>
+        <p style="color: var(--text-light);">Loading profile...</p>
+      </div>
+
+      <!-- Error State -->
+      <div id="error-state" class="error-state" style="display: none;">
+        <div class="error-icon">!</div>
+        <p class="error-message" id="error-message">Failed to load profile</p>
+        <button class="btn" onclick="window.location.href='index.html'">Back to Login</button>
+      </div>
+
+      <!-- Profile Content -->
+      <div id="profile-content" style="display: none;">
+        <div class="profile-header">
+          <div class="avatar" id="profile-avatar">U</div>
+          <div class="profile-name" id="profile-name">User</div>
+          <div class="profile-email" id="profile-email">user@example.com</div>
+        </div>
+
+        <div class="profile-body">
+          <h3 class="section-title">Account Information</h3>
+          <div class="info-grid" id="account-info">
+            <!-- Dynamic content -->
+          </div>
+
+          <h3 class="section-title" style="margin-top: 24px;">Personal Information</h3>
+          <div class="info-grid" id="personal-info">
+            <!-- Dynamic content -->
+          </div>
+
+          <details class="raw-data">
+            <summary>View Raw Response</summary>
+            <pre id="raw-json"></pre>
+          </details>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Load the core SDK from npm via unpkg (or self-host from node_modules). -->
+  <script src="https://unpkg.com/@loginradius/loginradius-core/dist/LoginRadiusCore.js"></script>
+  <script>
+    // Check for access token
+    const accessToken = localStorage.getItem('lr_access_token');
+
+    if (!accessToken) {
+      window.location.href = 'index.html';
+    }
+
+    // Initialize LoginRadiusCore — replace placeholders with values from your LoginRadius app settings.
+    const LRObject = new LoginRadiusCore({
+      apiKey: 'YOUR_API_KEY',
+      appName: 'YOUR_APP_NAME',
+      callbackUrl: window.location.href,
+      debugMode: true,
+    });
+
+    // DOM Elements
+    const loadingState = document.getElementById('loading-state');
+    const errorState = document.getElementById('error-state');
+    const profileContent = document.getElementById('profile-content');
+    const errorMessage = document.getElementById('error-message');
+
+    // Load profile data
+    function loadProfile() {
+      LRObject.ready(() => {
+        LRObject.controller.getAccount(
+          accessToken,
+          (response) => {
+            console.log('Profile response:', response);
+            
+            if (response?.success && response?.data) {
+              renderProfile(response.data);
+            } else {
+              showError(response?.error || 'Failed to load profile');
+            }
+          },
+          (error) => {
+            console.error('Profile error:', error);
+            const msg = error?.data?.Message || error?.error || 'Failed to load profile';
+            showError(msg);
+          }
+        );
+      });
+    }
+
+    // Render profile data
+    function renderProfile(profile) {
+      loadingState.style.display = 'none';
+      profileContent.style.display = 'block';
+
+      // Avatar
+      const avatar = document.getElementById('profile-avatar');
+      if (profile.ImageUrl) {
+        avatar.innerHTML = `<img src="${profile.ImageUrl}" alt="Profile">`;
+      } else {
+        const initial = (profile.FirstName || profile.Email?.[0]?.Value || 'U')[0].toUpperCase();
+        avatar.textContent = initial;
+      }
+
+      // Name
+      const name = [profile.FirstName, profile.LastName].filter(Boolean).join(' ') || 'User';
+      document.getElementById('profile-name').textContent = name;
+
+      // Email
+      const email = profile.Email?.[0]?.Value || 'No email';
+      document.getElementById('profile-email').textContent = email;
+
+      // Account Info
+      const accountInfo = document.getElementById('account-info');
+      accountInfo.innerHTML = createInfoItems([
+        { label: 'User ID (UID)', value: profile.Uid },
+        { label: 'Email Verified', value: profile.EmailVerified ? 'Yes' : 'No' },
+        { label: 'Phone Verified', value: profile.PhoneIdVerified ? 'Yes' : 'No' },
+        { label: 'Provider', value: profile.Provider },
+        { label: 'Created Date', value: formatDate(profile.CreatedDate) },
+        { label: 'Last Login', value: formatDate(profile.LastLoginDate) },
+      ]);
+
+      // Personal Info
+      const personalInfo = document.getElementById('personal-info');
+      personalInfo.innerHTML = createInfoItems([
+        { label: 'First Name', value: profile.FirstName },
+        { label: 'Last Name', value: profile.LastName },
+        { label: 'Username', value: profile.UserName },
+        { label: 'Phone', value: profile.PhoneId },
+        { label: 'Date of Birth', value: profile.BirthDate },
+        { label: 'Gender', value: profile.Gender },
+        { label: 'Country', value: profile.Country?.Name },
+        { label: 'City', value: profile.City },
+      ]);
+
+      // Raw JSON
+      document.getElementById('raw-json').textContent = JSON.stringify(profile, null, 2);
+    }
+
+    // Create info items HTML
+    function createInfoItems(items) {
+      return items.map(item => `
+        <div class="info-item">
+          <div class="info-label">${item.label}</div>
+          <div class="info-value ${!item.value ? 'empty' : ''}">${item.value || 'Not set'}</div>
+        </div>
+      `).join('');
+    }
+
+    // Format date
+    function formatDate(dateStr) {
+      if (!dateStr) return null;
+      try {
+        return new Date(dateStr).toLocaleDateString('en-US', {
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric',
+          hour: '2-digit',
+          minute: '2-digit'
+        });
+      } catch {
+        return dateStr;
+      }
+    }
+
+    // Show error
+    function showError(msg) {
+      loadingState.style.display = 'none';
+      errorState.style.display = 'block';
+      errorMessage.textContent = msg;
+    }
+
+    // Logout
+    document.getElementById('logout-btn').addEventListener('click', () => {
+      console.log('Logout button clicked');
+      
+      // Call SSO logout API, then clear local storage
+      LRObject.controller.ssoLogout(
+        (response) => {
+          console.log('SSO Logout successful:', response);
+          // Clear local storage and redirect
+          localStorage.removeItem('lr_access_token');
+          window.location.href = 'index.html';
+        },
+        (error) => {
+          console.log('SSO Logout error:', error);
+          // Still clear local storage and redirect even on error
+          localStorage.removeItem('lr_access_token');
+          window.location.href = 'index.html';
+        }
+      );
+      
+      // Also call local logout to clear cookies/storage
+      // LRObject.controller.logout();
+    });
+
+    // Load profile on page load
+    loadProfile();
+  </script>
+</body>
+</html>

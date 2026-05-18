@@ -1,0 +1,986 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sign in - Google Style</title>
+    <style>
+      :root {
+        --primary: #1a73e8;
+        --primary-dark: #1557b0;
+        --error: #d93025;
+        --border: #dadce0;
+        --text: #202124;
+        --text-light: #5f6368;
+        --bg-gray: #f1f3f4;
+      }
+
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      body {
+        font-family: 'Google Sans', Roboto, Arial, sans-serif;
+        background: #fff;
+        min-height: 100vh;
+        display: grid;
+        place-items: center;
+      }
+
+      .login-container {
+        width: 100%;
+        max-width: 500px;
+        padding: 48px 40px 36px;
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        background: #fff;
+      }
+
+      .logo {
+        text-align: center;
+        margin-bottom: 28px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-left: 40px;
+      }
+
+      .logo svg {
+        height: 40px;
+        width: auto;
+        max-width: 100%;
+      }
+
+      .title {
+        font-size: 24px;
+        font-weight: 400;
+        color: var(--text);
+        text-align: center;
+        margin-bottom: 8px;
+      }
+
+      .subtitle {
+        font-size: 16px;
+        color: var(--text);
+        text-align: center;
+        margin-bottom: 32px;
+      }
+
+      /* Floating Label Input */
+      .input-group {
+        position: relative;
+        margin-bottom: 10px;
+      }
+
+      .input-group input {
+        width: 100%;
+        height: 56px;
+        padding: 10px 16px 6px;
+        font-size: 16px;
+        border: 1px solid var(--border);
+        border-radius: 4px;
+        outline: none;
+        background: transparent;
+        transition: all 0.2s;
+      }
+
+      .input-group input:focus {
+        border: 2px solid var(--primary);
+        padding: 19px 15px 5px;
+      }
+
+      .input-group input.error {
+        border-color: var(--error);
+      }
+
+      .input-group input.error:focus {
+        border-color: var(--error);
+      }
+
+      .input-group label {
+        position: absolute;
+        left: 12px;
+        top: 37%;
+        transform: translateY(-50%);
+        font-size: 14px;
+        color: var(--text-light);
+        pointer-events: none;
+        transition: all 0.15s ease-out;
+        background: #fff;
+        padding: 0 4px;
+        margin-left: 0;
+      }
+
+      /* Floating label - when focused or has value */
+      .input-group input:focus + label,
+      .input-group input:not(:placeholder-shown) + label {
+        top: 0;
+        transform: translateY(-50%);
+        font-size: 12px;
+        color: var(--primary);
+      }
+
+      .input-group input:not(:focus):not(:placeholder-shown) + label {
+        color: var(--text-light);
+      }
+
+      .input-group input.error + label,
+      .input-group input.error:focus + label {
+        color: var(--error);
+      }
+
+      .error-message {
+        color: var(--error);
+        font-size: 12px;
+        margin-top: 4px;
+        opacity: 0;
+        height: 16px;
+        transition: opacity 0.2s;
+      }
+
+      .error-message.show {
+        opacity: 1;
+      }
+
+      .forgot-link {
+        display: block;
+        color: var(--primary);
+        font-size: 14px;
+        font-weight: 500;
+        text-decoration: none;
+        margin: 16px 0 32px;
+      }
+
+      .forgot-link:hover {
+        text-decoration: underline;
+      }
+
+      .btn-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 22px;
+      }
+
+      .create-account {
+        color: var(--primary);
+        font-weight: 500;
+        text-decoration: none;
+      }
+
+      .create-account:hover {
+        text-decoration: underline;
+      }
+
+      .btn-next {
+        background: var(--primary);
+        color: #fff;
+        border: none;
+        padding: 10px 24px;
+        font-size: 14px;
+        font-weight: 500;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: all 0.2s;
+      }
+
+      .btn-next:hover:not(:disabled) {
+        background: var(--primary-dark);
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+      }
+
+      .btn-next:disabled {
+        background: var(--border);
+        cursor: not-allowed;
+      }
+
+      /* Screens */
+      .screen {
+        display: none;
+        animation: fadeIn 0.3s ease;
+      }
+      .screen.active {
+        display: block;
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateX(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateX(0);
+        }
+      }
+
+      /* User Chip */
+      .user-chip {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 4px 12px 4px 4px;
+        border: 1px solid var(--border);
+        border-radius: 16px;
+        font-size: 14px;
+        color: #3c4043;
+        margin-bottom: 24px;
+        cursor: pointer;
+        transition: background 0.2s;
+      }
+
+      .user-chip:hover {
+        background: var(--bg-gray);
+      }
+
+      .user-chip .avatar {
+        width: 24px;
+        height: 24px;
+        border-radius: 50%;
+        background: var(--primary);
+        color: #fff;
+        display: grid;
+        place-items: center;
+        font-weight: 500;
+        font-size: 12px;
+      }
+
+      /* Password Toggle */
+      .password-toggle {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-top: 8px;
+        font-size: 14px;
+        color: var(--text);
+        user-select: none;
+        cursor: pointer;
+      }
+
+      .password-toggle input[type='checkbox'] {
+        width: 18px;
+        height: 18px;
+        -webkit-appearance: checkbox;
+        cursor: pointer;
+        accent-color: var(--primary);
+      }
+
+      /* Loading & Success */
+      .loading,
+      .success-message {
+        text-align: center;
+        padding: 40px 20px;
+      }
+
+      .spinner {
+        width: 24px;
+        height: 24px;
+        border: 3px solid var(--border);
+        border-top-color: var(--primary);
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+        margin: 0 auto 16px;
+      }
+
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+
+      .success-message .icon {
+        width: 48px;
+        height: 48px;
+        background: #34a853;
+        border-radius: 50%;
+        margin: 0 auto 16px;
+        display: grid;
+        place-items: center;
+      }
+
+      .success-message .icon svg {
+        width: 28px;
+        height: 28px;
+        fill: #fff;
+      }
+
+      /* Signup form */
+      .signup-loading {
+        text-align: center;
+        padding: 20px;
+      }
+
+      #signup-fields .input-group {
+        margin-bottom: 16px;
+      }
+
+      .field-row {
+        display: flex;
+        gap: 16px;
+      }
+
+      .field-row .input-group {
+        flex: 1;
+      }
+
+      /* Select styling */
+      .input-group select {
+        width: 100%;
+        height: 56px;
+        padding: 20px 16px 6px;
+        font-size: 16px;
+        border: 1px solid var(--border);
+        border-radius: 4px;
+        outline: none;
+        background: #fff;
+        cursor: pointer;
+        appearance: none;
+        -webkit-appearance: none;
+      }
+
+      .input-group select:focus {
+        border: 2px solid var(--primary);
+      }
+
+      /* Checkbox/Multi field */
+      .checkbox-group {
+        display: flex;
+        align-items: flex-start;
+        gap: 8px;
+        margin-bottom: 16px;
+        font-size: 14px;
+        color: var(--text);
+      }
+
+      .checkbox-group input[type='checkbox'] {
+        width: 18px;
+        height: 18px;
+        margin-top: 2px;
+        cursor: pointer;
+        accent-color: var(--primary);
+        -webkit-appearance: checkbox;
+      }
+
+      .checkbox-group label {
+        cursor: pointer;
+        line-height: 1.4;
+      }
+
+      .checkbox-group a {
+        color: var(--primary);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="login-container">
+      <!-- LoginRadius Logo -->
+      <div class="logo">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 205 40" style="width: 280px; height: 40px;">
+          <defs>
+            <style>
+              .lr-logo { font-family: 'Google Sans', 'Product Sans', Arial, sans-serif; font-weight: 700; font-size: 32px; }
+            </style>
+          </defs>
+          <text class="lr-logo" x="0" y="30">
+            <tspan fill="#4285F4">L</tspan><tspan fill="#EA4335">o</tspan><tspan fill="#FBBC05">g</tspan><tspan fill="#34A853">i</tspan><tspan fill="#EA4335">n</tspan><tspan fill="#4285F4">r</tspan><tspan fill="#EA4335">a</tspan><tspan fill="#FBBC05">d</tspan><tspan fill="#34A853">i</tspan><tspan fill="#EA4335">u</tspan><tspan fill="#4285F4">s</tspan>
+          </text>
+        </svg>
+      </div>
+
+      <!-- Email Screen -->
+      <div id="email-screen" class="screen active">
+        <h1 class="title">Sign in</h1>
+        <p class="subtitle">Use your Google Account</p>
+
+        <div class="input-group">
+          <input
+            type="email"
+            id="email-input"
+            placeholder=" "
+            autocomplete="email"
+            required
+          />
+          <label>Email or phone</label>
+          <div class="error-message" id="email-error"></div>
+        </div>
+
+        <p
+          style="font-size: 14px; color: var(--text-light); margin-bottom: 24px"
+        >
+          Not your computer? Use Guest mode to sign in privately.
+          <a href="#" style="color: var(--primary)">Learn more</a>
+        </p>
+
+        <div class="btn-row">
+          <a href="#" class="create-account">Create account</a>
+          <button class="btn-next" id="email-next-btn">Next</button>
+        </div>
+      </div>
+
+      <!-- Password Screen -->
+      <div id="password-screen" class="screen">
+        <h1 class="title">Welcome</h1>
+
+        <div class="user-chip" id="user-chip" tabindex="0" role="button">
+          <span class="avatar" id="user-avatar">U</span>
+          <span id="user-email">user@example.com</span>
+          <span class="arrow">▼</span>
+        </div>
+
+        <div class="input-group">
+          <input
+            type="password"
+            id="password-input"
+            placeholder=" "
+            autocomplete="current-password"
+            required
+          />
+          <label>Enter your password</label>
+          <div class="error-message" id="password-error"></div>
+        </div>
+
+        <label class="password-toggle">
+          <input type="checkbox" id="show-password" /> Show password
+        </label>
+
+        <a href="#" class="forgot-link">Forgot password?</a>
+
+        <div class="btn-row">
+          <div></div>
+          <button class="btn-next" id="login-btn">Next</button>
+        </div>
+      </div>
+
+      <!-- Signup Screen -->
+      <div id="signup-screen" class="screen">
+        <h1 class="title">Create your Account</h1>
+        <p class="subtitle">Enter your details to sign up</p>
+
+        <div id="signup-fields">
+          <!-- Dynamic fields will be rendered here -->
+          <div class="signup-loading">
+            <div class="spinner"></div>
+            <p style="color: var(--text-light); font-size: 14px">
+              Loading form...
+            </p>
+          </div>
+        </div>
+
+        <div class="error-message" id="signup-error"></div>
+
+        <div class="btn-row">
+          <a href="#" class="create-account" id="back-to-login"
+            >Sign In</a
+          >
+          <button class="btn-next" id="signup-btn" disabled>Sign up</button>
+        </div>
+      </div>
+
+      <!-- Loading -->
+      <div id="loading" class="screen loading">
+        <div class="spinner"></div>
+        <p style="color: var(--text-light)" id="loading-text">Signing in...</p>
+      </div>
+
+      <!-- Success -->
+      <div id="success" class="screen success-message">
+        <div class="icon">
+          <svg viewBox="0 0 24 24">
+            <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" />
+          </svg>
+        </div>
+        <h2>Welcome!</h2>
+        <p id="welcome-message">You have successfully signed in.</p>
+      </div>
+    </div>
+    <!-- Load the core SDK from npm via unpkg (or self-host from node_modules). -->
+    <script src="https://unpkg.com/@loginradius/loginradius-core/dist/LoginRadiusCore.js"></script>
+    <script>
+      // Replace placeholders with values from your LoginRadius app settings.
+      const LRClient = new LoginRadiusCore({
+        apiKey: 'YOUR_API_KEY',
+        sott: 'YOUR_SOTT',
+        callbackUrl: window.location.href,
+        debugMode: true,
+      });
+
+      // DOM Cache
+      const $ = (sel, el = document) => el.querySelector(sel);
+      const screens = {
+        email: $('#email-screen'),
+        password: $('#password-screen'),
+        signup: $('#signup-screen'),
+        loading: $('#loading'),
+        success: $('#success'),
+      };
+
+      const elements = {
+        emailInput: $('#email-input'),
+        passwordInput: $('#password-input'),
+        emailError: $('#email-error'),
+        passwordError: $('#password-error'),
+        emailNext: $('#email-next-btn'),
+        loginBtn: $('#login-btn'),
+        showPass: $('#show-password'),
+        userChip: $('#user-chip'),
+        userEmail: $('#user-email'),
+        userAvatar: $('#user-avatar'),
+        welcomeMsg: $('#welcome-message'),
+        createAccount: $('.create-account'),
+        signupFields: $('#signup-fields'),
+        signupBtn: $('#signup-btn'),
+        signupError: $('#signup-error'),
+        backToLogin: $('#back-to-login'),
+        loadingText: $('#loading-text'),
+      };
+
+      let currentEmail = '';
+
+      // Email validation
+      const isValidEmail = (email) =>
+        /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim());
+
+      // Screen control
+      const showScreen = (name) => {
+        Object.values(screens).forEach((s) => s.classList.remove('active'));
+        screens[name].classList.add('active');
+      };
+
+      // Error handling
+      const setError = (input, errorEl, message) => {
+        input.classList.add('error');
+        errorEl.textContent = message;
+        errorEl.classList.add('show');
+      };
+
+      const clearError = (input, errorEl) => {
+        input.classList.remove('error');
+        errorEl.classList.remove('show');
+      };
+
+      // Email → Password (with email availability check)
+      let emailCheckInProgress = false;
+
+      elements.emailNext.addEventListener('click', async () => {
+        if (emailCheckInProgress) return;
+
+        const email = elements.emailInput.value.trim();
+
+        if (!email) {
+          return setError(
+            elements.emailInput,
+            elements.emailError,
+            'Enter an email or phone number'
+          );
+        }
+        if (!isValidEmail(email)) {
+          return setError(
+            elements.emailInput,
+            elements.emailError,
+            'Enter a valid email address'
+          );
+        }
+
+        clearError(elements.emailInput, elements.emailError);
+        emailCheckInProgress = true;
+        elements.emailNext.disabled = true;
+        elements.emailNext.textContent = 'Checking...';
+
+        try {
+          // Check if email is registered
+          await LRClient.controller.checkEmailAvailability(
+            email,
+            (response) => {
+              console.log('Email availability response:', response);
+              if (response?.success && response?.data?.IsExist) {
+                // Email exists, proceed to password screen
+                currentEmail = email;
+                elements.userEmail.textContent = email;
+                elements.userAvatar.textContent = email[0].toUpperCase();
+                showScreen('password');
+                elements.passwordInput.focus();
+              } else {
+                // Email not registered
+                setError(
+                  elements.emailInput,
+                  elements.emailError,
+                  'Email not registered. Please create an account.'
+                );
+              }
+            },
+            (error) => {
+              console.error('Email check error:', error);
+              setError(
+                elements.emailInput,
+                elements.emailError,
+                error?.error || 'Unable to verify email. Please try again.'
+              );
+            }
+          );
+        } catch (err) {
+          console.error('Email check failed:', err);
+          setError(
+            elements.emailInput,
+            elements.emailError,
+            'Unable to verify email. Please try again.'
+          );
+        } finally {
+          emailCheckInProgress = false;
+          elements.emailNext.disabled = false;
+          elements.emailNext.textContent = 'Next';
+        }
+      });
+
+      // Back to email
+      elements.userChip.addEventListener('click', () => {
+        showScreen('email');
+        elements.emailInput.focus();
+      });
+
+      // Show password toggle
+      elements.showPass.addEventListener('change', () => {
+        elements.passwordInput.type = elements.showPass.checked
+          ? 'text'
+          : 'password';
+      });
+
+      // Login
+      let loginInProgress = false;
+
+      elements.loginBtn.addEventListener('click', async () => {
+        if (loginInProgress) return;
+        loginInProgress = true;
+
+        const password = elements.passwordInput.value;
+        if (!password) {
+          setError(
+            elements.passwordInput,
+            elements.passwordError,
+            'Enter a password'
+          );
+          loginInProgress = false;
+          return;
+        }
+
+        clearError(elements.passwordInput, elements.passwordError);
+        showScreen('loading');
+
+        try {
+          await LRClient.controller.login(
+            { emailid: currentEmail, password },
+            (response) => {
+              if (!response?.success) throw response;
+              
+              // Store access token and redirect to profile
+              const accessToken = response.data?.access_token;
+              if (accessToken) {
+                localStorage.setItem('lr_access_token', accessToken);
+                window.location.href = 'profile.html';
+              } else {
+                elements.welcomeMsg.textContent = `Login Success!`;
+                showScreen('success');
+              }
+            },
+            (error) => {
+              showScreen('password');
+              const msg =
+                error?.data?.Description ||
+                error?.error ||
+                'Wrong password. Try again.';
+              setError(elements.passwordInput, elements.passwordError, msg);
+              elements.passwordInput.value = '';
+              elements.passwordInput.focus();
+            }
+          );
+        } catch (err) {
+          console.error('Login failed:', err);
+        } finally {
+          loginInProgress = false;
+        }
+      });
+
+      // Enter key support
+      elements.emailInput.addEventListener(
+        'keydown',
+        (e) => e.key === 'Enter' && elements.emailNext.click()
+      );
+      elements.passwordInput.addEventListener(
+        'keydown',
+        (e) => e.key === 'Enter' && elements.loginBtn.click()
+      );
+
+      // Initial focus
+      elements.emailInput.focus();
+
+      // ============================================
+      // SIGNUP FUNCTIONALITY
+      // ============================================
+
+      let registrationSchema = null;
+
+      // Navigate to signup screen
+      elements.createAccount.addEventListener('click', (e) => {
+        e.preventDefault();
+        showScreen('signup');
+        loadRegistrationSchema();
+      });
+
+      // Back to login
+      elements.backToLogin.addEventListener('click', (e) => {
+        e.preventDefault();
+        showScreen('email');
+        elements.emailInput.focus();
+      });
+
+      // Load registration schema from API
+      function loadRegistrationSchema() {
+        if (registrationSchema) {
+          renderSignupFields(registrationSchema);
+          return;
+        }
+
+        LRClient.getSchema(
+          'registrationFormSchema',
+          {},
+          (schema) => {
+            console.log('Registration Schema:', schema);
+            registrationSchema = schema;
+            renderSignupFields(schema);
+          },
+          (error) => {
+            console.error('Failed to load schema:', error);
+            elements.signupFields.innerHTML =
+              '<p style="color:var(--error);">Failed to load form. Please try again.</p>';
+          }
+        );
+      }
+
+      // Render signup fields based on schema
+      function renderSignupFields(schema) {
+        let html = '';
+
+        // Handle different schema formats:
+        // 1. Direct array of fields
+        // 2. { Inputs: [...], SocialProviders: [...] }
+        // 3. { fields: [...] }
+        let fields = [];
+        if (Array.isArray(schema)) {
+          fields = schema;
+        } else if (schema.Inputs) {
+          fields = schema.Inputs;
+        } else if (schema.fields) {
+          fields = schema.fields;
+        }
+
+        console.log('Rendering fields:', fields);
+
+        if (!fields || fields.length === 0) {
+          elements.signupFields.innerHTML =
+            '<p style="color:var(--error);">No fields found in schema.</p>';
+          return;
+        }
+
+        fields.forEach((field) => {
+          // Skip hidden fields, but include fields without Checked property (like privacy policy)
+          if (field.type === 'hidden') return;
+          if (field.Checked === false) return; // Only skip if explicitly set to false
+          html += createFieldHTML(field);
+        });
+
+        elements.signupFields.innerHTML = html;
+        elements.signupBtn.disabled = false;
+
+        // Setup floating labels for new inputs
+        elements.signupFields
+          .querySelectorAll(
+            'input[type="text"], input[type="email"], input[type="password"]'
+          )
+          .forEach((input) => {
+            input.addEventListener('focus', () => {
+              input.classList.remove('error');
+              const errorEl =
+                input.parentElement.querySelector('.error-message');
+              if (errorEl) errorEl.classList.remove('show');
+            });
+          });
+      }
+
+      // Create HTML for a single field
+      function createFieldHTML(field) {
+        const name = field.name || '';
+        const display = field.display || field.name || '';
+        const type = field.type || 'string';
+        const rules = field.rules || '';
+        const isRequired = rules.includes('required');
+        const requiredMark = isRequired ? ' *' : '';
+
+        // Handle different field types
+        switch (type.toLowerCase()) {
+          case 'password':
+            return `
+            <div class="input-group">
+              <input type="password" name="${name}" placeholder=" " ${
+              isRequired ? 'required' : ''
+            }>
+              <label>${display}${requiredMark}</label>
+              <div class="error-message"></div>
+            </div>`;
+          case 'email':
+          case 'string':
+            const inputType = name.toLowerCase().includes('email')
+              ? 'email'
+              : 'text';
+            return `
+            <div class="input-group">
+              <input type="${inputType}" name="${name}" placeholder=" " ${
+              isRequired ? 'required' : ''
+            }>
+              <label>${display}${requiredMark}</label>
+              <div class="error-message"></div>
+            </div>`;
+
+          case 'multi':
+          case 'checkbox':
+            return `
+            <div class="checkbox-group">
+              <input type="checkbox" name="${name}" id="field-${name}" ${
+              isRequired ? 'required' : ''
+            }>
+              <label for="field-${name}">${display}</label>
+            </div>`;
+
+          case 'option':
+            const options = field.options || [];
+            let optionsHtml = options
+              .map(
+                (opt) =>
+                  `<option value="${opt.value || opt}">${
+                    opt.text || opt
+                  }</option>`
+              )
+              .join('');
+            return `
+            <div class="input-group">
+              <select name="${name}" ${isRequired ? 'required' : ''}>
+                <option value="">${display}</option>
+                ${optionsHtml}
+              </select>
+              <div class="error-message"></div>
+            </div>`;
+
+          default:
+            return `
+            <div class="input-group">
+              <input type="text" name="${name}" placeholder=" " ${
+              isRequired ? 'required' : ''
+            }>
+              <label>${display}${requiredMark}</label>
+              <div class="error-message"></div>
+            </div>`;
+        }
+      }
+
+      // Signup button click
+      let signupInProgress = false;
+
+      elements.signupBtn.addEventListener('click', async () => {
+        if (signupInProgress) return;
+        signupInProgress = true;
+
+        // Collect form data
+        const formData = {};
+        let hasError = false;
+
+        elements.signupFields
+          .querySelectorAll('input, select')
+          .forEach((input) => {
+            const name = input.name;
+            const value =
+              input.type === 'checkbox' ? input.checked : input.value.trim();
+            const isRequired = input.required;
+            const errorEl = input.parentElement.querySelector('.error-message');
+
+            // Validate required fields
+            if (isRequired && !value) {
+              input.classList.add('error');
+              if (errorEl) {
+                errorEl.textContent = `${
+                  input.previousElementSibling?.textContent || name
+                } is required`;
+                errorEl.classList.add('show');
+              }
+              hasError = true;
+              return;
+            }
+
+            // Handle email field specially
+            if (name.toLowerCase().includes('email') && value) {
+              formData.email = [{ type: 'Primary', value: value }];
+            } else if (value) {
+              formData[name] = value;
+            }
+          });
+
+        if (hasError) {
+          signupInProgress = false;
+          return;
+        }
+
+        // Clear previous errors
+        clearError(elements.signupBtn, elements.signupError);
+        elements.loadingText.textContent = 'Creating account...';
+        showScreen('loading');
+
+        console.log('Registration payload:', formData);
+
+        try {
+           LRClient.controller.register(
+            formData,
+            (response) => {
+              console.log('Registration response:', response);
+              if (response?.success) {
+                // Store access token if available and redirect to profile
+                const accessToken = response.data?.access_token;
+                if (accessToken) {
+                  localStorage.setItem('lr_access_token', accessToken);
+                  // window.location.href = 'profile.html';
+                } else {
+                  elements.welcomeMsg.textContent = 'Account created successfully!';
+                  showScreen('success');
+                }
+              } else {
+                showScreen('signup');
+                const msg =
+                  response?.error ||
+                  response?.data?.Message ||
+                  'Registration failed. Please try again.';
+                setError(elements.signupBtn, elements.signupError, msg);
+              }
+            },
+            (error) => {
+              console.error('Registration error:', error);
+              showScreen('signup');
+              const msg =
+                error?.data?.Description ||
+                error?.data?.Message ||
+                error?.error ||
+                'Registration failed. Please try again.';
+              setError(elements.signupBtn, elements.signupError, msg);
+            }
+          );
+        } catch (err) {
+          console.error('Registration failed:', err);
+          showScreen('signup');
+          setError(
+            elements.signupBtn,
+            elements.signupError,
+            'An error occurred. Please try again.'
+          );
+        } finally {
+          signupInProgress = false;
+        }
+      });
+    </script>
+  </body>
+</html>
