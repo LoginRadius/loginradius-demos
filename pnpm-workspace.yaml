@@ -1,0 +1,4 @@
+packages:
+  - 'loginradius-core/*'
+  - 'loginradius-js/*'
+  - 'loginradius-react/*'

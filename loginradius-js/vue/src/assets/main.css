@@ -1,0 +1,17 @@
+@import './base.css';
+
+#app {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem;
+  font-weight: normal;
+}
+
+.main-container {
+  display: flex;
+  justify-content: center;
+}
+
+#auth-container {
+  margin-top: 1rem;
+}

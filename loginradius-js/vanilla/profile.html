@@ -1,0 +1,112 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>LoginRadius SDK Demo</title>
+    <!-- Load the SDK CSS from npm via unpkg (or self-host from node_modules). -->
+    <link rel="stylesheet" href="https://unpkg.com/@loginradius/loginradius-js/dist/LoginRadiusV3.css" />
+    <style>
+      body {
+        margin: 0;
+        padding: 20px;
+        background-color: #f5f5f5;
+      }
+
+      .container {
+        /* max-width: 400px; */
+        margin: 0 auto;
+
+        text-align: left;
+      }
+
+      .form-section {
+        display: none;
+      }
+      .form-section.active {
+        display: block;
+      }
+      .toggle-link {
+        margin-top: 20px;
+        font-size: 14px;
+        color: #666;
+      }
+      .toggle-link a {
+        color: #3b82f6;
+        text-decoration: none;
+        cursor: pointer;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>LoginRadius Js SDK</h1>
+      <div class="form-section active" id="login-section">
+        <div id="profile-container"></div>
+        <!-- <div id="workflow-container"></div> -->
+      </div>
+      <div class="form-section" id="registration-section">
+        <!-- <div id="registration-container"></div> -->''
+      </div>
+    </div>
+    <!-- Load the SDK runtime from npm via unpkg (or self-host from node_modules). -->
+    <script src="https://unpkg.com/@loginradius/loginradius-js/dist/LoginRadiusV3.js"></script>
+    <script>
+      // Call when script is loaded
+      if (window.LoginRadiusSDK) {
+        var commonOptions = {
+          // Replace with values from your LoginRadius app settings.
+          apiKey: 'YOUR_API_KEY',
+          sott: 'YOUR_SOTT',
+          verificationUrl: 'https://your-tenant.example.com/auth.aspx',
+          callbackUrl: window.location.origin,
+          deleteUrl: window.location.href,
+          // isForgotPassword: true,
+          templateName: '',
+          // Workflow specific options
+          clientId: 'YOUR_CLIENT_ID',
+          brand: 'default',
+          AppName: 'YOUR_APP_NAME',
+          OtpLength: 4,
+          OtpType: 'ALPHANUMERICONLYCAPSLETTER',
+        };
+        var LRObject = new LoginRadiusSDK(commonOptions);
+    
+        
+          LRObject.init('profileEditor', {
+            logoutRedirectUrl: window.location.origin + '/index.html',
+          container: 'profile-container',
+          isForgotpassword:false,
+          onSuccess: function (response) {
+            console.log('Profile successful:', response);
+          },
+          onError: function (error) {
+            console.error('Registration error:', error);
+          },
+        });
+      } else {
+        console.error(
+          'LoginRadiusSDK is not defined. Ensure the SDK script is loaded correctly.'
+        );
+      }
+      // Initial form to show
+      const params = new URLSearchParams(window.location.search);
+      if (params.get('vtype') === 'orginvite' && params.get('vtoken')) {
+        switchForm('invitation');
+      } else {
+        switchForm('login');
+      }
+      function switchForm(formName) {
+        console.log(`Switching to ${formName} form`);
+        // Hide all sections and show the selected one
+        console.log(document.querySelectorAll('.form-section'));
+
+        document
+          .querySelectorAll('.form-section')
+          .forEach((section) => section.classList.remove('active'));
+        document.getElementById(`${formName}-section`).classList.add('active');
+      }
+    </script>
+  </body>
+</html>
