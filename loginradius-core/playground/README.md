@@ -1,181 +1,114 @@
-# LoginRadius Core — TypeScript Demo
+<p align="center">
+  <a href="https://www.loginradius.com" target="_blank" rel="noopener noreferrer">
+    <img src="https://auth-dev.lrinternal.com/loginradius_favicon.svg" height="64" alt="LoginRadius logo" />
+  </a>
+</p>
 
-A minimal, framework-agnostic **single-page** app that integrates the
-[`@loginradius/loginradius-core`](https://www.npmjs.com/package/@loginradius/loginradius-core)
-npm package against a real LoginRadius tenant. Built with Vite + TypeScript,
-no UI framework — bring your own.
+<h1 align="center">LoginRadius Core SDK &mdash; Playground</h1>
 
-> Sibling demo: [`../vanilla/`](../vanilla/) — same flows, loaded from a CDN
-> `<script>` tag instead of via npm. Use whichever is closer to your stack.
+<p align="center">
+  <a href="https://www.npmjs.com/package/@loginradius/loginradius-core"><img src="https://img.shields.io/npm/v/@loginradius/loginradius-core.svg" alt="npm version" /></a>
+  <a href="https://vitejs.dev"><img src="https://img.shields.io/badge/Vite-7-646cff.svg" alt="Vite 7" /></a>
+  <a href="https://www.typescriptlang.org"><img src="https://img.shields.io/badge/TypeScript-5.9-3178c6.svg" alt="TypeScript 5.9" /></a>
+  <a href="https://www.loginradius.com/docs"><img src="https://img.shields.io/badge/documentation-loginradius-blue.svg" alt="documentation" /></a>
+  <a href="https://opensource.org/licenses/MIT"><img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="License: MIT" /></a>
+</p>
 
----
+<p align="center">
+  A framework-agnostic Vite + TypeScript app that drives <code>@loginradius/loginradius-core</code> directly &mdash; schema-driven forms, controller-level auth calls, and a hand-rolled UI. The reference for building your own auth UX on top of the LoginRadius controller.
+</p>
 
-## What it demonstrates
-
-| SDK surface                              | Where it's used                                                              |
-| ---------------------------------------- | ---------------------------------------------------------------------------- |
-| `LoginRadiusCore.createLoginRadius(...)` | [`src/sdk.ts`](./src/sdk.ts) — async init with env-validated options         |
-| `controller.checkEmailAvailability(...)` | [`flows/login.ts`](./src/flows/login.ts) — two-step email→password gate      |
-| `controller.login(...)`                  | [`flows/login.ts`](./src/flows/login.ts) — credential submit                 |
-| `controller.register(...)`               | [`flows/signup.ts`](./src/flows/signup.ts) — registration submit             |
-| `controller.getAccount(token)`           | [`flows/profile.ts`](./src/flows/profile.ts) — load authenticated profile    |
-| `controller.ssoLogout(...)`              | [`flows/profile.ts`](./src/flows/profile.ts) — sign-out + local token clear  |
-| `getSchema('loginFormSchema')`           | [`flows/login.ts`](./src/flows/login.ts) — schema-driven password fields     |
-| `getSchema('registrationFormSchema')`    | [`flows/signup.ts`](./src/flows/signup.ts) — schema-driven registration form |
-
-The UI is hand-rolled HTML/CSS — the SDK contributes auth logic and form
-schemas only.
+<p align="center">
+  Part of the <a href="../../README.md">LoginRadius Demos</a> monorepo. The underlying package is <a href="https://www.npmjs.com/package/@loginradius/loginradius-core"><code>@loginradius/loginradius-core</code></a>.
+</p>
 
 ---
 
-## Quick start
+## 🚀 Get started with LoginRadius
 
-```bash
-pnpm install
-cp .env.example .env.local           # fill in your LoginRadius credentials
-pnpm dev                             # http://localhost:5001
-```
+1. [Sign up for an account](https://accounts.loginradius.com/auth.aspx?return_url=https://dashboard.loginradius.com/login).
+2. Create an application in your LoginRadius Dashboard and grab your **API Key** and **SOTT**.
+3. Add `http://localhost:5001` to your app's **Allowed Domains** list (this demo runs on port **5001**, not the Vite default).
 
 ### Prerequisites
 
-- Node.js ≥ 20.19
-- pnpm ≥ 10 (or npm / yarn)
-- A LoginRadius app — get `apiKey` and `sott` from the
-  [LoginRadius Admin Console](https://adminconsole.loginradius.com/)
-- Add `http://localhost:5001` to **App Settings → Allowed Domains**, or CORS
-  preflights will fail.
+- Node.js **≥ 20.19**
+- pnpm **≥ 10** (npm or yarn also work)
 
-### Configuration
+### Install
 
-`.env.local` is loaded by Vite. The bootstrap in [`src/sdk.ts`](./src/sdk.ts)
-throws an actionable error if a required variable is missing.
-
-| Variable                              | Required | Notes                                                      |
-| ------------------------------------- | -------- | ---------------------------------------------------------- |
-| `VITE_LOGINRADIUS_API_KEY`            | yes      | App key from the Admin Console.                            |
-| `VITE_LOGINRADIUS_SOTT`               | yes      | Secure One-Time Token (registration anti-abuse signature). |
-| `VITE_LOGINRADIUS_VERIFICATION_URL`   | no       | Where users land after clicking an email-verify link.      |
-| `VITE_LOGINRADIUS_RESET_PASSWORD_URL` | no       | Where reset-password links land.                           |
-| `VITE_LOGINRADIUS_CALLBACK_URL`       | no       | Social-login callback (defaults to `window.location.origin`). |
-
----
-
-## Project structure
-
-```
-playground/
-├── index.html              # single-page shell — all screens live here
-├── vite.config.ts          # dev: 5001, preview: 4301
-├── tsconfig.json
-└── src/
-    ├── main.ts             # bootstrap: init SDK, wire flows, resume session
-    ├── sdk.ts              # createLoginRadius() — validates env, returns instance
-    ├── session.ts          # access-token persistence (localStorage)
-    ├── screens.ts          # screen show/hide + auth↔profile card swap
-    ├── schemaForm.ts       # schema → HTML field renderer (input/email/password/checkbox/select)
-    ├── dom.ts              # $, $$, escapeHtml, setError/clearError, isValidEmail
-    ├── styles.css          # global stylesheet
-    ├── env.d.ts            # typed import.meta.env
-    └── flows/
-        ├── login.ts        # email-availability check + sign-in (schema-driven password)
-        ├── signup.ts       # registration (schema-driven, with fallback messaging)
-        └── profile.ts      # getAccount + ssoLogout, token-expiry handling
+```bash
+cd loginradius-core/playground
+pnpm install
 ```
 
-Each `flows/*.ts` module owns one user journey and exposes a small public
-surface; [`main.ts`](./src/main.ts) is the only place that wires them
-together. Add a new flow (forgot-password, MFA, social login) by dropping a
-file in `flows/` and registering it in `main.ts`.
+### Configure
 
----
+Copy the example env file and fill in your credentials:
 
-## How it works
-
-The SDK is initialized once at bootstrap and the instance is shared across
-flows:
-
-```ts
-import LoginRadiusCore from '@loginradius/loginradius-core';
-
-const lrCore = await LoginRadiusCore.createLoginRadius({
-  apiKey: import.meta.env.VITE_LOGINRADIUS_API_KEY,
-  sott:   import.meta.env.VITE_LOGINRADIUS_SOTT,
-  // ...
-});
+```bash
+cp .env.example .env.local
 ```
 
-Authenticated calls go through `lrCore.controller.*`, which accepts a
-`(payload, onSuccess, onError)` callback signature:
-
-```ts
-await lrCore.controller.login(
-  { emailid, password },
-  (res) => { /* persist token, swap to profile screen */ },
-  (err) => { /* show inline error */ },
-);
+```env
+VITE_LOGINRADIUS_API_KEY=your-api-key
+VITE_LOGINRADIUS_SOTT=your-sott
+VITE_LOGINRADIUS_VERIFICATION_URL=https://your-tenant.example.com/auth.aspx
+VITE_LOGINRADIUS_RESET_PASSWORD_URL=https://your-tenant.example.com/auth.aspx
+VITE_LOGINRADIUS_CALLBACK_URL=http://localhost:5001
 ```
 
-On page load, if an access token is already in `localStorage` the app skips
-the login screen and calls `getAccount` directly. If the token has expired
-(`errorCode === 905`) the session is cleared and the user is returned to the
-email screen — no redirect loops.
+> ⚠️ [`src/sdk.ts`](./src/sdk.ts) calls `requireEnv(...)` on `VITE_LOGINRADIUS_API_KEY` and `VITE_LOGINRADIUS_SOTT` &mdash; bootstrap throws an actionable error if either is missing.
+
+### Run
+
+```bash
+pnpm dev      # vite dev server on http://localhost:5001
+pnpm build    # production bundle into dist/
+pnpm preview  # serve the production build on http://localhost:4301
+```
 
 ---
 
-## Scripts
+## 🧩 What this demo shows
 
-| Command        | What it does                                              |
-| -------------- | --------------------------------------------------------- |
-| `pnpm dev`     | Vite dev server with HMR on http://localhost:5001         |
-| `pnpm build`   | Production build into `dist/`                             |
-| `pnpm preview` | Serve the production build on http://localhost:4301      |
-
----
-
-## Production checklist
-
-This is a **demo**. Before adopting the patterns here in production:
-
-- **Token storage**: `localStorage` is used for simplicity. Prefer HTTP-only,
-  `Secure`, `SameSite=Strict` cookies (set by your backend) or in-memory
-  storage with short-lived access tokens + refresh-token rotation to mitigate
-  XSS exposure.
-- **CSP**: ship a Content-Security-Policy that pins the LoginRadius endpoints
-  and disallows inline scripts in environments where you can.
-- **Allowed Domains**: lock the Admin Console list to your real origins; do
-  not leave wildcards or `localhost` enabled in production tenants.
-- **SOTT rotation**: SOTT values can be scoped and time-limited — rotate them
-  according to your security posture.
-- **Schema validation**: the schema-driven renderer here renders whatever the
-  tenant config returns. If you tighten field types in the Admin Console, the
-  UI follows automatically; the reverse is not true.
-- **Logging**: `debugMode: true` is enabled in dev only via
-  [`sdk.ts`](./src/sdk.ts) (`import.meta.env.DEV`). Verify it is off in prod
-  builds before shipping.
-- **Never commit secrets**: `.env.local` is git-ignored. Do not paste
-  `apiKey` / `sott` into the source, into chat tools, or into screenshots.
+- A single async `bootstrap()` in [`src/main.ts`](./src/main.ts) that calls `initSDK()`, wires three independent flow modules, then resumes any cached session from `localStorage`.
+- [`src/sdk.ts`](./src/sdk.ts) calling `LoginRadiusCore.createLoginRadius(options)` with env-validated options and `debugMode: import.meta.env.DEV` &mdash; debug logging is dev-only by construction.
+- Per-flow modules under [`src/flows/`](./src/flows/) that own one journey each: email-availability + sign-in ([`login.ts`](./src/flows/login.ts)), registration ([`signup.ts`](./src/flows/signup.ts)), and authenticated profile + sign-out ([`profile.ts`](./src/flows/profile.ts)).
+- Schema-driven form rendering: `lr.getSchema('loginFormSchema' | 'registrationFormSchema', content)` feeds [`src/schemaForm.ts`](./src/schemaForm.ts), which maps schema field types (`input` / `email` / `password` / `checkbox` / `select`) to DOM inputs &mdash; the tenant config drives the UI.
+- A `(payload, onSuccess, onError)` callback shape on every `controller.*` method (`login`, `register`, `checkEmailAvailability`, `getAccount`, `ssoLogout`).
+- Token-expiry handling in [`flows/profile.ts`](./src/flows/profile.ts): `errorCode === 905` clears `localStorage` and returns the user to the email screen &mdash; no redirect loops.
 
 ---
 
-## Troubleshooting
+## 🛠 Troubleshooting
 
-| Symptom                                              | Likely cause                                                                                       |
-| ---------------------------------------------------- | -------------------------------------------------------------------------------------------------- |
-| `Missing required environment variable`              | `.env.local` not present, or the variable name is missing the `VITE_` prefix.                      |
-| CORS / 401 in the Network tab                        | Current origin isn't in the app's **Allowed Domains** list.                                        |
-| `loginFormSchema unavailable, using fallback`        | Tenant template config isn't provisioned — the static password field is rendered instead. Safe to ignore for the demo. |
-| Stuck on the profile spinner / `errorCode 905`       | Expired token. The app clears it automatically and returns you to sign-in.                         |
-| `apiKey is undefined` in the console                 | Env file isn't being picked up — restart the Vite dev server after editing `.env.local`.            |
+| Symptom | Likely cause & fix |
+|---|---|
+| `Missing required environment variable: VITE_LOGINRADIUS_*` | `.env.local` not present or var name missing the `VITE_` prefix. Restart the dev server after editing. |
+| `loginFormSchema unavailable, using fallback` | Tenant template config isn't provisioned; the static password field is rendered instead. Safe to ignore for the demo. |
+| Stuck on the profile spinner with `errorCode 905` | Expired access token. The app clears it automatically and returns to sign-in. |
+| `401` / CORS error in the Network tab | Add `http://localhost:5001` to **Allowed Domains**. |
+| `debugMode` chatter in production console | `import.meta.env.DEV` should be `false` in prod builds &mdash; verify you ran `pnpm build`, not `pnpm dev`. |
 
 ---
 
-## Related
+## 🏁 Learning LoginRadius
 
-- [`@loginradius/loginradius-core` on npm](https://www.npmjs.com/package/@loginradius/loginradius-core)
-- [`../vanilla/`](../vanilla/) — CDN/script-tag equivalent of this demo
-- [`../README.md`](../README.md) — top-level overview of all core SDK demos
-- [LoginRadius developer docs](https://www.loginradius.com/docs/)
+The full LoginRadius documentation lives at [loginradius.com/docs](https://www.loginradius.com/docs).
+
+- New to LoginRadius? Start with the [quickstart guides](https://www.loginradius.com/docs/).
+- Want the same flows from a `<script>` tag with no bundler? See [`loginradius-core/vanilla/`](../vanilla/).
+- Don't want to hand-roll the UI? Use [`loginradius-js/`](../../loginradius-js/) (pre-built UI on top of the same controller) or [`loginradius-react/`](../../loginradius-react/) (React hooks + components).
+
+---
+
+## 🛟 Release notes
+
+Curious what shipped recently? Browse the [`@loginradius/loginradius-core` releases](https://www.npmjs.com/package/@loginradius/loginradius-core?activeTab=versions) on npm.
+
+---
 
 ## License
 
-MIT — see the [repository root](../../) for license details.
+MIT.
