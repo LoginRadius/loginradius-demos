@@ -86,7 +86,14 @@ function AdminLayoutInner() {
 
   // Early returns must come AFTER all hooks so hook call order stays stable
   // across renders (Rules of Hooks).
-  if (loading) return <div> Loading </div>;
+  if (loading) {
+    return (
+      <div className="page-loader" role="status" aria-live="polite">
+        <div className="spinner" aria-hidden="true" />
+        <div className="label">Loading…</div>
+      </div>
+    );
+  }
   if (!isAuthenticated) return <Navigate to="/home" replace />;
 
   const crumb = CRUMB_BY_PATH[location.pathname] || "Dashboard";
@@ -112,6 +119,7 @@ function AdminLayoutInner() {
   const handleSignOut = async () => {
     try {
       await lrInstance?.controller?.ssoLogout?.();
+      localStorage.removeItem("lrorganization-context");
     } catch (err) {
       console.warn("Logout failed, redirecting anyway:", err);
     }

@@ -8,4 +8,5 @@ export const LOGIN_RADIUS_OPTIONS = {
   oidcClientId: import.meta.env.VITE_LOGINRADIUS_CLIENT_ID,
   oidcRedirectUri:
     typeof window !== "undefined" ? window.location.origin + "/admin" : "",
+  customDomain: import.meta.env.VITE_AUTH_DOMAIN
 };
