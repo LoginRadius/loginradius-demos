@@ -11,8 +11,8 @@ import {
   PasskeyProfileComponent,
   DeleteProfileComponent,
   Profile,
-} from '@loginradius/loginradius-react';
-import { useLRAuth } from '@loginradius/loginradius-react';
+} from '@loginradius/loginradius-react-sdk';
+import { useLRAuth } from '@loginradius/loginradius-react-sdk';
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 

@@ -1,4 +1,4 @@
-import { LoginRadiusProvider } from '@loginradius/loginradius-react';
+import { LoginRadiusProvider } from '@loginradius/loginradius-react-sdk';
 import { StrictMode } from 'react';
 import * as ReactDOM from 'react-dom/client';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
@@ -6,12 +6,12 @@ import App from './app/app';
 import { ProfileSdk } from './app/Components/Sdkprofile';
 
 const root = ReactDOM.createRoot(
-  document.getElementById('root') as HTMLElement
+  document.getElementById('root') as HTMLElement,
 );
 
 const searchParams = new URLSearchParams(window.location.search);
 
-const onLoading = function (isLoading) {
+const onLoading = function (isLoading: any) {
   const loader = document.getElementById('my-loader');
   if (!loader) return;
 
@@ -48,5 +48,5 @@ root.render(
         </Routes>
       </BrowserRouter>
     </StrictMode>
-  </LoginRadiusProvider>
+  </LoginRadiusProvider>,
 );

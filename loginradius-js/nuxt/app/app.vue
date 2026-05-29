@@ -27,7 +27,7 @@ onMounted(async () => {
   });
 
   // Initialize login interface
-  loginRadius.init('login', {
+  loginRadius.init('auth', {
     container: 'auth-container',
     onSuccess: (response) => {
       console.log('Login response:', response);
@@ -53,8 +53,9 @@ onMounted(async () => {
 }
 
 body {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
-    Ubuntu, Cantarell, sans-serif;
+  font-family:
+    -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu,
+    Cantarell, sans-serif;
   min-height: 100vh;
   padding: 2rem;
 }

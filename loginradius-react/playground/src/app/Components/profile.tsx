@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Sun, Moon, LogOut } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import { useLRAuth } from '@loginradius/loginradius-react';
+import { useLRAuth } from '@loginradius/loginradius-react-sdk';
 const UserProfile: React.FC = () => {
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [data, setData] = useState<any>(null);

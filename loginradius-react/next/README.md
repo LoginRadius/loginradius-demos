@@ -1,24 +1,58 @@
-# Next.js Demo
+<p align="center">
+  <a href="https://www.loginradius.com" target="_blank" rel="noopener noreferrer">
+    <img src="https://auth-dev.lrinternal.com/loginradius_favicon.svg" height="64" alt="LoginRadius logo" />
+  </a>
+</p>
 
-A Next.js App Router demo that renders the LoginRadius `<Login>` component inside a client page, showing how to integrate `@loginradius/loginradius-react` with React Server Components.
+<h1 align="center">LoginRadius React SDK &mdash; Next.js Demo</h1>
 
-**Stack:** Next.js 16 (App Router), React 19, Tailwind CSS 4, TypeScript 5
+<p align="center">
+  <a href="https://www.npmjs.com/package/@loginradius/loginradius-react-sdk"><img src="https://img.shields.io/npm/v/@loginradius/loginradius-react-sdk.svg" alt="npm version" /></a>
+  <a href="https://nextjs.org"><img src="https://img.shields.io/badge/Next.js-16.1-black.svg" alt="Next.js 16.1" /></a>
+  <a href="https://react.dev"><img src="https://img.shields.io/badge/React-19.2-61dafb.svg" alt="React 19.2" /></a>
+  <a href="https://tailwindcss.com"><img src="https://img.shields.io/badge/Tailwind-4-38bdf8.svg" alt="Tailwind 4" /></a>
+  <a href="https://www.typescriptlang.org"><img src="https://img.shields.io/badge/TypeScript-5-3178c6.svg" alt="TypeScript 5" /></a>
+  <a href="https://www.loginradius.com/docs"><img src="https://img.shields.io/badge/documentation-loginradius-blue.svg" alt="documentation" /></a>
+  <a href="https://opensource.org/licenses/MIT"><img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="License: MIT" /></a>
+</p>
 
-## Prerequisites
-- Node.js >= 20.19
-- pnpm >= 10 (or npm/yarn)
-- A LoginRadius app with API Key and SOTT
+<p align="center">
+  A reference integration that renders the LoginRadius React <code>&lt;Auth&gt;</code> flow inside a Next.js&nbsp;16 App Router client page, with <code>&lt;LoginRadiusProvider&gt;</code> scoped to the page so the rest of the layout stays server-rendered.
+</p>
 
-## Install
+<p align="center">
+  Part of the <a href="../../README.md">LoginRadius Demos</a> monorepo. The underlying package is <a href="https://www.npmjs.com/package/@loginradius/loginradius-react-sdk"><code>@loginradius/loginradius-react-sdk</code></a>.
+</p>
+
+---
+
+## 🚀 Get started with LoginRadius
+
+1. [Sign up for an account](https://accounts.loginradius.com/auth.aspx?return_url=https://dashboard.loginradius.com/login).
+2. Create an application in your LoginRadius Dashboard and grab your **API Key** and **SOTT**.
+3. Add `http://localhost:3000` to your app's **Allowed Domains** list.
+
+### Prerequisites
+
+- Node.js **≥ 20.19**
+- pnpm **≥ 10** (npm or yarn also work)
+
+### Install
+
 ```bash
 cd loginradius-react/next
 pnpm install
 ```
 
-## Configure
-Copy `.env.example` to `.env.local` and fill in your tenant values:
+### Configure
+
+Copy the example env file and fill in your credentials:
 
 ```bash
+cp .env.example .env.local
+```
+
+```env
 NEXT_PUBLIC_LOGINRADIUS_API_KEY=your-api-key
 NEXT_PUBLIC_LOGINRADIUS_SOTT=your-sott
 NEXT_PUBLIC_LOGINRADIUS_VERIFICATION_URL=https://your-tenant.example.com/auth.aspx
@@ -27,25 +61,57 @@ NEXT_PUBLIC_LOGINRADIUS_CALLBACK_URL=http://localhost:3000
 NEXT_PUBLIC_LOGINRADIUS_LOCALIZATION=true
 ```
 
-Only `NEXT_PUBLIC_*` variables are exposed to the browser. Server-only secrets must not use this prefix.
+> ⚠️ Only `NEXT_PUBLIC_*` variables are exposed to the browser. Anything without the prefix stays server-only &mdash; never put server-side secrets under `NEXT_PUBLIC_`. Rebuild after editing `.env.local`; Next.js inlines these values at build time.
 
-## Run
+### Run
+
 ```bash
-pnpm dev       # dev server on http://localhost:3000
-pnpm build     # production build (.next/)
-pnpm start     # serve the production build
-pnpm lint      # ESLint
+pnpm dev      # next dev on http://localhost:3000
+pnpm build    # next build (production bundle)
+pnpm start    # next start (serves the production build)
+pnpm lint     # ESLint via next/core-web-vitals
 ```
 
-## What it demonstrates
-- `app/page.tsx` is marked `'use client'` because the SDK relies on browser APIs (storage, `window`, WebAuthn) and React context — server components cannot host `<LoginRadiusProvider>`.
-- The provider is mounted inside the page itself rather than `app/layout.tsx`, keeping the rest of the layout server-rendered. To share auth state across routes, lift the provider into a dedicated client wrapper imported from `layout.tsx`.
-- Renders the `<Login>` flow component (not the combined `<Auth>` flow) with `onSuccess` / `onError` callbacks typed as `ApiResponse<AuthResponse>` and `ApiError`.
-- Demonstrates passing extra options (`OtpType: 'email'`, `OtpLength: 6`) alongside env-driven config.
-- An `onLoading` callback toggles a DOM loader element, illustrating imperative DOM access from a client component.
+---
 
-## Troubleshooting
-- **"You're importing a component that needs `useState`..."**: ensure `'use client'` is the first line of any file using the SDK, its hooks, or its components.
-- **Env vars are `undefined` at runtime**: prefix with `NEXT_PUBLIC_` and restart `next dev`. Build-time inlining means a rebuild is needed after `.env.local` changes.
-- **Hydration mismatch warning**: avoid rendering SDK state during SSR. Gate any post-auth UI behind a `useEffect`-set flag, or dynamically import the auth section with `ssr: false`.
-- **CORS / 401 from LoginRadius APIs**: whitelist `http://localhost:3000` (and your production origin) under App Settings > Whitelist Domain in the Admin Console.
+## 🧩 What this demo shows
+
+- The `'use client'` directive on [`app/page.tsx`](./app/page.tsx) &mdash; required because `<LoginRadiusProvider>` uses React context and the SDK touches `window`, `localStorage`, and WebAuthn at init.
+- The provider mounted **inside** the page (not `app/layout.tsx`), keeping the layout server-rendered. Lift it into a dedicated client wrapper if you need auth state across routes.
+- A typed options object built from `process.env.NEXT_PUBLIC_*`, including the `disableLocalization` derivation and extra hard-coded `OtpType: 'email'` / `OtpLength: 6` settings.
+- The combined `<Auth>` flow component (not separate `<Login>` / `<Register>`) with typed `onSuccess: (response: ApiResponse<AuthResponse>) => void` and `onError: (error: ApiError) => void` callbacks.
+- An `onLoading` prop passed to `<LoginRadiusProvider>` that toggles a `#my-loader` DOM element &mdash; an example of imperative DOM access from a client component, useful when you can't move the loader into React state.
+
+---
+
+## 🛠 Troubleshooting
+
+| Symptom | Likely cause & fix |
+|---|---|
+| `You're importing a component that needs useState...` | `'use client'` is missing at the top of any file importing the SDK, its hooks, or its components. Add it as the first non-comment line. |
+| Env vars are `undefined` at runtime | Missing `NEXT_PUBLIC_` prefix, or `next dev` not restarted after editing `.env.local`. Build-time inlining requires a rebuild for `next build`. |
+| Hydration mismatch warning around the auth card | SDK state is rendering during SSR. Gate post-auth UI behind a `useEffect`-set flag, or dynamically import the auth section with `{ ssr: false }`. |
+| `401` / CORS error from LoginRadius | Add `http://localhost:3000` to your app's **Allowed Domains**. |
+| `Port 3000 already in use` | Run on a different port: `pnpm dev -- -p 3001`. |
+
+---
+
+## 🏁 Learning LoginRadius
+
+The full LoginRadius documentation lives at [loginradius.com/docs](https://www.loginradius.com/docs).
+
+- New to LoginRadius? Start with the [quickstart guides](https://www.loginradius.com/docs/).
+- Want a Vite + React SPA instead? See [`loginradius-react/playground/`](../playground/).
+- Need the pre-built UI without React hooks? See [`loginradius-js/next/`](../../loginradius-js/next/) for the equivalent JS SDK demo on Next.js.
+
+---
+
+## 🛟 Release notes
+
+Curious what shipped recently? Browse the [`@loginradius/loginradius-react-sdk` releases](https://www.npmjs.com/package/@loginradius/loginradius-react-sdk?activeTab=versions) on npm.
+
+---
+
+## License
+
+MIT.

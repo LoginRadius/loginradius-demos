@@ -14,7 +14,7 @@
     });
 
     // Initialize login interface
-    loginRadius.init('login', {
+    loginRadius.init('auth', {
       container: 'auth-container',
       onSuccess: (response: unknown) => {
         console.log('Login response:', response);

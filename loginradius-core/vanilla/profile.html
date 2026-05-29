@@ -1,443 +1,680 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Profile - LoginRadius</title>
-  <!-- Load the core SDK CSS from npm via unpkg (or self-host from node_modules). -->
-  <link rel="stylesheet" href="https://unpkg.com/@loginradius/loginradius-core/dist/LoginRadiusCore.css">
-  <style>
-    :root {
-      --primary: #1a73e8;
-      --primary-dark: #1557b0;
-      --error: #d93025;
-      --success: #34a853;
-      --border: #dadce0;
-      --text: #202124;
-      --text-light: #5f6368;
-      --bg-gray: #f8f9fa;
-    }
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Profile — LoginRadius</title>
+    <!-- Load the core SDK CSS from npm via unpkg (or self-host from node_modules). -->
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/@loginradius/loginradius-core/dist/LoginRadiusCore.css"
+    />
+    <style>
+      :root {
+        --primary: #1a73e8;
+        --primary-dark: #1557b0;
+        --primary-soft: #e8f0fe;
+        --error: #d93025;
+        --success: #34a853;
+        --border: #e3e6ea;
+        --border-strong: #c0c4c9;
+        --text: #202124;
+        --text-light: #5f6368;
+        --bg: #f6f8fb;
+        --surface: #ffffff;
+        --shadow-sm: 0 1px 2px rgba(60, 64, 67, 0.06),
+          0 1px 3px rgba(60, 64, 67, 0.06);
+        --shadow-md: 0 4px 12px rgba(60, 64, 67, 0.08),
+          0 12px 32px rgba(60, 64, 67, 0.06);
+      }
 
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    
-    body {
-      font-family: 'Google Sans', Roboto, Arial, sans-serif;
-      background: var(--bg-gray);
-      min-height: 100vh;
-      padding: 20px;
-    }
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
 
-    .container {
-      max-width: 800px;
-      margin: 0 auto;
-    }
+      body {
+        font-family: "Google Sans", "Inter", -apple-system, BlinkMacSystemFont,
+          Roboto, Arial, sans-serif;
+        background: radial-gradient(
+            1400px 700px at 50% -10%,
+            #eaf1fd 0%,
+            transparent 60%
+          ),
+          var(--bg);
+        min-height: 100vh;
+        padding: 24px 20px 60px;
+        color: var(--text);
+      }
 
-    .header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 16px 24px;
-      background: #fff;
-      border-radius: 8px;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-      margin-bottom: 24px;
-    }
+      .container {
+        max-width: 880px;
+        margin: 0 auto;
+      }
 
-    .header h1 {
-      font-size: 24px;
-      font-weight: 400;
-      color: var(--text);
-    }
+      /* Top bar */
+      .topbar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 14px 22px;
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 14px;
+        box-shadow: var(--shadow-sm);
+        margin-bottom: 24px;
+      }
 
-    .btn {
-      background: var(--primary);
-      color: #fff;
-      border: none;
-      padding: 10px 24px;
-      font-size: 14px;
-      font-weight: 500;
-      border-radius: 4px;
-      cursor: pointer;
-      transition: all 0.2s;
-    }
+      .topbar .brand svg {
+        height: 32px;
+        width: auto;
+        display: block;
+      }
 
-    .btn:hover {
-      background: var(--primary-dark);
-    }
+      .btn {
+        background: var(--primary);
+        color: #fff;
+        border: none;
+        padding: 10px 22px;
+        font-size: 14px;
+        font-weight: 500;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: all 0.18s ease;
+      }
 
-    .btn-outline {
-      background: transparent;
-      color: var(--primary);
-      border: 1px solid var(--border);
-    }
+      .btn:hover {
+        background: var(--primary-dark);
+        box-shadow: 0 1px 3px rgba(26, 115, 232, 0.4);
+      }
 
-    .btn-outline:hover {
-      background: var(--bg-gray);
-    }
+      .btn-outline {
+        background: transparent;
+        color: var(--primary);
+        border: 1px solid var(--border-strong);
+      }
 
-    .profile-card {
-      background: #fff;
-      border-radius: 8px;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-      overflow: hidden;
-    }
+      .btn-outline:hover {
+        background: var(--primary-soft);
+        border-color: var(--primary);
+        box-shadow: none;
+      }
 
-    .profile-header {
-      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
-      padding: 32px 24px;
-      text-align: center;
-      color: #fff;
-    }
+      /* Profile card */
+      .profile-card {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 16px;
+        box-shadow: var(--shadow-md);
+        overflow: hidden;
+      }
 
-    .avatar {
-      width: 96px;
-      height: 96px;
-      border-radius: 50%;
-      background: #fff;
-      color: var(--primary);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 36px;
-      font-weight: 500;
-      margin: 0 auto 16px;
-      border: 4px solid rgba(255,255,255,0.3);
-    }
+      .profile-header {
+        position: relative;
+        background:
+          radial-gradient(
+            600px 200px at 20% 0%,
+            rgba(255, 255, 255, 0.18) 0%,
+            transparent 60%
+          ),
+          linear-gradient(135deg, #1a73e8 0%, #1557b0 100%);
+        padding: 40px 24px 56px;
+        text-align: center;
+        color: #fff;
+      }
 
-    .avatar img {
-      width: 100%;
-      height: 100%;
-      border-radius: 50%;
-      object-fit: cover;
-    }
+      .profile-header::after {
+        content: "";
+        position: absolute;
+        inset: auto 0 -28px 0;
+        height: 56px;
+        background: var(--surface);
+        border-top-left-radius: 28px;
+        border-top-right-radius: 28px;
+      }
 
-    .profile-name {
-      font-size: 24px;
-      font-weight: 500;
-      margin-bottom: 4px;
-    }
+      .avatar-wrap {
+        position: relative;
+        z-index: 1;
+        margin: 0 auto 14px;
+        width: 108px;
+        height: 108px;
+        border-radius: 50%;
+        padding: 4px;
+        background: rgba(255, 255, 255, 0.35);
+        backdrop-filter: blur(4px);
+      }
 
-    .profile-email {
-      opacity: 0.9;
-      font-size: 14px;
-    }
+      .avatar {
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+        background: #fff;
+        color: var(--primary);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 40px;
+        font-weight: 500;
+        overflow: hidden;
+      }
 
-    .profile-body {
-      padding: 24px;
-    }
+      .avatar img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
 
-    .section-title {
-      font-size: 14px;
-      font-weight: 500;
-      color: var(--text-light);
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      margin-bottom: 16px;
-      padding-bottom: 8px;
-      border-bottom: 1px solid var(--border);
-    }
+      .profile-name {
+        position: relative;
+        z-index: 1;
+        font-size: 26px;
+        font-weight: 500;
+        margin-bottom: 4px;
+        letter-spacing: -0.2px;
+      }
 
-    .info-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-      gap: 16px;
-    }
+      .profile-email {
+        position: relative;
+        z-index: 1;
+        opacity: 0.95;
+        font-size: 14px;
+      }
 
-    .info-item {
-      padding: 12px 16px;
-      background: var(--bg-gray);
-      border-radius: 8px;
-    }
+      .profile-badges {
+        position: relative;
+        z-index: 1;
+        display: flex;
+        gap: 8px;
+        justify-content: center;
+        margin-top: 12px;
+        flex-wrap: wrap;
+      }
 
-    .info-label {
-      font-size: 12px;
-      color: var(--text-light);
-      margin-bottom: 4px;
-    }
+      .badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 4px 10px;
+        font-size: 12px;
+        background: rgba(255, 255, 255, 0.2);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        border-radius: 999px;
+        color: #fff;
+        backdrop-filter: blur(6px);
+      }
 
-    .info-value {
-      font-size: 14px;
-      color: var(--text);
-      word-break: break-all;
-    }
+      .badge .dot {
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: #b7f0c2;
+      }
 
-    .info-value.empty {
-      color: var(--text-light);
-      font-style: italic;
-    }
+      .badge.unverified .dot {
+        background: #ffd166;
+      }
 
-    /* Loading */
-    .loading {
-      text-align: center;
-      padding: 60px 20px;
-    }
+      .profile-body {
+        padding: 36px 28px 28px;
+      }
 
-    .spinner {
-      width: 40px;
-      height: 40px;
-      border: 4px solid var(--border);
-      border-top-color: var(--primary);
-      border-radius: 50%;
-      animation: spin 1s linear infinite;
-      margin: 0 auto 16px;
-    }
+      .section-title {
+        font-size: 12px;
+        font-weight: 600;
+        color: var(--text-light);
+        text-transform: uppercase;
+        letter-spacing: 0.8px;
+        margin-bottom: 14px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
 
-    @keyframes spin {
-      to { transform: rotate(360deg); }
-    }
+      .section-title::after {
+        content: "";
+        flex: 1;
+        height: 1px;
+        background: var(--border);
+      }
 
-    /* Error */
-    .error-state {
-      text-align: center;
-      padding: 60px 20px;
-    }
+      .info-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+        gap: 12px;
+      }
 
-    .error-icon {
-      width: 64px;
-      height: 64px;
-      background: #fce8e6;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin: 0 auto 16px;
-      color: var(--error);
-      font-size: 32px;
-    }
+      .info-item {
+        padding: 14px 16px;
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        transition:
+          border-color 0.18s,
+          box-shadow 0.18s,
+          transform 0.18s;
+      }
 
-    .error-message {
-      color: var(--error);
-      margin-bottom: 16px;
-    }
+      .info-item:hover {
+        border-color: var(--primary);
+        box-shadow: var(--shadow-sm);
+        transform: translateY(-1px);
+      }
 
-    /* Raw JSON */
-    .raw-data {
-      margin-top: 24px;
-    }
+      .info-label {
+        font-size: 11px;
+        color: var(--text-light);
+        margin-bottom: 4px;
+        text-transform: uppercase;
+        letter-spacing: 0.4px;
+        font-weight: 500;
+      }
 
-    .raw-data summary {
-      cursor: pointer;
-      color: var(--primary);
-      font-size: 14px;
-      padding: 8px 0;
-    }
+      .info-value {
+        font-size: 14px;
+        color: var(--text);
+        word-break: break-word;
+        line-height: 1.4;
+      }
 
-    .raw-data pre {
-      background: #1e1e1e;
-      color: #d4d4d4;
-      padding: 16px;
-      border-radius: 8px;
-      overflow-x: auto;
-      font-size: 12px;
-      margin-top: 8px;
-    }
-  </style>
-</head>
-<body>
-  <div class="container">
-    <div class="header">
-      <h1>My Profile</h1>
-      <button class="btn btn-outline" id="logout-btn">Sign Out</button>
-    </div>
+      .info-value.empty {
+        color: var(--text-light);
+        font-style: italic;
+      }
 
-    <div class="profile-card">
-      <!-- Loading State -->
-      <div id="loading-state" class="loading">
-        <div class="spinner"></div>
-        <p style="color: var(--text-light);">Loading profile...</p>
+      .section + .section {
+        margin-top: 28px;
+      }
+
+      /* Loading */
+      .loading {
+        text-align: center;
+        padding: 80px 20px;
+      }
+
+      .spinner {
+        width: 40px;
+        height: 40px;
+        border: 4px solid var(--border);
+        border-top-color: var(--primary);
+        border-radius: 50%;
+        animation: spin 0.9s linear infinite;
+        margin: 0 auto 16px;
+      }
+
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+
+      /* Error */
+      .error-state {
+        text-align: center;
+        padding: 80px 20px;
+      }
+
+      .error-icon {
+        width: 72px;
+        height: 72px;
+        background: #fce8e6;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 20px;
+        color: var(--error);
+        font-size: 36px;
+        font-weight: 500;
+      }
+
+      .error-message {
+        color: var(--error);
+        margin-bottom: 20px;
+        font-size: 15px;
+      }
+
+      /* Raw JSON */
+      .raw-data {
+        margin-top: 28px;
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        overflow: hidden;
+      }
+
+      .raw-data summary {
+        cursor: pointer;
+        color: var(--primary);
+        font-size: 13px;
+        font-weight: 500;
+        padding: 12px 16px;
+        background: #fafbfc;
+        list-style: none;
+        user-select: none;
+      }
+
+      .raw-data summary::-webkit-details-marker {
+        display: none;
+      }
+
+      .raw-data summary::before {
+        content: "▸";
+        display: inline-block;
+        margin-right: 8px;
+        transition: transform 0.18s;
+      }
+
+      .raw-data[open] summary::before {
+        transform: rotate(90deg);
+      }
+
+      .raw-data pre {
+        background: #1e1e1e;
+        color: #d4d4d4;
+        padding: 16px;
+        overflow-x: auto;
+        font-size: 12px;
+        font-family: "SF Mono", Menlo, Consolas, monospace;
+        line-height: 1.5;
+      }
+
+      .footnote {
+        text-align: center;
+        font-size: 12px;
+        color: var(--text-light);
+        margin-top: 28px;
+      }
+
+      @media (max-width: 560px) {
+        .topbar {
+          flex-direction: column;
+          gap: 12px;
+        }
+        .profile-header {
+          padding: 32px 18px 50px;
+        }
+        .profile-body {
+          padding: 32px 20px 24px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="topbar">
+        <div class="brand">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 240 48"
+            width="200"
+            height="32"
+            role="img"
+            aria-label="LoginRadius"
+          >
+            <g>
+              <rect x="0" y="4" width="40" height="40" rx="10" fill="#1a73e8" />
+              <path
+                d="M12 13 L12 35 L28 35"
+                stroke="#fff"
+                stroke-width="3.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                fill="none"
+              />
+              <circle cx="30" cy="15" r="4.5" fill="#fff" />
+            </g>
+            <text
+              x="52"
+              y="32"
+              font-family="'Google Sans','Inter',system-ui,-apple-system,sans-serif"
+              font-weight="600"
+              font-size="22"
+              fill="#202124"
+              letter-spacing="-0.3"
+            >
+              Login<tspan fill="#1a73e8" font-weight="700">Radius</tspan>
+            </text>
+          </svg>
+        </div>
+        <button class="btn btn-outline" id="logout-btn">Sign Out</button>
       </div>
 
-      <!-- Error State -->
-      <div id="error-state" class="error-state" style="display: none;">
-        <div class="error-icon">!</div>
-        <p class="error-message" id="error-message">Failed to load profile</p>
-        <button class="btn" onclick="window.location.href='index.html'">Back to Login</button>
-      </div>
-
-      <!-- Profile Content -->
-      <div id="profile-content" style="display: none;">
-        <div class="profile-header">
-          <div class="avatar" id="profile-avatar">U</div>
-          <div class="profile-name" id="profile-name">User</div>
-          <div class="profile-email" id="profile-email">user@example.com</div>
+      <div class="profile-card">
+        <!-- Loading State -->
+        <div id="loading-state" class="loading">
+          <div class="spinner"></div>
+          <p style="color: var(--text-light)">Loading profile...</p>
         </div>
 
-        <div class="profile-body">
-          <h3 class="section-title">Account Information</h3>
-          <div class="info-grid" id="account-info">
-            <!-- Dynamic content -->
+        <!-- Error State -->
+        <div id="error-state" class="error-state" style="display: none">
+          <div class="error-icon">!</div>
+          <p class="error-message" id="error-message">Failed to load profile</p>
+          <button class="btn" onclick="window.location.href = 'index.html'">
+            Back to Login
+          </button>
+        </div>
+
+        <!-- Profile Content -->
+        <div id="profile-content" style="display: none">
+          <div class="profile-header">
+            <div class="avatar-wrap">
+              <div class="avatar" id="profile-avatar">U</div>
+            </div>
+            <div class="profile-name" id="profile-name">User</div>
+            <div class="profile-email" id="profile-email">user@example.com</div>
+            <div class="profile-badges" id="profile-badges"></div>
           </div>
 
-          <h3 class="section-title" style="margin-top: 24px;">Personal Information</h3>
-          <div class="info-grid" id="personal-info">
-            <!-- Dynamic content -->
-          </div>
+          <div class="profile-body">
+            <div class="section">
+              <h3 class="section-title">Account</h3>
+              <div class="info-grid" id="account-info"></div>
+            </div>
 
-          <details class="raw-data">
-            <summary>View Raw Response</summary>
-            <pre id="raw-json"></pre>
-          </details>
+            <div class="section">
+              <h3 class="section-title">Personal</h3>
+              <div class="info-grid" id="personal-info"></div>
+            </div>
+
+            <details class="raw-data">
+              <summary>View raw response</summary>
+              <pre id="raw-json"></pre>
+            </details>
+          </div>
         </div>
       </div>
+
+      <p class="footnote">Secured by LoginRadius CIAM</p>
     </div>
-  </div>
 
-  <!-- Load the core SDK from npm via unpkg (or self-host from node_modules). -->
-  <script src="https://unpkg.com/@loginradius/loginradius-core/dist/LoginRadiusCore.js"></script>
-  <script>
-    // Check for access token
-    const accessToken = localStorage.getItem('lr_access_token');
+    <!-- Load the core SDK from npm via unpkg (or self-host from node_modules). -->
+    <script src="https://auth.lrcontent.com/LoginRadiusCore.js"></script>
+    <script>
+      const accessToken = localStorage.getItem("lr_access_token");
 
-    if (!accessToken) {
-      window.location.href = 'index.html';
-    }
+      if (!accessToken) {
+        window.location.href = "index.html";
+      }
 
-    // Initialize LoginRadiusCore — replace placeholders with values from your LoginRadius app settings.
-    const LRObject = new LoginRadiusCore({
-      apiKey: 'YOUR_API_KEY',
-      appName: 'YOUR_APP_NAME',
-      callbackUrl: window.location.href,
-      debugMode: true,
-    });
+      const LRObject = new LoginRadiusCore({
+        apiKey: "YOUR_API_KEY",
+        appName: "YOUR_APP_NAME",
+        callbackUrl: window.location.href,
+        debugMode: true,
+      });
 
-    // DOM Elements
-    const loadingState = document.getElementById('loading-state');
-    const errorState = document.getElementById('error-state');
-    const profileContent = document.getElementById('profile-content');
-    const errorMessage = document.getElementById('error-message');
+      const loadingState = document.getElementById("loading-state");
+      const errorState = document.getElementById("error-state");
+      const profileContent = document.getElementById("profile-content");
+      const errorMessage = document.getElementById("error-message");
 
-    // Load profile data
-    function loadProfile() {
-      LRObject.ready(() => {
-        LRObject.controller.getAccount(
-          accessToken,
-          (response) => {
-            console.log('Profile response:', response);
-            
-            if (response?.success && response?.data) {
-              renderProfile(response.data);
-            } else {
-              showError(response?.error || 'Failed to load profile');
-            }
+      function loadProfile() {
+        LRObject.ready(() => {
+          LRObject.controller.getAccount(
+            accessToken,
+            (response) => {
+              const ok = response?.success || response?.IsPosted;
+              // Profile payload can arrive as response.data, response.Data,
+              // response.Data.Profile (register-style), or response itself.
+              const data =
+                response?.data ||
+                response?.Data?.Profile ||
+                response?.Data ||
+                response;
+              if (ok && data) {
+                renderProfile(data);
+              } else if (data && (data.Uid || data.ID || data.Email)) {
+                renderProfile(data);
+              } else {
+                showError(response?.error || "Failed to load profile");
+              }
+            },
+            (error) => {
+              console.error("Profile error:", error);
+              const msg =
+                error?.data?.Message ||
+                error?.error ||
+                "Failed to load profile";
+              showError(msg);
+            },
+          );
+        });
+      }
+
+      function renderProfile(profile) {
+        loadingState.style.display = "none";
+        profileContent.style.display = "block";
+
+        const avatar = document.getElementById("profile-avatar");
+        if (profile.ImageUrl) {
+          avatar.innerHTML = `<img src="${profile.ImageUrl}" alt="Profile">`;
+        } else {
+          const initial = (profile.FirstName ||
+            profile.Email?.[0]?.Value ||
+            "U")[0].toUpperCase();
+          avatar.textContent = initial;
+        }
+
+        const name =
+          [profile.FirstName, profile.LastName].filter(Boolean).join(" ") ||
+          "User";
+        document.getElementById("profile-name").textContent = name;
+
+        const email = profile.Email?.[0]?.Value || "No email";
+        document.getElementById("profile-email").textContent = email;
+
+        // Status badges
+        const badges = document.getElementById("profile-badges");
+        const badgeItems = [];
+        badgeItems.push(
+          `<span class="badge ${profile.EmailVerified ? "" : "unverified"}"><span class="dot"></span>${
+            profile.EmailVerified ? "Email verified" : "Email unverified"
+          }</span>`,
+        );
+        if (profile.Provider) {
+          badgeItems.push(
+            `<span class="badge"><span class="dot"></span>${escapeHtml(profile.Provider)}</span>`,
+          );
+        }
+        badges.innerHTML = badgeItems.join("");
+
+        const accountInfo = document.getElementById("account-info");
+        accountInfo.innerHTML = createInfoItems([
+          { label: "User ID (UID)", value: profile.Uid },
+          {
+            label: "Email Verified",
+            value: profile.EmailVerified ? "Yes" : "No",
           },
-          (error) => {
-            console.error('Profile error:', error);
-            const msg = error?.data?.Message || error?.error || 'Failed to load profile';
-            showError(msg);
-          }
+          {
+            label: "Phone Verified",
+            value: profile.PhoneIdVerified ? "Yes" : "No",
+          },
+          { label: "Provider", value: profile.Provider },
+          { label: "Created Date", value: formatDate(profile.CreatedDate) },
+          { label: "Last Login", value: formatDate(profile.LastLoginDate) },
+        ]);
+
+        const personalInfo = document.getElementById("personal-info");
+        personalInfo.innerHTML = createInfoItems([
+          { label: "First Name", value: profile.FirstName },
+          { label: "Last Name", value: profile.LastName },
+          { label: "Username", value: profile.UserName },
+          { label: "Phone", value: profile.PhoneId },
+          { label: "Date of Birth", value: profile.BirthDate },
+          { label: "Gender", value: profile.Gender },
+          { label: "Country", value: profile.Country?.Name },
+          { label: "City", value: profile.City },
+        ]);
+
+        document.getElementById("raw-json").textContent = JSON.stringify(
+          profile,
+          null,
+          2,
+        );
+      }
+
+      function escapeHtml(s) {
+        return String(s).replace(/[&<>"']/g, (c) => ({
+          "&": "&amp;",
+          "<": "&lt;",
+          ">": "&gt;",
+          '"': "&quot;",
+          "'": "&#39;",
+        })[c]);
+      }
+
+      function createInfoItems(items) {
+        return items
+          .map(
+            (item) => `
+        <div class="info-item">
+          <div class="info-label">${escapeHtml(item.label)}</div>
+          <div class="info-value ${!item.value ? "empty" : ""}">${
+            item.value ? escapeHtml(item.value) : "Not set"
+          }</div>
+        </div>
+      `,
+          )
+          .join("");
+      }
+
+      function formatDate(dateStr) {
+        if (!dateStr) return null;
+        try {
+          return new Date(dateStr).toLocaleDateString("en-US", {
+            year: "numeric",
+            month: "long",
+            day: "numeric",
+            hour: "2-digit",
+            minute: "2-digit",
+          });
+        } catch {
+          return dateStr;
+        }
+      }
+
+      function showError(msg) {
+        loadingState.style.display = "none";
+        errorState.style.display = "block";
+        errorMessage.textContent = msg;
+      }
+
+      document.getElementById("logout-btn").addEventListener("click", () => {
+        LRObject.controller.ssoLogout(
+          () => {
+            localStorage.removeItem("lr_access_token");
+            window.location.href = "index.html";
+          },
+          () => {
+            localStorage.removeItem("lr_access_token");
+            window.location.href = "index.html";
+          },
         );
       });
-    }
 
-    // Render profile data
-    function renderProfile(profile) {
-      loadingState.style.display = 'none';
-      profileContent.style.display = 'block';
-
-      // Avatar
-      const avatar = document.getElementById('profile-avatar');
-      if (profile.ImageUrl) {
-        avatar.innerHTML = `<img src="${profile.ImageUrl}" alt="Profile">`;
-      } else {
-        const initial = (profile.FirstName || profile.Email?.[0]?.Value || 'U')[0].toUpperCase();
-        avatar.textContent = initial;
-      }
-
-      // Name
-      const name = [profile.FirstName, profile.LastName].filter(Boolean).join(' ') || 'User';
-      document.getElementById('profile-name').textContent = name;
-
-      // Email
-      const email = profile.Email?.[0]?.Value || 'No email';
-      document.getElementById('profile-email').textContent = email;
-
-      // Account Info
-      const accountInfo = document.getElementById('account-info');
-      accountInfo.innerHTML = createInfoItems([
-        { label: 'User ID (UID)', value: profile.Uid },
-        { label: 'Email Verified', value: profile.EmailVerified ? 'Yes' : 'No' },
-        { label: 'Phone Verified', value: profile.PhoneIdVerified ? 'Yes' : 'No' },
-        { label: 'Provider', value: profile.Provider },
-        { label: 'Created Date', value: formatDate(profile.CreatedDate) },
-        { label: 'Last Login', value: formatDate(profile.LastLoginDate) },
-      ]);
-
-      // Personal Info
-      const personalInfo = document.getElementById('personal-info');
-      personalInfo.innerHTML = createInfoItems([
-        { label: 'First Name', value: profile.FirstName },
-        { label: 'Last Name', value: profile.LastName },
-        { label: 'Username', value: profile.UserName },
-        { label: 'Phone', value: profile.PhoneId },
-        { label: 'Date of Birth', value: profile.BirthDate },
-        { label: 'Gender', value: profile.Gender },
-        { label: 'Country', value: profile.Country?.Name },
-        { label: 'City', value: profile.City },
-      ]);
-
-      // Raw JSON
-      document.getElementById('raw-json').textContent = JSON.stringify(profile, null, 2);
-    }
-
-    // Create info items HTML
-    function createInfoItems(items) {
-      return items.map(item => `
-        <div class="info-item">
-          <div class="info-label">${item.label}</div>
-          <div class="info-value ${!item.value ? 'empty' : ''}">${item.value || 'Not set'}</div>
-        </div>
-      `).join('');
-    }
-
-    // Format date
-    function formatDate(dateStr) {
-      if (!dateStr) return null;
-      try {
-        return new Date(dateStr).toLocaleDateString('en-US', {
-          year: 'numeric',
-          month: 'long',
-          day: 'numeric',
-          hour: '2-digit',
-          minute: '2-digit'
-        });
-      } catch {
-        return dateStr;
-      }
-    }
-
-    // Show error
-    function showError(msg) {
-      loadingState.style.display = 'none';
-      errorState.style.display = 'block';
-      errorMessage.textContent = msg;
-    }
-
-    // Logout
-    document.getElementById('logout-btn').addEventListener('click', () => {
-      console.log('Logout button clicked');
-      
-      // Call SSO logout API, then clear local storage
-      LRObject.controller.ssoLogout(
-        (response) => {
-          console.log('SSO Logout successful:', response);
-          // Clear local storage and redirect
-          localStorage.removeItem('lr_access_token');
-          window.location.href = 'index.html';
-        },
-        (error) => {
-          console.log('SSO Logout error:', error);
-          // Still clear local storage and redirect even on error
-          localStorage.removeItem('lr_access_token');
-          window.location.href = 'index.html';
-        }
-      );
-      
-      // Also call local logout to clear cookies/storage
-      // LRObject.controller.logout();
-    });
-
-    // Load profile on page load
-    loadProfile();
-  </script>
-</body>
+      loadProfile();
+    </script>
+  </body>
 </html>

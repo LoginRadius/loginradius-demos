@@ -1,12 +1,12 @@
 'use client';
 
 import {
-  Login,
+  Auth,
   AuthResponse,
   ApiResponse,
   ApiError,
   LoginRadiusProvider,
-} from '@loginradius/loginradius-react';
+} from '@loginradius/loginradius-react-sdk';
 import { useState } from 'react';
 
 export default function Home() {
@@ -51,7 +51,7 @@ export default function Home() {
       <main className="relative flex min-h-screen flex-col items-center justify-center">
         <div
           className={`thin-scrollbar w-[400px] rounded-2xl bg-white transition-transform duration-500 ${
-            isRegisterView ? 'scale-100' : 'scale-95'
+            isRegisterView ? "scale-100" : "scale-95"
           }`}
           style={{
             transition: 'height 0.5s ease',
@@ -62,7 +62,7 @@ export default function Home() {
             <div>Loading...</div>
           </div>
 
-          <Login onSuccess={handleLoginSuccess} onError={handleError} />
+          <Auth onSuccess={handleLoginSuccess} onError={handleError} />
         </div>
       </main>
     </LoginRadiusProvider>

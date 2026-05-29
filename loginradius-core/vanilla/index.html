@@ -1,18 +1,24 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Sign in - Google Style</title>
+    <title>Sign in — LoginRadius</title>
     <style>
       :root {
         --primary: #1a73e8;
         --primary-dark: #1557b0;
+        --primary-soft: #e8f0fe;
         --error: #d93025;
         --border: #dadce0;
+        --border-strong: #c0c4c9;
         --text: #202124;
         --text-light: #5f6368;
         --bg-gray: #f1f3f4;
+        --shadow-sm: 0 1px 2px rgba(60, 64, 67, 0.08),
+          0 1px 3px rgba(60, 64, 67, 0.06);
+        --shadow-md: 0 2px 6px rgba(60, 64, 67, 0.1),
+          0 8px 24px rgba(60, 64, 67, 0.08);
       }
 
       * {
@@ -21,53 +27,59 @@
         padding: 0;
       }
       body {
-        font-family: 'Google Sans', Roboto, Arial, sans-serif;
-        background: #fff;
+        font-family: "Google Sans", "Inter", -apple-system, BlinkMacSystemFont,
+          Roboto, Arial, sans-serif;
+        background: radial-gradient(
+            1200px 600px at 50% -10%,
+            #eef3fd 0%,
+            transparent 60%
+          ),
+          #fafbfc;
         min-height: 100vh;
         display: grid;
         place-items: center;
+        padding: 24px;
+        color: var(--text);
       }
 
       .login-container {
         width: 100%;
-        max-width: 500px;
-        padding: 48px 40px 36px;
+        max-width: 460px;
+        padding: 44px 40px 32px;
         border: 1px solid var(--border);
-        border-radius: 8px;
+        border-radius: 12px;
         background: #fff;
+        box-shadow: var(--shadow-md);
       }
 
       .logo {
-        text-align: center;
-        margin-bottom: 28px;
         display: flex;
         justify-content: center;
         align-items: center;
-        margin-left: 40px;
+        margin-bottom: 28px;
       }
 
       .logo svg {
         height: 40px;
         width: auto;
-        max-width: 100%;
       }
 
       .title {
-        font-size: 24px;
-        font-weight: 400;
+        font-size: 26px;
+        font-weight: 500;
         color: var(--text);
         text-align: center;
         margin-bottom: 8px;
+        letter-spacing: -0.2px;
       }
 
       .subtitle {
-        font-size: 16px;
-        color: var(--text);
+        font-size: 15px;
+        color: var(--text-light);
         text-align: center;
         margin-bottom: 32px;
       }
 
-      /* Floating Label Input */
       .input-group {
         position: relative;
         margin-bottom: 10px;
@@ -79,10 +91,17 @@
         padding: 10px 16px 6px;
         font-size: 16px;
         border: 1px solid var(--border);
-        border-radius: 4px;
+        border-radius: 6px;
         outline: none;
         background: transparent;
-        transition: all 0.2s;
+        transition:
+          border-color 0.15s ease,
+          box-shadow 0.15s ease;
+        color: var(--text);
+      }
+
+      .input-group input:hover {
+        border-color: var(--border-strong);
       }
 
       .input-group input:focus {
@@ -109,10 +128,8 @@
         transition: all 0.15s ease-out;
         background: #fff;
         padding: 0 4px;
-        margin-left: 0;
       }
 
-      /* Floating label - when focused or has value */
       .input-group input:focus + label,
       .input-group input:not(:placeholder-shown) + label {
         top: 0;
@@ -143,13 +160,29 @@
         opacity: 1;
       }
 
+      .helper-text {
+        font-size: 13px;
+        color: var(--text-light);
+        margin-bottom: 24px;
+        line-height: 1.5;
+      }
+
+      .helper-text a {
+        color: var(--primary);
+        text-decoration: none;
+        font-weight: 500;
+      }
+      .helper-text a:hover {
+        text-decoration: underline;
+      }
+
       .forgot-link {
-        display: block;
+        display: inline-block;
         color: var(--primary);
         font-size: 14px;
         font-weight: 500;
         text-decoration: none;
-        margin: 16px 0 32px;
+        margin: 12px 0 24px;
       }
 
       .forgot-link:hover {
@@ -160,13 +193,14 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
-        margin-top: 22px;
+        margin-top: 24px;
       }
 
       .create-account {
         color: var(--primary);
         font-weight: 500;
         text-decoration: none;
+        font-size: 14px;
       }
 
       .create-account:hover {
@@ -177,17 +211,18 @@
         background: var(--primary);
         color: #fff;
         border: none;
-        padding: 10px 24px;
+        padding: 11px 28px;
         font-size: 14px;
         font-weight: 500;
-        border-radius: 4px;
+        border-radius: 6px;
         cursor: pointer;
-        transition: all 0.2s;
+        transition: all 0.18s ease;
+        letter-spacing: 0.2px;
       }
 
       .btn-next:hover:not(:disabled) {
         background: var(--primary-dark);
-        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+        box-shadow: 0 1px 3px rgba(26, 115, 232, 0.4);
       }
 
       .btn-next:disabled {
@@ -195,10 +230,9 @@
         cursor: not-allowed;
       }
 
-      /* Screens */
       .screen {
         display: none;
-        animation: fadeIn 0.3s ease;
+        animation: fadeIn 0.25s ease;
       }
       .screen.active {
         display: block;
@@ -207,27 +241,26 @@
       @keyframes fadeIn {
         from {
           opacity: 0;
-          transform: translateX(20px);
+          transform: translateY(8px);
         }
         to {
           opacity: 1;
-          transform: translateX(0);
+          transform: translateY(0);
         }
       }
 
-      /* User Chip */
       .user-chip {
         display: inline-flex;
         align-items: center;
         gap: 8px;
-        padding: 4px 12px 4px 4px;
+        padding: 4px 14px 4px 4px;
         border: 1px solid var(--border);
-        border-radius: 16px;
+        border-radius: 20px;
         font-size: 14px;
         color: #3c4043;
         margin-bottom: 24px;
         cursor: pointer;
-        transition: background 0.2s;
+        transition: background 0.18s;
       }
 
       .user-chip:hover {
@@ -235,18 +268,17 @@
       }
 
       .user-chip .avatar {
-        width: 24px;
-        height: 24px;
+        width: 26px;
+        height: 26px;
         border-radius: 50%;
         background: var(--primary);
         color: #fff;
         display: grid;
         place-items: center;
         font-weight: 500;
-        font-size: 12px;
+        font-size: 13px;
       }
 
-      /* Password Toggle */
       .password-toggle {
         display: flex;
         align-items: center;
@@ -258,7 +290,7 @@
         cursor: pointer;
       }
 
-      .password-toggle input[type='checkbox'] {
+      .password-toggle input[type="checkbox"] {
         width: 18px;
         height: 18px;
         -webkit-appearance: checkbox;
@@ -266,7 +298,6 @@
         accent-color: var(--primary);
       }
 
-      /* Loading & Success */
       .loading,
       .success-message {
         text-align: center;
@@ -274,12 +305,12 @@
       }
 
       .spinner {
-        width: 24px;
-        height: 24px;
+        width: 28px;
+        height: 28px;
         border: 3px solid var(--border);
         border-top-color: var(--primary);
         border-radius: 50%;
-        animation: spin 1s linear infinite;
+        animation: spin 0.9s linear infinite;
         margin: 0 auto 16px;
       }
 
@@ -290,8 +321,8 @@
       }
 
       .success-message .icon {
-        width: 48px;
-        height: 48px;
+        width: 56px;
+        height: 56px;
         background: #34a853;
         border-radius: 50%;
         margin: 0 auto 16px;
@@ -300,18 +331,18 @@
       }
 
       .success-message .icon svg {
-        width: 28px;
-        height: 28px;
+        width: 30px;
+        height: 30px;
         fill: #fff;
       }
 
-      /* Signup form */
       .signup-loading {
         text-align: center;
         padding: 20px;
       }
 
-      #signup-fields .input-group {
+      #signup-fields .input-group,
+      #login-fields .input-group {
         margin-bottom: 16px;
       }
 
@@ -324,14 +355,13 @@
         flex: 1;
       }
 
-      /* Select styling */
       .input-group select {
         width: 100%;
         height: 56px;
         padding: 20px 16px 6px;
         font-size: 16px;
         border: 1px solid var(--border);
-        border-radius: 4px;
+        border-radius: 6px;
         outline: none;
         background: #fff;
         cursor: pointer;
@@ -343,7 +373,6 @@
         border: 2px solid var(--primary);
       }
 
-      /* Checkbox/Multi field */
       .checkbox-group {
         display: flex;
         align-items: flex-start;
@@ -353,7 +382,7 @@
         color: var(--text);
       }
 
-      .checkbox-group input[type='checkbox'] {
+      .checkbox-group input[type="checkbox"] {
         width: 18px;
         height: 18px;
         margin-top: 2px;
@@ -370,20 +399,49 @@
       .checkbox-group a {
         color: var(--primary);
       }
+
+      .footnote {
+        text-align: center;
+        font-size: 12px;
+        color: var(--text-light);
+        margin-top: 20px;
+      }
     </style>
   </head>
   <body>
     <div class="login-container">
       <!-- LoginRadius Logo -->
       <div class="logo">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 205 40" style="width: 280px; height: 40px;">
-          <defs>
-            <style>
-              .lr-logo { font-family: 'Google Sans', 'Product Sans', Arial, sans-serif; font-weight: 700; font-size: 32px; }
-            </style>
-          </defs>
-          <text class="lr-logo" x="0" y="30">
-            <tspan fill="#4285F4">L</tspan><tspan fill="#EA4335">o</tspan><tspan fill="#FBBC05">g</tspan><tspan fill="#34A853">i</tspan><tspan fill="#EA4335">n</tspan><tspan fill="#4285F4">r</tspan><tspan fill="#EA4335">a</tspan><tspan fill="#FBBC05">d</tspan><tspan fill="#34A853">i</tspan><tspan fill="#EA4335">u</tspan><tspan fill="#4285F4">s</tspan>
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 240 48"
+          width="240"
+          height="48"
+          role="img"
+          aria-label="LoginRadius"
+        >
+          <g>
+            <rect x="0" y="4" width="40" height="40" rx="10" fill="#1a73e8" />
+            <path
+              d="M12 13 L12 35 L28 35"
+              stroke="#fff"
+              stroke-width="3.5"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              fill="none"
+            />
+            <circle cx="30" cy="15" r="4.5" fill="#fff" />
+          </g>
+          <text
+            x="52"
+            y="32"
+            font-family="'Google Sans','Inter',system-ui,-apple-system,sans-serif"
+            font-weight="600"
+            font-size="22"
+            fill="#202124"
+            letter-spacing="-0.3"
+          >
+            Login<tspan fill="#1a73e8" font-weight="700">Radius</tspan>
           </text>
         </svg>
       </div>
@@ -391,7 +449,7 @@
       <!-- Email Screen -->
       <div id="email-screen" class="screen active">
         <h1 class="title">Sign in</h1>
-        <p class="subtitle">Use your Google Account</p>
+        <p class="subtitle">Use your credentials to continue</p>
 
         <div class="input-group">
           <input
@@ -405,11 +463,9 @@
           <div class="error-message" id="email-error"></div>
         </div>
 
-        <p
-          style="font-size: 14px; color: var(--text-light); margin-bottom: 24px"
-        >
+        <p class="helper-text">
           Not your computer? Use Guest mode to sign in privately.
-          <a href="#" style="color: var(--primary)">Learn more</a>
+          <a href="#">Learn more</a>
         </p>
 
         <div class="btn-row">
@@ -418,7 +474,7 @@
         </div>
       </div>
 
-      <!-- Password Screen -->
+      <!-- Password Screen (fields rendered from loginFormSchema) -->
       <div id="password-screen" class="screen">
         <h1 class="title">Welcome</h1>
 
@@ -428,16 +484,20 @@
           <span class="arrow">▼</span>
         </div>
 
-        <div class="input-group">
-          <input
-            type="password"
-            id="password-input"
-            placeholder=" "
-            autocomplete="current-password"
-            required
-          />
-          <label>Enter your password</label>
-          <div class="error-message" id="password-error"></div>
+        <div id="login-fields">
+          <!-- Fallback (used until/if schema loads). Schema-driven fields will replace this. -->
+          <div class="input-group">
+            <input
+              type="password"
+              id="password-input"
+              name="password"
+              placeholder=" "
+              autocomplete="current-password"
+              required
+            />
+            <label>Enter your password</label>
+            <div class="error-message" id="password-error"></div>
+          </div>
         </div>
 
         <label class="password-toggle">
@@ -458,7 +518,6 @@
         <p class="subtitle">Enter your details to sign up</p>
 
         <div id="signup-fields">
-          <!-- Dynamic fields will be rendered here -->
           <div class="signup-loading">
             <div class="spinner"></div>
             <p style="color: var(--text-light); font-size: 14px">
@@ -470,9 +529,7 @@
         <div class="error-message" id="signup-error"></div>
 
         <div class="btn-row">
-          <a href="#" class="create-account" id="back-to-login"
-            >Sign In</a
-          >
+          <a href="#" class="create-account" id="back-to-login">Sign In</a>
           <button class="btn-next" id="signup-btn" disabled>Sign up</button>
         </div>
       </div>
@@ -494,75 +551,79 @@
         <p id="welcome-message">You have successfully signed in.</p>
       </div>
     </div>
+
+    <p class="footnote">Secured by LoginRadius CIAM</p>
+
     <!-- Load the core SDK from npm via unpkg (or self-host from node_modules). -->
-    <script src="https://unpkg.com/@loginradius/loginradius-core/dist/LoginRadiusCore.js"></script>
+    <script src="https://auth.lrcontent.com/LoginRadiusCore.js"></script>
     <script>
       // Replace placeholders with values from your LoginRadius app settings.
       const LRClient = new LoginRadiusCore({
-        apiKey: 'YOUR_API_KEY',
-        sott: 'YOUR_SOTT',
+        apiKey: "YOUR_API_KEY",
+        sott: "YOUR_SOTT",
         callbackUrl: window.location.href,
         debugMode: true,
       });
 
-      // DOM Cache
       const $ = (sel, el = document) => el.querySelector(sel);
       const screens = {
-        email: $('#email-screen'),
-        password: $('#password-screen'),
-        signup: $('#signup-screen'),
-        loading: $('#loading'),
-        success: $('#success'),
+        email: $("#email-screen"),
+        password: $("#password-screen"),
+        signup: $("#signup-screen"),
+        loading: $("#loading"),
+        success: $("#success"),
       };
 
       const elements = {
-        emailInput: $('#email-input'),
-        passwordInput: $('#password-input'),
-        emailError: $('#email-error'),
-        passwordError: $('#password-error'),
-        emailNext: $('#email-next-btn'),
-        loginBtn: $('#login-btn'),
-        showPass: $('#show-password'),
-        userChip: $('#user-chip'),
-        userEmail: $('#user-email'),
-        userAvatar: $('#user-avatar'),
-        welcomeMsg: $('#welcome-message'),
-        createAccount: $('.create-account'),
-        signupFields: $('#signup-fields'),
-        signupBtn: $('#signup-btn'),
-        signupError: $('#signup-error'),
-        backToLogin: $('#back-to-login'),
-        loadingText: $('#loading-text'),
+        emailInput: $("#email-input"),
+        emailError: $("#email-error"),
+        emailNext: $("#email-next-btn"),
+        loginFields: $("#login-fields"),
+        passwordInput: $("#password-input"),
+        passwordError: $("#password-error"),
+        loginBtn: $("#login-btn"),
+        showPass: $("#show-password"),
+        userChip: $("#user-chip"),
+        userEmail: $("#user-email"),
+        userAvatar: $("#user-avatar"),
+        welcomeMsg: $("#welcome-message"),
+        createAccount: $(".create-account"),
+        signupFields: $("#signup-fields"),
+        signupBtn: $("#signup-btn"),
+        signupError: $("#signup-error"),
+        backToLogin: $("#back-to-login"),
+        loadingText: $("#loading-text"),
       };
 
-      let currentEmail = '';
+      let currentEmail = "";
 
-      // Email validation
       const isValidEmail = (email) =>
         /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim());
 
-      // Screen control
       const showScreen = (name) => {
-        Object.values(screens).forEach((s) => s.classList.remove('active'));
-        screens[name].classList.add('active');
+        Object.values(screens).forEach((s) => s.classList.remove("active"));
+        screens[name].classList.add("active");
       };
 
-      // Error handling
       const setError = (input, errorEl, message) => {
-        input.classList.add('error');
-        errorEl.textContent = message;
-        errorEl.classList.add('show');
+        if (input) input.classList.add("error");
+        if (errorEl) {
+          errorEl.textContent = message;
+          errorEl.classList.add("show");
+        }
       };
 
       const clearError = (input, errorEl) => {
-        input.classList.remove('error');
-        errorEl.classList.remove('show');
+        if (input) input.classList.remove("error");
+        if (errorEl) errorEl.classList.remove("show");
       };
 
-      // Email → Password (with email availability check)
+      // ============================================
+      // EMAIL → PASSWORD (with email availability check)
+      // ============================================
       let emailCheckInProgress = false;
 
-      elements.emailNext.addEventListener('click', async () => {
+      elements.emailNext.addEventListener("click", async () => {
         if (emailCheckInProgress) return;
 
         const email = elements.emailInput.value.trim();
@@ -571,130 +632,158 @@
           return setError(
             elements.emailInput,
             elements.emailError,
-            'Enter an email or phone number'
+            "Enter an email or phone number",
           );
         }
         if (!isValidEmail(email)) {
           return setError(
             elements.emailInput,
             elements.emailError,
-            'Enter a valid email address'
+            "Enter a valid email address",
           );
         }
 
         clearError(elements.emailInput, elements.emailError);
         emailCheckInProgress = true;
         elements.emailNext.disabled = true;
-        elements.emailNext.textContent = 'Checking...';
+        elements.emailNext.textContent = "Checking...";
 
         try {
-          // Check if email is registered
           await LRClient.controller.checkEmailAvailability(
             email,
             (response) => {
-              console.log('Email availability response:', response);
               if (response?.success && response?.data?.IsExist) {
-                // Email exists, proceed to password screen
                 currentEmail = email;
                 elements.userEmail.textContent = email;
                 elements.userAvatar.textContent = email[0].toUpperCase();
-                showScreen('password');
-                elements.passwordInput.focus();
+                showScreen("password");
+                getCurrentPasswordInput()?.focus();
               } else {
-                // Email not registered
                 setError(
                   elements.emailInput,
                   elements.emailError,
-                  'Email not registered. Please create an account.'
+                  "Email not registered. Please create an account.",
                 );
               }
             },
             (error) => {
-              console.error('Email check error:', error);
+              console.error("Email check error:", error);
               setError(
                 elements.emailInput,
                 elements.emailError,
-                error?.error || 'Unable to verify email. Please try again.'
+                error?.error || "Unable to verify email. Please try again.",
               );
-            }
+            },
           );
         } catch (err) {
-          console.error('Email check failed:', err);
+          console.error("Email check failed:", err);
           setError(
             elements.emailInput,
             elements.emailError,
-            'Unable to verify email. Please try again.'
+            "Unable to verify email. Please try again.",
           );
         } finally {
           emailCheckInProgress = false;
           elements.emailNext.disabled = false;
-          elements.emailNext.textContent = 'Next';
+          elements.emailNext.textContent = "Next";
         }
       });
 
       // Back to email
-      elements.userChip.addEventListener('click', () => {
-        showScreen('email');
+      elements.userChip.addEventListener("click", () => {
+        showScreen("email");
         elements.emailInput.focus();
       });
 
-      // Show password toggle
-      elements.showPass.addEventListener('change', () => {
-        elements.passwordInput.type = elements.showPass.checked
-          ? 'text'
-          : 'password';
+      // Show password toggle (works on current rendered password input)
+      elements.showPass.addEventListener("change", () => {
+        const pwd = getCurrentPasswordInput();
+        if (pwd) pwd.type = elements.showPass.checked ? "text" : "password";
       });
 
-      // Login
+      function getCurrentPasswordInput() {
+        return elements.loginFields.querySelector('input[type="password"], input[type="text"][name="password"]');
+      }
+
+      function getCurrentPasswordError(pwd) {
+        return pwd?.parentElement.querySelector(".error-message");
+      }
+
+      // ============================================
+      // LOGIN
+      // ============================================
       let loginInProgress = false;
 
-      elements.loginBtn.addEventListener('click', async () => {
+      elements.loginBtn.addEventListener("click", async () => {
         if (loginInProgress) return;
         loginInProgress = true;
 
-        const password = elements.passwordInput.value;
-        if (!password) {
-          setError(
-            elements.passwordInput,
-            elements.passwordError,
-            'Enter a password'
-          );
+        // Collect credentials from rendered login fields
+        const credentials = { emailid: currentEmail };
+        let hasError = false;
+        let firstInvalid = null;
+
+        elements.loginFields
+          .querySelectorAll("input, select")
+          .forEach((input) => {
+            const name = input.name;
+            if (!name) return;
+            const value =
+              input.type === "checkbox" ? input.checked : input.value.trim?.() ?? input.value;
+            const errorEl = input.parentElement.querySelector(".error-message");
+
+            if (input.required && !value) {
+              setError(input, errorEl, `${name} is required`);
+              hasError = true;
+              if (!firstInvalid) firstInvalid = input;
+              return;
+            }
+            clearError(input, errorEl);
+            credentials[name] = value;
+          });
+
+        if (hasError) {
           loginInProgress = false;
+          firstInvalid?.focus();
           return;
         }
 
-        clearError(elements.passwordInput, elements.passwordError);
-        showScreen('loading');
+        showScreen("loading");
 
         try {
           await LRClient.controller.login(
-            { emailid: currentEmail, password },
+            credentials,
             (response) => {
-              if (!response?.success) throw response;
-              
-              // Store access token and redirect to profile
-              const accessToken = response.data?.access_token;
+              const ok = response?.success || response?.IsPosted;
+              if (!ok) throw response;
+
+              const data = response.data || response.Data || {};
+              const accessToken = data.access_token;
               if (accessToken) {
-                localStorage.setItem('lr_access_token', accessToken);
-                window.location.href = 'profile.html';
+                localStorage.setItem("lr_access_token", accessToken);
+                window.location.href = "profile.html";
               } else {
                 elements.welcomeMsg.textContent = `Login Success!`;
-                showScreen('success');
+                showScreen("success");
               }
             },
             (error) => {
-              showScreen('password');
+              showScreen("password");
               const msg =
                 error?.data?.Description ||
                 error?.error ||
-                'Wrong password. Try again.';
-              setError(elements.passwordInput, elements.passwordError, msg);
-              elements.passwordInput.value = '';
-              elements.passwordInput.focus();
-            }
+                "Wrong password. Try again.";
+              const pwd = getCurrentPasswordInput();
+              const pwdErr = getCurrentPasswordError(pwd);
+              setError(pwd, pwdErr, msg);
+              if (pwd) {
+                pwd.value = "";
+                pwd.focus();
+              }
+            },
           );
         } catch (err) {
-          console.error('Login failed:', err);
+          console.error("Login failed:", err);
         } finally {
           loginInProgress = false;
         }
@@ -702,38 +791,91 @@
 
       // Enter key support
       elements.emailInput.addEventListener(
-        'keydown',
-        (e) => e.key === 'Enter' && elements.emailNext.click()
+        "keydown",
+        (e) => e.key === "Enter" && elements.emailNext.click(),
       );
-      elements.passwordInput.addEventListener(
-        'keydown',
-        (e) => e.key === 'Enter' && elements.loginBtn.click()
-      );
+      elements.loginFields.addEventListener("keydown", (e) => {
+        if (e.key === "Enter" && e.target.matches("input")) {
+          e.preventDefault();
+          elements.loginBtn.click();
+        }
+      });
 
       // Initial focus
       elements.emailInput.focus();
 
       // ============================================
-      // SIGNUP FUNCTIONALITY
+      // SCHEMA-DRIVEN LOGIN FORM (loginFormSchema)
       // ============================================
+      let loginSchema = null;
 
+      function loadLoginSchema() {
+        if (loginSchema) return;
+        LRClient.getSchema(
+          "loginFormSchema",
+          {},
+          (schema) => {
+            loginSchema = schema;
+            renderLoginFields(schema);
+          },
+          (error) => {
+            // Non-fatal: fallback static password field remains active.
+            console.warn("loginFormSchema unavailable, using fallback:", error);
+          },
+        );
+      }
+
+      function renderLoginFields(schema) {
+        let fields = [];
+        if (Array.isArray(schema)) fields = schema;
+        else if (schema.Inputs) fields = schema.Inputs;
+        else if (schema.fields) fields = schema.fields;
+
+        // Filter out fields already collected (email/loginid) and hidden fields.
+        fields = fields.filter((f) => {
+          if (!f || f.type === "hidden") return false;
+          if (f.Checked === false) return false;
+          const n = (f.name || "").toLowerCase();
+          if (
+            n === "emailid" ||
+            n === "email" ||
+            n.includes("email") ||
+            n === "loginid" ||
+            n === "username"
+          )
+            return false;
+          return true;
+        });
+
+        if (fields.length === 0) return; // keep fallback static password input
+
+        let html = "";
+        fields.forEach((f) => {
+          html += createFieldHTML(f);
+        });
+        elements.loginFields.innerHTML = html;
+
+        // Reset show-password toggle to match new input default state.
+        elements.showPass.checked = false;
+      }
+
+      // ============================================
+      // SIGNUP (registrationFormSchema)
+      // ============================================
       let registrationSchema = null;
 
-      // Navigate to signup screen
-      elements.createAccount.addEventListener('click', (e) => {
+      elements.createAccount.addEventListener("click", (e) => {
         e.preventDefault();
-        showScreen('signup');
+        showScreen("signup");
         loadRegistrationSchema();
       });
 
-      // Back to login
-      elements.backToLogin.addEventListener('click', (e) => {
+      elements.backToLogin.addEventListener("click", (e) => {
         e.preventDefault();
-        showScreen('email');
+        showScreen("email");
         elements.emailInput.focus();
       });
 
-      // Load registration schema from API
       function loadRegistrationSchema() {
         if (registrationSchema) {
           renderSignupFields(registrationSchema);
@@ -741,39 +883,27 @@
         }
 
         LRClient.getSchema(
-          'registrationFormSchema',
+          "registrationFormSchema",
           {},
           (schema) => {
-            console.log('Registration Schema:', schema);
             registrationSchema = schema;
             renderSignupFields(schema);
           },
           (error) => {
-            console.error('Failed to load schema:', error);
+            console.error("Failed to load schema:", error);
             elements.signupFields.innerHTML =
               '<p style="color:var(--error);">Failed to load form. Please try again.</p>';
-          }
+          },
         );
       }
 
-      // Render signup fields based on schema
       function renderSignupFields(schema) {
-        let html = '';
+        let html = "";
 
-        // Handle different schema formats:
-        // 1. Direct array of fields
-        // 2. { Inputs: [...], SocialProviders: [...] }
-        // 3. { fields: [...] }
         let fields = [];
-        if (Array.isArray(schema)) {
-          fields = schema;
-        } else if (schema.Inputs) {
-          fields = schema.Inputs;
-        } else if (schema.fields) {
-          fields = schema.fields;
-        }
-
-        console.log('Rendering fields:', fields);
+        if (Array.isArray(schema)) fields = schema;
+        else if (schema.Inputs) fields = schema.Inputs;
+        else if (schema.fields) fields = schema.fields;
 
         if (!fields || fields.length === 0) {
           elements.signupFields.innerHTML =
@@ -782,141 +912,137 @@
         }
 
         fields.forEach((field) => {
-          // Skip hidden fields, but include fields without Checked property (like privacy policy)
-          if (field.type === 'hidden') return;
-          if (field.Checked === false) return; // Only skip if explicitly set to false
+          if (field.type === "hidden") return;
+          if (field.Checked === false) return;
           html += createFieldHTML(field);
         });
 
         elements.signupFields.innerHTML = html;
         elements.signupBtn.disabled = false;
 
-        // Setup floating labels for new inputs
         elements.signupFields
           .querySelectorAll(
-            'input[type="text"], input[type="email"], input[type="password"]'
+            'input[type="text"], input[type="email"], input[type="password"]',
           )
           .forEach((input) => {
-            input.addEventListener('focus', () => {
-              input.classList.remove('error');
+            input.addEventListener("focus", () => {
+              input.classList.remove("error");
               const errorEl =
-                input.parentElement.querySelector('.error-message');
-              if (errorEl) errorEl.classList.remove('show');
+                input.parentElement.querySelector(".error-message");
+              if (errorEl) errorEl.classList.remove("show");
             });
           });
       }
 
-      // Create HTML for a single field
+      // Shared schema → HTML field renderer
       function createFieldHTML(field) {
-        const name = field.name || '';
-        const display = field.display || field.name || '';
-        const type = field.type || 'string';
-        const rules = field.rules || '';
-        const isRequired = rules.includes('required');
-        const requiredMark = isRequired ? ' *' : '';
+        const name = field.name || "";
+        const display = field.display || field.name || "";
+        const type = field.type || "string";
+        const rules = field.rules || "";
+        const isRequired = rules.includes("required");
+        const requiredMark = isRequired ? " *" : "";
 
-        // Handle different field types
         switch (type.toLowerCase()) {
-          case 'password':
+          case "password":
             return `
             <div class="input-group">
               <input type="password" name="${name}" placeholder=" " ${
-              isRequired ? 'required' : ''
-            }>
+                isRequired ? "required" : ""
+              }>
               <label>${display}${requiredMark}</label>
               <div class="error-message"></div>
             </div>`;
-          case 'email':
-          case 'string':
-            const inputType = name.toLowerCase().includes('email')
-              ? 'email'
-              : 'text';
+          case "email":
+          case "string": {
+            const inputType = name.toLowerCase().includes("email")
+              ? "email"
+              : "text";
             return `
             <div class="input-group">
               <input type="${inputType}" name="${name}" placeholder=" " ${
-              isRequired ? 'required' : ''
-            }>
+                isRequired ? "required" : ""
+              }>
               <label>${display}${requiredMark}</label>
               <div class="error-message"></div>
             </div>`;
-
-          case 'multi':
-          case 'checkbox':
+          }
+          case "multi":
+          case "checkbox":
             return `
             <div class="checkbox-group">
               <input type="checkbox" name="${name}" id="field-${name}" ${
-              isRequired ? 'required' : ''
-            }>
+                isRequired ? "required" : ""
+              }>
               <label for="field-${name}">${display}</label>
             </div>`;
 
-          case 'option':
+          case "option": {
             const options = field.options || [];
-            let optionsHtml = options
+            const optionsHtml = options
               .map(
                 (opt) =>
                   `<option value="${opt.value || opt}">${
                     opt.text || opt
-                  }</option>`
+                  }</option>`,
               )
-              .join('');
+              .join("");
             return `
             <div class="input-group">
-              <select name="${name}" ${isRequired ? 'required' : ''}>
+              <select name="${name}" ${isRequired ? "required" : ""}>
                 <option value="">${display}</option>
                 ${optionsHtml}
               </select>
               <div class="error-message"></div>
             </div>`;
-
+          }
           default:
             return `
             <div class="input-group">
               <input type="text" name="${name}" placeholder=" " ${
-              isRequired ? 'required' : ''
-            }>
+                isRequired ? "required" : ""
+              }>
               <label>${display}${requiredMark}</label>
               <div class="error-message"></div>
             </div>`;
         }
       }
 
-      // Signup button click
+      // ============================================
+      // SIGNUP submit
+      // ============================================
       let signupInProgress = false;
 
-      elements.signupBtn.addEventListener('click', async () => {
+      elements.signupBtn.addEventListener("click", async () => {
         if (signupInProgress) return;
         signupInProgress = true;
 
-        // Collect form data
         const formData = {};
         let hasError = false;
 
         elements.signupFields
-          .querySelectorAll('input, select')
+          .querySelectorAll("input, select")
           .forEach((input) => {
             const name = input.name;
             const value =
-              input.type === 'checkbox' ? input.checked : input.value.trim();
+              input.type === "checkbox" ? input.checked : input.value.trim();
             const isRequired = input.required;
-            const errorEl = input.parentElement.querySelector('.error-message');
+            const errorEl = input.parentElement.querySelector(".error-message");
 
-            // Validate required fields
             if (isRequired && !value) {
-              input.classList.add('error');
+              input.classList.add("error");
               if (errorEl) {
                 errorEl.textContent = `${
                   input.previousElementSibling?.textContent || name
                 } is required`;
-                errorEl.classList.add('show');
+                errorEl.classList.add("show");
               }
               hasError = true;
               return;
             }
 
-            // Handle email field specially
-            if (name.toLowerCase().includes('email') && value) {
-              formData.email = [{ type: 'Primary', value: value }];
+            if (name.toLowerCase().includes("email") && value) {
+              formData.email = [{ type: "Primary", value: value }];
             } else if (value) {
               formData[name] = value;
             }
@@ -927,60 +1053,68 @@
           return;
         }
 
-        // Clear previous errors
         clearError(elements.signupBtn, elements.signupError);
-        elements.loadingText.textContent = 'Creating account...';
-        showScreen('loading');
-
-        console.log('Registration payload:', formData);
+        elements.loadingText.textContent = "Creating account...";
+        showScreen("loading");
 
         try {
-           LRClient.controller.register(
+          LRClient.controller.register(
             formData,
             (response) => {
-              console.log('Registration response:', response);
-              if (response?.success) {
-                // Store access token if available and redirect to profile
-                const accessToken = response.data?.access_token;
+              const ok = response?.success || response?.IsPosted;
+              const data = response?.data || response?.Data || {};
+              if (ok) {
+                const accessToken = data.access_token;
                 if (accessToken) {
-                  localStorage.setItem('lr_access_token', accessToken);
-                  // window.location.href = 'profile.html';
+                  // Auto-login after registration: persist token and go to profile.
+                  localStorage.setItem("lr_access_token", accessToken);
+                  window.location.href = "profile.html";
                 } else {
-                  elements.welcomeMsg.textContent = 'Account created successfully!';
-                  showScreen('success');
+                  // Email verification required (no token issued).
+                  elements.welcomeMsg.textContent =
+                    "Account created. Please verify your email to sign in.";
+                  showScreen("success");
                 }
               } else {
-                showScreen('signup');
+                showScreen("signup");
                 const msg =
                   response?.error ||
-                  response?.data?.Message ||
-                  'Registration failed. Please try again.';
+                  data?.Message ||
+                  response?.Message ||
+                  "Registration failed. Please try again.";
                 setError(elements.signupBtn, elements.signupError, msg);
               }
             },
             (error) => {
-              console.error('Registration error:', error);
-              showScreen('signup');
+              console.error("Registration error:", error);
+              showScreen("signup");
               const msg =
                 error?.data?.Description ||
                 error?.data?.Message ||
                 error?.error ||
-                'Registration failed. Please try again.';
+                "Registration failed. Please try again.";
               setError(elements.signupBtn, elements.signupError, msg);
-            }
+            },
           );
         } catch (err) {
-          console.error('Registration failed:', err);
-          showScreen('signup');
+          console.error("Registration failed:", err);
+          showScreen("signup");
           setError(
             elements.signupBtn,
             elements.signupError,
-            'An error occurred. Please try again.'
+            "An error occurred. Please try again.",
           );
         } finally {
           signupInProgress = false;
         }
       });
+
+      // Kick off login schema fetch in the background (non-blocking).
+      if (LRClient.ready) {
+        LRClient.ready(() => loadLoginSchema());
+      } else {
+        loadLoginSchema();
+      }
     </script>
   </body>
 </html>

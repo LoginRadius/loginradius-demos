@@ -1,6 +1,6 @@
 // src/app/workflow.tsx
 import React from 'react';
-import { WorkflowFlow } from '@loginradius/loginradius-react';
+import { WorkflowFlow } from '@loginradius/loginradius-react-sdk';
 
 const Workflow: React.FC = () => {
   return (
@@ -13,7 +13,7 @@ const Workflow: React.FC = () => {
       >
         <WorkflowFlow
           workflowName="testmfaauthenticator"
-          clientId="da4d0462-afbd-4bf9-92b3-f5fcdb887e18"
+          clientId="YOUR_CLIENT_ID"
           onSuccess={(response) => {
             console.log('Workflow success:', response);
             window.location.href = 'https://www.google.com';

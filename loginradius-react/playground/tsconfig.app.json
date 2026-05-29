@@ -17,7 +17,7 @@
     "noFallthroughCasesInSwitch": true,
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
-    "types": ["node", "vite/client"]
+    "types": ["vite/client"]
   },
   "include": ["src"],
   "exclude": ["node_modules", "dist"]
