@@ -1,11 +1,13 @@
+import { useOrgContext } from "@loginradius/loginradius-react-sdk";
 import { I } from "./Icons.jsx";
 import { mockData } from "../services/mockData.js";
-import { useAccountProfile } from "../hooks/useAccountProfile.jsx";
 
 export function Header({ orgName, crumb }) {
-  const { profileData } = useAccountProfile();
+  const { currentOrg } = useOrgContext?.() || {};
+  // Active org from SDK wins; fall back to the layout prop and finally mock data
+  // so the demo still renders something before a real session is established.
   const displayOrgName =
-    profileData?.Organizations?.[0]?.Name || orgName || mockData.org.name;
+    currentOrg?.OrgName || orgName || mockData.org.name;
 
   return (
     <header className="header">

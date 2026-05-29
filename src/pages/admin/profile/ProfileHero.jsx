@@ -1,9 +1,10 @@
+import { useOrgContext } from "@loginradius/loginradius-react-sdk";
 import { I } from "../../../components/Icons.jsx";
 import { PI } from "./ProfileIcons.jsx";
 import { mockData } from "../../../services/mockData.js";
 import { useAccountProfile } from "../../../hooks/useAccountProfile.jsx";
 
-function deriveHero(profileData, fallback) {
+function deriveHero(profileData, fallback, activeOrgName) {
   const fb = fallback || mockData.currentUser;
 
   const firstName = profileData?.Firstname ?? "";
@@ -32,8 +33,9 @@ function deriveHero(profileData, fallback) {
     ? new Date(joinedRaw).toLocaleDateString(undefined, { month: "short", year: "numeric" })
     : fb.joined;
 
-  const orgName =
-    profileData?.Organizations?.[0]?.Name || fb.org || mockData.org.name;
+  // Prefer the active org from OrgContext over the profile's Organizations[0]
+  // (which is a static list of every org the user belongs to, not the selected one).
+  const orgName = activeOrgName || fb.org || mockData.org.name;
 
   return {
     name,
@@ -49,7 +51,8 @@ function deriveHero(profileData, fallback) {
 
 export function ProfileHero({ user: fallback }) {
   const { profileData } = useAccountProfile();
-  const user = deriveHero(profileData, fallback);
+  const { currentOrg } = useOrgContext?.() || {};
+  const user = deriveHero(profileData, fallback, currentOrg?.OrgName);
   const { color, imageUrl } = user;
 
   return (
