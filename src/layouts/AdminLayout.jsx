@@ -4,6 +4,7 @@ import {
   useLoginRadiusSDK,
   useLRAuth,
   useOrgContext,
+  OrganizationSelector,
 } from "@loginradius/loginradius-react-sdk";
 
 import { Sidebar } from "../components/Sidebar.jsx";
@@ -86,7 +87,7 @@ function AdminLayoutInner() {
 
   // Early returns must come AFTER all hooks so hook call order stays stable
   // across renders (Rules of Hooks).
-  if (loading) {
+  if (loading || orgContext.loading) {
     return (
       <div className="page-loader" role="status" aria-live="polite">
         <div className="spinner" aria-hidden="true" />
@@ -96,15 +97,22 @@ function AdminLayoutInner() {
   }
   if (!isAuthenticated) return <Navigate to="/home" replace />;
 
-  const crumb = CRUMB_BY_PATH[location.pathname] || "Dashboard";
+  // Gate: real session with multiple orgs and none selected → force a pick.
+  // Single-org tenants and the mock-data fallback path skip straight through.
+  const realOrgs = orgContext.organizations || [];
+  const needsOrgPick =
+    realOrgs.length > 1 && !orgContext.currentOrg && !orgContext.currentOrgId;
+  if (needsOrgPick) {
+    return (
+      <div className="org-gate">
+        <div className="org-gate-card">
+          <OrganizationSelector />
+        </div>
+      </div>
+    );
+  }
 
-  const handleSwitchOrg = (next) => {
-    setCurrentOrg(next);
-    // If the SDK exposes a real switcher, call it — best-effort, ignore if missing.
-    if (typeof orgContext.switchOrganization === "function") {
-      orgContext.switchOrganization(next.id);
-    }
-  };
+  const crumb = CRUMB_BY_PATH[location.pathname] || "Dashboard";
 
   const user = profileData
     ? {
@@ -129,9 +137,6 @@ function AdminLayoutInner() {
   return (
     <div className="app">
       <Sidebar
-        orgs={orgs}
-        currentOrg={currentOrg}
-        setCurrentOrg={handleSwitchOrg}
         user={user}
         counts={counts}
         onSignOut={handleSignOut}

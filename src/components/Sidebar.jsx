@@ -1,6 +1,6 @@
 import { NavLink } from "react-router-dom";
+import { OrganizationSwitcher } from "@loginradius/loginradius-react-sdk";
 import { I } from "./Icons.jsx";
-import { OrgSwitcher } from "./OrgSwitcher.jsx";
 import { useAccountProfile } from "../hooks/useAccountProfile.jsx";
 
 const NAV = [
@@ -67,7 +67,7 @@ function deriveSidebarUser(profileData, fallback) {
   };
 }
 
-export function Sidebar({ orgs, currentOrg, setCurrentOrg, user, counts, onSignOut }) {
+export function Sidebar({ user, counts, onSignOut }) {
   const { profileData } = useAccountProfile();
   const display = deriveSidebarUser(profileData, user);
 
@@ -83,7 +83,7 @@ export function Sidebar({ orgs, currentOrg, setCurrentOrg, user, counts, onSignO
         </div>
       </div>
 
-      <OrgSwitcher />
+      <OrganizationSwitcher />
 
       <nav className="nav">
         {NAV.map((section, sIdx) => (

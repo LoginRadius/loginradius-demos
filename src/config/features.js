@@ -2,11 +2,19 @@
 // Defaults to true (render SDK widgets); set "false" to render the mock UI.
 export const USE_SDK = import.meta.env.VITE_USE_SDK !== "false";
 
+const localization = {
+  mapErrorMessages: [
+    { code: 6002, message: "You dont have access to this section" },
+    { code: 966, message: "This is for test" },
+  ],
+};
+
 export const LOGIN_RADIUS_OPTIONS = {
   apiKey: import.meta.env.VITE_LOGINRADIUS_API_KEY,
   oidcAppName: import.meta.env.VITE_LOGINRADIUS_OIDC_APP_NAME,
   oidcClientId: import.meta.env.VITE_LOGINRADIUS_CLIENT_ID,
   oidcRedirectUri:
     typeof window !== "undefined" ? window.location.origin + "/admin" : "",
-  customDomain: import.meta.env.VITE_AUTH_DOMAIN
+  customDomain: import.meta.env.VITE_AUTH_DOMAIN,
+  localizationConfig: localization
 };

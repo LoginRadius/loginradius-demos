@@ -17,7 +17,7 @@ const make = (name) => {
   return function SDKWrapper({ fallback, onError, ...props }) {
     const { handleError } = useSessionGuard();
     const guardedOnError = (err) => {
-      handleError(err);
+      // handleError(err);
       onError?.(err);
     };
     if (!USE_SDK || typeof Widget !== "function") return fallback;
