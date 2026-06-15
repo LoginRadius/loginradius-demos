@@ -13,7 +13,7 @@
 </p>
 
 <p align="center">
-  Reference apps that consume <a href="https://www.npmjs.com/package/@loginradius/loginradius-react-sdk"><code>@loginradius/loginradius-react-sdk</code></a> &mdash; the React-first SDK with first-class hooks and pre-built components, composed on top of <a href="https://www.npmjs.com/package/@loginradius/loginradius-core"><code>@loginradius/loginradius-core</code></a>.
+  Reference apps that consume <a href="https://www.npmjs.com/package/@loginradius/loginradius-react-sdk"><code>@loginradius/loginradius-react-sdk</code></a> &mdash; the React-first SDK with first-class hooks and pre-built components.
 </p>
 
 <p align="center">
@@ -26,7 +26,7 @@
 
 | Framework | Description | Link |
 |---|---|---|
-| Vite + React 19 | SPA with React Router, cookie session, and a separate `/user` profile route. | [`playground/`](./playground) |
+| Vite + React 19 | SPA with React Router, cookie session, and a separate `/user` profile route. | [`react/`](./react) |
 | Next.js 16 | App Router client page wrapping `<Auth>` in `<LoginRadiusProvider>` &mdash; layout stays server-rendered. | [`next/`](./next) |
 
 ## What the React SDK gives you
@@ -36,7 +36,7 @@
 - `useLRAuth()` &mdash; carries cross-step state (`email`, `phone`, `accessToken`, `mfaToken`, ...) between flow steps.
 - `<AuthFlow />`, `<LoginFlow />`, `<RegisterFlow />`, `<ProfileFlow />` &mdash; pre-built orchestrators that read the flow registry and render the right step component for the user's current position.
 
-Under the hood it composes [`@loginradius/loginradius-core`](../loginradius-core). Pick this package when you want the controller plus React UI for the standard auth flows.
+Pick this package when you want the controller plus React UI for the standard auth flows.
 
 ---
 
@@ -53,14 +53,14 @@ Install once from the repo root, then run a demo:
 # from the repo root
 pnpm install
 
-pnpm --filter @loginradius/demo-react-playground dev   # http://localhost:5000
+pnpm --filter @loginradius/demo-react dev              # http://localhost:5000
 pnpm --filter @loginradius/demo-react-next dev         # http://localhost:3000
 ```
 
 Or treat any demo as a standalone project:
 
 ```bash
-cd loginradius-react/playground   # or loginradius-react/next
+cd loginradius-react/react   # or loginradius-react/next
 pnpm install
 cp .env.example .env.local
 pnpm dev
@@ -70,7 +70,7 @@ pnpm dev
 
 | Demo | Env-var prefix | Env file | Default port |
 |---|---|---|---|
-| `playground` | `VITE_LOGINRADIUS_*` | `.env.local` | `5000` |
+| `react` | `VITE_LOGINRADIUS_*` | `.env.local` | `5000` |
 | `next` | `NEXT_PUBLIC_LOGINRADIUS_*` | `.env.local` | `3000` |
 
 The variable **suffixes** are identical across demos: `API_KEY`, `SOTT`, `VERIFICATION_URL`, `RESET_PASSWORD_URL`, `CALLBACK_URL`, `LOCALIZATION`. See the per-demo README for the full list and footguns.
@@ -81,7 +81,6 @@ The variable **suffixes** are identical across demos: `API_KEY`, `SOTT`, `VERIFI
 
 - Full docs at [loginradius.com/docs](https://www.loginradius.com/docs).
 - Want pre-built UI without React-specific hooks? See [`../loginradius-js/`](../loginradius-js/).
-- Building your own UI? See [`../loginradius-core/`](../loginradius-core/) for the controller-level building blocks.
 
 ## License
 

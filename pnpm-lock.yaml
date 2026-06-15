@@ -12,19 +12,6 @@ importers:
         specifier: ^3.3.3
         version: 3.8.3
 
-  loginradius-core/playground:
-    dependencies:
-      '@loginradius/loginradius-core':
-        specifier: latest
-        version: 3.0.0-rc.1
-    devDependencies:
-      typescript:
-        specifier: ^5.9.3
-        version: 5.9.3
-      vite:
-        specifier: ^7.1.9
-        version: 7.3.3(@types/node@24.12.4)(jiti@2.7.0)(lightningcss@1.32.0)(sass@1.97.3)(terser@5.48.0)(yaml@2.9.0)
-
   loginradius-js/angular:
     dependencies:
       '@angular/common':
@@ -142,19 +129,6 @@ importers:
         specifier: ^3.2.4
         version: 3.3.2(typescript@5.9.3)
 
-  loginradius-js/playground:
-    dependencies:
-      '@loginradius/loginradius-js':
-        specifier: latest
-        version: 3.0.0-rc.1.1(preact@10.29.2)(react-dom@19.2.3(react@19.2.3))(react@19.2.3)
-    devDependencies:
-      typescript:
-        specifier: ^5.9.3
-        version: 5.9.3
-      vite:
-        specifier: ^7.1.9
-        version: 7.3.3(@types/node@24.12.4)(jiti@2.7.0)(lightningcss@1.32.0)(sass@1.97.3)(terser@5.48.0)(yaml@2.9.0)
-
   loginradius-js/solid:
     dependencies:
       '@loginradius/loginradius-js':
@@ -205,6 +179,19 @@ importers:
         specifier: ^7.3.1
         version: 7.3.3(@types/node@24.12.4)(jiti@2.7.0)(lightningcss@1.32.0)(sass@1.97.3)(terser@5.48.0)(yaml@2.9.0)
 
+  loginradius-js/typescript:
+    dependencies:
+      '@loginradius/loginradius-js':
+        specifier: latest
+        version: 3.0.0-rc.2(preact@10.29.2)(react-dom@19.2.3(react@19.2.3))(react@19.2.3)
+    devDependencies:
+      typescript:
+        specifier: ^5.9.3
+        version: 5.9.3
+      vite:
+        specifier: ^7.1.9
+        version: 7.3.3(@types/node@24.12.4)(jiti@2.7.0)(lightningcss@1.32.0)(sass@1.97.3)(terser@5.48.0)(yaml@2.9.0)
+
   loginradius-js/vue:
     dependencies:
       '@loginradius/loginradius-js':
@@ -228,7 +215,7 @@ importers:
     dependencies:
       '@loginradius/loginradius-react-sdk':
         specifier: latest
-        version: 3.0.0-rc.1.1(@loginradius/loginradius-core@3.0.0-rc.1)(preact@10.29.2)(react-dom@19.2.3(react@19.2.3))(react@19.2.3)
+        version: 3.0.0-rc.1.1(@loginradius/loginradius-core@3.0.0-rc.2)(preact@10.29.2)(react-dom@19.2.3(react@19.2.3))(react@19.2.3)
       next:
         specifier: 16.1.6
         version: 16.1.6(react-dom@19.2.3(react@19.2.3))(react@19.2.3)(sass@1.97.3)
@@ -264,11 +251,11 @@ importers:
         specifier: ^5
         version: 5.9.3
 
-  loginradius-react/playground:
+  loginradius-react/react:
     dependencies:
       '@loginradius/loginradius-react-sdk':
         specifier: latest
-        version: 3.0.0-rc.1.1(@loginradius/loginradius-core@3.0.0-rc.1)(preact@10.29.2)(react-dom@19.2.3(react@19.2.3))(react@19.2.3)
+        version: 3.0.0-rc.1.1(@loginradius/loginradius-core@3.0.0-rc.2)(preact@10.29.2)(react-dom@19.2.3(react@19.2.3))(react@19.2.3)
       js-cookie:
         specifier: ^3.0.5
         version: 3.0.7
@@ -1755,13 +1742,27 @@ packages:
   '@loginradius/loginradius-core@3.0.0-rc.1':
     resolution: {integrity: sha512-hIpSwaMMNHggfme/4ZLlzXR0Gz1yuE3Hzv2Plv8Mgt0xl754FIv1a5BRhvePtZj+79mXd9a6HnxFQDDgztSilw==}
 
+  '@loginradius/loginradius-core@3.0.0-rc.2':
+    resolution: {integrity: sha512-qjb00Z0b8A6/yrGIASRh7CLfeB0mhutuefwr4KuHFh6yERLg6mn0yGa4hiNj3lZysdePM+7ivXF5em8izqkNJQ==}
+
   '@loginradius/loginradius-js@3.0.0-rc.1.1':
     resolution: {integrity: sha512-sKf+Vpp5aRIJeTrS6ZYiH9ut9wXRD/QYIT83nGTW6X+EVVzNvFAvufwzweG5o7m3O5bj4EEx7aC6jqPI60ccmA==}
+
+  '@loginradius/loginradius-js@3.0.0-rc.2':
+    resolution: {integrity: sha512-wn4cwfzPInBLxWKZaRFJGhgADGUDHHSXCBlcFDS8HeyPGkM0JD/ITFSfNO81nug1lSHAALVtIH/gDQ2pV1OvjA==}
 
   '@loginradius/loginradius-react-sdk@3.0.0-rc.1.1':
     resolution: {integrity: sha512-QGjtvopTJCuGDOd5vJcoydXRK4AgBSzla1DIQw3fwltwB7ImKfeeUiYiuwTfc/+EG2hnkJpHqOBQkae+MQWuTQ==}
     peerDependencies:
       '@loginradius/loginradius-core': ^3.0.0-rc.1
+      preact: ^10.27.2
+      react: ^16.0.0 || ^17.0.0 || ^18.0.0 || ^19.0.0 || ^19.0.0-0
+      react-dom: ^16.0.0 || ^17.0.0 || ^18.0.0 || ^19.0.0 || ^19.0.0-0
+
+  '@loginradius/loginradius-react@3.0.0-rc.2':
+    resolution: {integrity: sha512-2GDuFYCT5Ygeh14kO8mJDOjhg4aFYKwiBnMBnpWkaI2vr3Uz3SU+TZK8AD5yNTFOC3gwuuRRqFkLEhS0A7mSAA==}
+    peerDependencies:
+      '@loginradius/loginradius-core': ^3.0.0-rc.2
       preact: ^10.27.2
       react: ^16.0.0 || ^17.0.0 || ^18.0.0 || ^19.0.0 || ^19.0.0-0
       react-dom: ^16.0.0 || ^17.0.0 || ^18.0.0 || ^19.0.0 || ^19.0.0-0
@@ -9409,10 +9410,29 @@ snapshots:
       - debug
       - supports-color
 
+  '@loginradius/loginradius-core@3.0.0-rc.2':
+    dependencies:
+      axios: 1.16.1
+      js-cookie: 3.0.7
+    transitivePeerDependencies:
+      - debug
+      - supports-color
+
   '@loginradius/loginradius-js@3.0.0-rc.1.1(preact@10.29.2)(react-dom@19.2.3(react@19.2.3))(react@19.2.3)':
     dependencies:
       '@loginradius/loginradius-core': 3.0.0-rc.1
       '@loginradius/loginradius-react-sdk': 3.0.0-rc.1.1(@loginradius/loginradius-core@3.0.0-rc.1)(preact@10.29.2)(react-dom@19.2.3(react@19.2.3))(react@19.2.3)
+    transitivePeerDependencies:
+      - debug
+      - preact
+      - react
+      - react-dom
+      - supports-color
+
+  '@loginradius/loginradius-js@3.0.0-rc.2(preact@10.29.2)(react-dom@19.2.3(react@19.2.3))(react@19.2.3)':
+    dependencies:
+      '@loginradius/loginradius-core': 3.0.0-rc.2
+      '@loginradius/loginradius-react': 3.0.0-rc.2(@loginradius/loginradius-core@3.0.0-rc.2)(preact@10.29.2)(react-dom@19.2.3(react@19.2.3))(react@19.2.3)
     transitivePeerDependencies:
       - debug
       - preact
@@ -9427,6 +9447,21 @@ snapshots:
       react: 19.2.3
       react-dom: 19.2.3(react@19.2.3)
       react-google-recaptcha: 3.1.0(react@19.2.3)
+
+  '@loginradius/loginradius-react-sdk@3.0.0-rc.1.1(@loginradius/loginradius-core@3.0.0-rc.2)(preact@10.29.2)(react-dom@19.2.3(react@19.2.3))(react@19.2.3)':
+    dependencies:
+      '@loginradius/loginradius-core': 3.0.0-rc.2
+      preact: 10.29.2
+      react: 19.2.3
+      react-dom: 19.2.3(react@19.2.3)
+      react-google-recaptcha: 3.1.0(react@19.2.3)
+
+  '@loginradius/loginradius-react@3.0.0-rc.2(@loginradius/loginradius-core@3.0.0-rc.2)(preact@10.29.2)(react-dom@19.2.3(react@19.2.3))(react@19.2.3)':
+    dependencies:
+      '@loginradius/loginradius-core': 3.0.0-rc.2
+      preact: 10.29.2
+      react: 19.2.3
+      react-dom: 19.2.3(react@19.2.3)
 
   '@mapbox/node-pre-gyp@2.0.3':
     dependencies:

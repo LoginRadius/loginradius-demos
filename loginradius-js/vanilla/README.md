@@ -101,8 +101,7 @@ npx serve .
 The full LoginRadius documentation lives at [loginradius.com/docs](https://www.loginradius.com/docs).
 
 - New to LoginRadius? Start with the [quickstart guides](https://www.loginradius.com/docs/).
-- Looking for other frameworks? Browse the sibling demos under [`loginradius-js/`](../) (Next.js, Nuxt, Vue, Svelte, Solid, Angular, Playground).
-- Want the same drop-in approach without the pre-built UI? See [`loginradius-core/vanilla/`](../../loginradius-core/vanilla/).
+- Looking for other frameworks? Browse the sibling demos under [`loginradius-js/`](../) (Next.js, Nuxt, Vue, Svelte, Solid, Angular, TypeScript).
 
 ---
 

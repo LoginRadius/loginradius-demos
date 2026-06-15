@@ -4,7 +4,7 @@
   </a>
 </p>
 
-<h1 align="center">LoginRadius React SDK &mdash; Playground</h1>
+<h1 align="center">LoginRadius React SDK &mdash; React</h1>
 
 <p align="center">
   <a href="https://www.npmjs.com/package/@loginradius/loginradius-react-sdk"><img src="https://img.shields.io/npm/v/@loginradius/loginradius-react-sdk.svg" alt="npm version" /></a>
@@ -40,7 +40,7 @@
 ### Install
 
 ```bash
-cd loginradius-react/playground
+cd loginradius-react/react
 pnpm install
 ```
 

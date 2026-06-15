@@ -4,7 +4,7 @@
   </a>
 </p>
 
-<h1 align="center">LoginRadius JS SDK &mdash; Playground</h1>
+<h1 align="center">LoginRadius JS SDK &mdash; TypeScript</h1>
 
 <p align="center">
   <a href="https://www.npmjs.com/package/@loginradius/loginradius-js"><img src="https://img.shields.io/npm/v/@loginradius/loginradius-js.svg" alt="npm version" /></a>
@@ -38,7 +38,7 @@
 ### Install
 
 ```bash
-cd loginradius-js/playground
+cd loginradius-js/typescript
 pnpm install
 ```
 
@@ -96,7 +96,6 @@ The full LoginRadius documentation lives at [loginradius.com/docs](https://www.l
 - New to LoginRadius? Start with the [quickstart guides](https://www.loginradius.com/docs/).
 - Looking for other frameworks? Browse the sibling demos under [`loginradius-js/`](../) (Next.js, Nuxt, Vue, Svelte, Solid, Angular, Vanilla).
 - Building with React components instead of the pre-built UI? See [`loginradius-react/`](../../loginradius-react/).
-- Need the lower-level controller without the bundled UI? See [`loginradius-core/`](../../loginradius-core/).
 
 ---
 

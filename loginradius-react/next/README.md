@@ -101,7 +101,7 @@ pnpm lint     # ESLint via next/core-web-vitals
 The full LoginRadius documentation lives at [loginradius.com/docs](https://www.loginradius.com/docs).
 
 - New to LoginRadius? Start with the [quickstart guides](https://www.loginradius.com/docs/).
-- Want a Vite + React SPA instead? See [`loginradius-react/playground/`](../playground/).
+- Want a Vite + React SPA instead? See [`loginradius-react/react/`](../react/).
 - Need the pre-built UI without React hooks? See [`loginradius-js/next/`](../../loginradius-js/next/) for the equivalent JS SDK demo on Next.js.
 
 ---

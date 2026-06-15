@@ -27,7 +27,7 @@
 | Framework | Description | Link |
 |---|---|---|
 | Vanilla HTML | Zero-build, CDN `<script>` &mdash; the minimum viable integration. | [`vanilla/`](./vanilla) |
-| Playground | Vite + TypeScript sandbox with a Preact-compat alias for the smallest bundle. | [`playground/`](./playground) |
+| TypeScript | Vite + TypeScript sandbox with a Preact-compat alias for the smallest bundle. | [`typescript/`](./typescript) |
 | Angular 21 | Standalone-component demo initializing the SDK in `ngOnInit`. | [`angular/`](./angular) |
 | Next.js 16 | App Router client island with `'use client'` and `useEffect` init. | [`next/`](./next) |
 | Nuxt 4 | SSR-safe dynamic `import()` inside `onMounted`, env via `useRuntimeConfig()`. | [`nuxt/`](./nuxt) |
@@ -40,7 +40,7 @@
 - A single `LoginRadiusSDK` class wrapping the core controller plus pre-built UI &mdash; one import covers login, register, profile editor, and workflow flows.
 - `sdk.init('auth' | 'login' | 'register' | 'profileEditor' | 'workflow', options)` to mount any flow into a DOM container.
 - `sdk.$hooks.call('mapValidationMessages' | 'mapErrorMessages', overrides)` for customizing copy without rebuilding the SDK.
-- `sdk.controller.*` if you want raw access to the same auth methods as [`@loginradius/loginradius-core`](../loginradius-core).
+- `sdk.controller.*` if you want raw access to the underlying auth methods.
 
 Use this SDK when you want a **fast** integration and don't need React-specific hooks/components.
 
@@ -68,7 +68,7 @@ pnpm --filter @loginradius/demo-js-nuxt dev
 Or treat any demo as a standalone project:
 
 ```bash
-cd loginradius-js/vue            # or next, nuxt, svelte, solid, angular, playground
+cd loginradius-js/vue            # or next, nuxt, svelte, solid, angular, typescript
 pnpm install
 cp .env.example .env.local       # see the per-demo README for the right var prefix
 pnpm dev
@@ -80,7 +80,7 @@ The vanilla demo needs no install &mdash; open `vanilla/index.html` in a browser
 
 | Demo | Env-var prefix | Env file |
 |---|---|---|
-| `playground`, `solid`, `svelte`, `vue` | `VITE_LOGINRADIUS_*` | `.env.local` |
+| `typescript`, `solid`, `svelte`, `vue` | `VITE_LOGINRADIUS_*` | `.env.local` |
 | `next` | `NEXT_PUBLIC_LOGINRADIUS_*` | `.env.local` |
 | `nuxt` | `NUXT_PUBLIC_LOGINRADIUS_*` | `.env` |
 | `angular` | n/a &mdash; edit `src/environments/environment.ts` | &mdash; |
@@ -93,7 +93,6 @@ Each per-demo README documents the exact ports, scripts, and framework-specific 
 ## 🏁 Learning LoginRadius
 
 - Full docs at [loginradius.com/docs](https://www.loginradius.com/docs).
-- Need lower-level controller access without the bundled UI? See [`../loginradius-core/`](../loginradius-core/).
 - Building in React? Prefer [`../loginradius-react/`](../loginradius-react/) for first-class hooks and components.
 
 ## License
