@@ -40,7 +40,7 @@ Single-bundle SDK that ships the pre-built auth UI on top of the controller. Dro
 
 ### React SDK &mdash; [`loginradius-react/`](./loginradius-react)
 
-React-first SDK with `<LoginRadiusProvider>`, `useLoginRadiusSDK()`, `useLRAuth()`, and `<AuthFlow>`/`<LoginFlow>`/`<RegisterFlow>`/`<ProfileFlow>` components. Package: [`@loginradius/loginradius-react-sdk`](https://www.npmjs.com/package/@loginradius/loginradius-react-sdk).
+React-first SDK with `<LoginRadiusProvider>`, `useLoginRadiusSDK()`, `useLRAuth()`, and `<AuthFlow>`/`<LoginFlow>`/`<RegisterFlow>`/`<ProfileFlow>` components. Package: [`@loginradius/loginradius-react`](https://www.npmjs.com/package/@loginradius/loginradius-react).
 
 | Demo       | Stack                             | Link                                                              |
 | ---------- | --------------------------------- | ----------------------------------------------------------------- |
@@ -91,7 +91,7 @@ loginradius-demos/
 │   ├── solid/               # SolidJS + Vite
 │   ├── svelte/              # Svelte 5 + Vite
 │   └── vue/                 # Vue 3 + Vite
-├── loginradius-react/       # @loginradius/loginradius-react-sdk (hooks + components)
+├── loginradius-react/       # @loginradius/loginradius-react (hooks + components)
 │   ├── react/               # Vite + React 19 + React Router
 │   └── next/                # Next.js 16 + React 19 + Tailwind 4
 ├── pnpm-workspace.yaml      # workspace globs

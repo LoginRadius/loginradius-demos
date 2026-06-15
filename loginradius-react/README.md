@@ -7,13 +7,13 @@
 <h1 align="center">LoginRadius React SDK Demos</h1>
 
 <p align="center">
-  <a href="https://www.npmjs.com/package/@loginradius/loginradius-react-sdk"><img src="https://img.shields.io/npm/v/@loginradius/loginradius-react-sdk.svg" alt="npm version" /></a>
+  <a href="https://www.npmjs.com/package/@loginradius/loginradius-react"><img src="https://img.shields.io/npm/v/@loginradius/loginradius-react.svg" alt="npm version" /></a>
   <a href="https://www.loginradius.com/docs"><img src="https://img.shields.io/badge/documentation-loginradius-blue.svg" alt="documentation" /></a>
   <a href="https://opensource.org/licenses/MIT"><img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="License: MIT" /></a>
 </p>
 
 <p align="center">
-  Reference apps that consume <a href="https://www.npmjs.com/package/@loginradius/loginradius-react-sdk"><code>@loginradius/loginradius-react-sdk</code></a> &mdash; the React-first SDK with first-class hooks and pre-built components.
+  Reference apps that consume <a href="https://www.npmjs.com/package/@loginradius/loginradius-react"><code>@loginradius/loginradius-react</code></a> &mdash; the React-first SDK with first-class hooks and pre-built components.
 </p>
 
 <p align="center">

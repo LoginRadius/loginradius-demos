@@ -14,7 +14,7 @@ const Workflow: React.FC = () => {
       >
         <WorkflowFlow
           workflowName="testmfaauthenticator"
-          clientId="YOUR_CLIENT_ID"
+          clientId={import.meta.env.VITE_LOGINRADIUS_CLIENT_ID}
           onSuccess={(response) => {
             console.log("Workflow success:", response);
             window.location.href = "https://www.google.com";

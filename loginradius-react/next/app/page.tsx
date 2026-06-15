@@ -6,7 +6,7 @@ import {
   ApiResponse,
   ApiError,
   LoginRadiusProvider,
-} from '@loginradius/loginradius-react-sdk';
+} from '@loginradius/loginradius-react';
 import { useState } from 'react';
 
 export default function Home() {

@@ -7,7 +7,7 @@
 <h1 align="center">LoginRadius React SDK &mdash; Next.js Demo</h1>
 
 <p align="center">
-  <a href="https://www.npmjs.com/package/@loginradius/loginradius-react-sdk"><img src="https://img.shields.io/npm/v/@loginradius/loginradius-react-sdk.svg" alt="npm version" /></a>
+  <a href="https://www.npmjs.com/package/@loginradius/loginradius-react"><img src="https://img.shields.io/npm/v/@loginradius/loginradius-react.svg" alt="npm version" /></a>
   <a href="https://nextjs.org"><img src="https://img.shields.io/badge/Next.js-16.1-black.svg" alt="Next.js 16.1" /></a>
   <a href="https://react.dev"><img src="https://img.shields.io/badge/React-19.2-61dafb.svg" alt="React 19.2" /></a>
   <a href="https://tailwindcss.com"><img src="https://img.shields.io/badge/Tailwind-4-38bdf8.svg" alt="Tailwind 4" /></a>
@@ -21,7 +21,7 @@
 </p>
 
 <p align="center">
-  Part of the <a href="../../README.md">LoginRadius Demos</a> monorepo. The underlying package is <a href="https://www.npmjs.com/package/@loginradius/loginradius-react-sdk"><code>@loginradius/loginradius-react-sdk</code></a>.
+  Part of the <a href="../../README.md">LoginRadius Demos</a> monorepo. The underlying package is <a href="https://www.npmjs.com/package/@loginradius/loginradius-react"><code>@loginradius/loginradius-react</code></a>.
 </p>
 
 ---
@@ -108,7 +108,7 @@ The full LoginRadius documentation lives at [loginradius.com/docs](https://www.l
 
 ## 🛟 Release notes
 
-Curious what shipped recently? Browse the [`@loginradius/loginradius-react-sdk` releases](https://www.npmjs.com/package/@loginradius/loginradius-react-sdk?activeTab=versions) on npm.
+Curious what shipped recently? Browse the [`@loginradius/loginradius-react` releases](https://www.npmjs.com/package/@loginradius/loginradius-react?activeTab=versions) on npm.
 
 ---
 
