@@ -253,9 +253,9 @@ importers:
 
   loginradius-react/react:
     dependencies:
-      '@loginradius/loginradius-react-sdk':
-        specifier: latest
-        version: 3.0.0-rc.1.1(@loginradius/loginradius-core@3.0.0-rc.2)(preact@10.29.2)(react-dom@19.2.3(react@19.2.3))(react@19.2.3)
+      '@loginradius/loginradius-react':
+        specifier: 3.0.0-rc.2
+        version: 3.0.0-rc.2(@loginradius/loginradius-core@3.0.0-rc.2)(preact@10.29.2)(react-dom@19.2.3(react@19.2.3))(react@19.2.3)
       js-cookie:
         specifier: ^3.0.5
         version: 3.0.7

@@ -1,18 +1,18 @@
 import {
-  PinProfileComponent,
-  PasswordProfileComponent,
-  SocialProviderProfileComponent,
-  EmailProfileComponent,
-  ProfileDetailsComponent,
-  UpdatePhoneProfileComponent,
-  EmailPhoneVerificationComponent,
-  UsernameComponent,
-  MFAProfileComponent,
-  PasskeyProfileComponent,
-  DeleteProfileComponent,
+  ChangePin,
+  ChangePassword,
+  LinkAccount,
+  AddEmail,
+  PersonalDetails,
+  EditPhone,
+  VerifyEmailPhone,
+  EditUsername,
+  SetupTwoFactorAuth,
+  AddPasskey,
+  DeleteAccount,
   Profile,
-} from '@loginradius/loginradius-react-sdk';
-import { useLRAuth } from '@loginradius/loginradius-react-sdk';
+  useLRAuth,
+} from '@loginradius/loginradius-react';
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
@@ -28,17 +28,17 @@ export const ProfileSdk = () => {
   return (
     <>
       <Profile />
-      <ProfileDetailsComponent />
-      <EmailProfileComponent />
-      <UpdatePhoneProfileComponent />
-      <PasswordProfileComponent />
-      <PinProfileComponent />
-      <UsernameComponent />
-      <EmailPhoneVerificationComponent />
-      <MFAProfileComponent />
-      <PasskeyProfileComponent />
-      <SocialProviderProfileComponent />
-      <DeleteProfileComponent />
+      <PersonalDetails />
+      <AddEmail />
+      <EditPhone />
+      <ChangePassword />
+      <ChangePin />
+      <EditUsername />
+      <VerifyEmailPhone />
+      <SetupTwoFactorAuth />
+      <AddPasskey />
+      <LinkAccount />
+      <DeleteAccount />
     </>
   );
 };
