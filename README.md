@@ -23,15 +23,6 @@
 
 This monorepo groups demos by SDK family. Each demo is self-contained, installs from npm, and ships with a `.env.example` (or inline placeholder) for tenant credentials.
 
-### Core SDK &mdash; [`loginradius-core/`](./loginradius-core)
-
-The framework-agnostic controller, flow registry, and schemas. Use when you're rolling your own UI on top of the LoginRadius auth API. Package: [`@loginradius/loginradius-core`](https://www.npmjs.com/package/@loginradius/loginradius-core).
-
-| Demo         | Stack                                  | Link                                                            |
-| ------------ | -------------------------------------- | --------------------------------------------------------------- |
-| Vanilla HTML | CDN `<script>`, hand-rolled UI         | [`loginradius-core/vanilla/`](./loginradius-core/vanilla)       |
-| Playground   | Vite + TypeScript, schema-driven forms | [`loginradius-core/playground/`](./loginradius-core/playground) |
-
 ### JS SDK &mdash; [`loginradius-js/`](./loginradius-js)
 
 Single-bundle SDK that ships the pre-built auth UI on top of the controller. Drop into any frontend and call `sdk.init('auth', { container })`. Package: [`@loginradius/loginradius-js`](https://www.npmjs.com/package/@loginradius/loginradius-js).
@@ -39,7 +30,7 @@ Single-bundle SDK that ships the pre-built auth UI on top of the controller. Dro
 | Demo         | Stack                                     | Link                                                        |
 | ------------ | ----------------------------------------- | ----------------------------------------------------------- |
 | Vanilla HTML | unpkg CDN `<script>`, no bundler          | [`loginradius-js/vanilla/`](./loginradius-js/vanilla)       |
-| Playground   | Vite + TypeScript, Preact-compat alias    | [`loginradius-js/playground/`](./loginradius-js/playground) |
+| TypeScript   | Vite + TypeScript, Preact-compat alias    | [`loginradius-js/typescript/`](./loginradius-js/typescript) |
 | Angular      | Angular 21 standalone component           | [`loginradius-js/angular/`](./loginradius-js/angular)       |
 | Next.js      | Next.js 16 App Router client island       | [`loginradius-js/next/`](./loginradius-js/next)             |
 | Nuxt         | Nuxt 4 + Nuxt UI, SSR-safe dynamic import | [`loginradius-js/nuxt/`](./loginradius-js/nuxt)             |
@@ -49,11 +40,11 @@ Single-bundle SDK that ships the pre-built auth UI on top of the controller. Dro
 
 ### React SDK &mdash; [`loginradius-react/`](./loginradius-react)
 
-React-first SDK with `<LoginRadiusProvider>`, `useLoginRadiusSDK()`, `useLRAuth()`, and `<AuthFlow>`/`<LoginFlow>`/`<RegisterFlow>`/`<ProfileFlow>` components. Package: [`@loginradius/loginradius-react-sdk`](https://www.npmjs.com/package/@loginradius/loginradius-react-sdk).
+React-first SDK with `<LoginRadiusProvider>`, `useLoginRadiusSDK()`, `useLRAuth()`, and `<AuthFlow>`/`<LoginFlow>`/`<RegisterFlow>`/`<ProfileFlow>` components. Package: [`@loginradius/loginradius-react`](https://www.npmjs.com/package/@loginradius/loginradius-react).
 
 | Demo       | Stack                             | Link                                                              |
 | ---------- | --------------------------------- | ----------------------------------------------------------------- |
-| Playground | Vite + React 19 + React Router    | [`loginradius-react/playground/`](./loginradius-react/playground) |
+| React      | Vite + React 19 + React Router    | [`loginradius-react/react/`](./loginradius-react/react)           |
 | Next.js    | Next.js 16 App Router, Tailwind 4 | [`loginradius-react/next/`](./loginradius-react/next)             |
 
 ---
@@ -76,9 +67,9 @@ cd loginradius-demos
 pnpm install
 
 # run any single demo (filter by package name from its package.json)
-pnpm --filter @loginradius/demo-react-playground dev
+pnpm --filter @loginradius/demo-react dev
 pnpm --filter @loginradius/demo-js-next dev
-pnpm --filter @loginradius/demo-core-playground dev
+pnpm --filter @loginradius/demo-js-typescript dev
 ```
 
 Each demo is also a standalone project &mdash; `cd` into it and use `pnpm install && pnpm dev` directly.
@@ -91,20 +82,17 @@ Each demo is also a standalone project &mdash; `cd` into it and use `pnpm instal
 
 ```
 loginradius-demos/
-├── loginradius-core/        # @loginradius/loginradius-core (controller + schemas)
-│   ├── vanilla/             # CDN <script>, hand-rolled UI
-│   └── playground/          # Vite + TypeScript, schema-driven forms
 ├── loginradius-js/          # @loginradius/loginradius-js (controller + pre-built UI)
 │   ├── vanilla/             # unpkg CDN
-│   ├── playground/          # Vite + TS (Preact-compat alias)
+│   ├── typescript/          # Vite + TS (Preact-compat alias)
 │   ├── angular/             # Angular 21
 │   ├── next/                # Next.js 16 (App Router)
 │   ├── nuxt/                # Nuxt 4 + Nuxt UI 4
 │   ├── solid/               # SolidJS + Vite
 │   ├── svelte/              # Svelte 5 + Vite
 │   └── vue/                 # Vue 3 + Vite
-├── loginradius-react/       # @loginradius/loginradius-react-sdk (hooks + components)
-│   ├── playground/          # Vite + React 19 + React Router
+├── loginradius-react/       # @loginradius/loginradius-react (hooks + components)
+│   ├── react/               # Vite + React 19 + React Router
 │   └── next/                # Next.js 16 + React 19 + Tailwind 4
 ├── pnpm-workspace.yaml      # workspace globs
 └── package.json             # root scripts (format / format:check)

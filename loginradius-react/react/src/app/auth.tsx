@@ -3,7 +3,7 @@ import {
   AuthResponse,
   ApiResponse,
   ApiError,
-} from '@loginradius/loginradius-react-sdk';
+} from '@loginradius/loginradius-react';
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
