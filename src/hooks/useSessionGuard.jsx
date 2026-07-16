@@ -1,5 +1,5 @@
 import { useCallback } from "react";
-import { useLoginRadiusSDK } from "@loginradius/loginradius-react-sdk";
+import { useLoginRadiusSDK } from "@loginradius/loginradius-react";
 
 // Patterns LoginRadius APIs return when the access token is missing/expired.
 // Matching is intentionally loose — the error payload shape varies across

@@ -1,12 +1,10 @@
 import { useState } from "react";
 import { I } from "../../../components/Icons.jsx";
 import { PI } from "./ProfileIcons.jsx";
-import {
-  PasswordProfileComponent,
-  MFAProfileComponent,
-  PasskeyProfileComponent,
-  PinProfileComponent,
-} from "@loginradius/loginradius-react-sdk";
+import { SetupTwoFactorAuth } from "@loginradius/loginradius-react";
+import { ChangePassword } from "@loginradius/loginradius-react";
+import { AddPasskey } from "@loginradius/loginradius-react";
+import { ChangePIN } from "@loginradius/loginradius-react";
 
 function ReadRow({ label, value, mono }) {
   return (
@@ -130,28 +128,28 @@ export function SecurityTab({ onSuccess, onError }) {
 
   return (
     <div className="col" style={{ gap: 16 }}>
-      <PasswordProfileComponent
+      <ChangePassword
         embedded
         onSuccess={onSuccess}
         onError={onError}
         fallback={<PasswordMock />}
       />
 
-      <MFAProfileComponent
+      <SetupTwoFactorAuth
         embedded
         onSuccess={onSuccess}
         onError={onError}
         fallback={<MFAMock />}
       />
 
-      <PasskeyProfileComponent
+      <AddPasskey
         embedded
         onSuccess={onSuccess}
         onError={onError}
         fallback={<PasskeyMock />}
       />
 
-      <PinProfileComponent
+      <ChangePIN
         embedded
         onSuccess={onSuccess}
         onError={onError}

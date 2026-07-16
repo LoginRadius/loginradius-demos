@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Navigate } from "react-router-dom";
-import { useLRAuth } from "@loginradius/loginradius-react-sdk";
+import { useLRAuth } from "@loginradius/loginradius-react";
 import { I } from "../components/Icons.jsx";
 
 export function Home() {

@@ -1,4 +1,4 @@
-import { useOrgContext } from "@loginradius/loginradius-react-sdk";
+import { useOrgContext } from "@loginradius/loginradius-react";
 import { I } from "./Icons.jsx";
 import { mockData } from "../services/mockData.js";
 

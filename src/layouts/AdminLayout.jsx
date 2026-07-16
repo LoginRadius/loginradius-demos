@@ -5,7 +5,7 @@ import {
   useLRAuth,
   useOrgContext,
   OrganizationSelector,
-} from "@loginradius/loginradius-react-sdk";
+} from "@loginradius/loginradius-react";
 
 import { Sidebar } from "../components/Sidebar.jsx";
 import { Header } from "../components/Header.jsx";

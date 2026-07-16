@@ -1,10 +1,8 @@
+import { PersonalDetails } from "@loginradius/loginradius-react";
 import { I } from "../../../components/Icons.jsx";
 import { PI } from "./ProfileIcons.jsx";
 import { SDKCard } from "./SDKCard.jsx";
-import {
-  ProfileDetailsComponent,
-  UsernameComponent,
-} from "@loginradius/loginradius-react-sdk";
+import { ChangeUsername } from "@loginradius/loginradius-react";
 
 function ReadRow({ label, value, mono, action }) {
   return (
@@ -50,14 +48,14 @@ function UsernameMock() {
 export function InfoTab({ onSuccess, onError }) {
   return (
     <div className="col" style={{ gap: 16 }}>
-      <ProfileDetailsComponent
+      <PersonalDetails
         embedded
         onSuccess={onSuccess}
         onError={onError}
         fallback={<ProfileDetailsMock />}
       />
 
-      <UsernameComponent
+      <ChangeUsername
         embedded
         onSuccess={onSuccess}
         onError={onError}

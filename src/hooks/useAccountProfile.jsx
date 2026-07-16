@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useState } from "react";
-import { useLoginRadiusSDK, useLRAuth } from "@loginradius/loginradius-react-sdk";
+import { useLoginRadiusSDK, useLRAuth } from "@loginradius/loginradius-react";
 import { useSessionGuard } from "./useSessionGuard.jsx";
 
 const AccountProfileContext = createContext({ profileData: null, loading: false });

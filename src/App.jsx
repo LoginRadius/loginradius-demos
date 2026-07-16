@@ -2,7 +2,7 @@ import { Navigate, Route, Routes } from "react-router-dom";
 import {
   LoginRadiusProvider,
   OrgContextProvider,
-} from "@loginradius/loginradius-react-sdk";
+} from "@loginradius/loginradius-react";
 
 import { LOGIN_RADIUS_OPTIONS } from "./config/features.js";
 import { Home } from "./pages/Home.jsx";

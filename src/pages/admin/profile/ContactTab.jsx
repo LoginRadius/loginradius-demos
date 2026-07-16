@@ -6,7 +6,7 @@ import {
   UpdatePhoneWrapper,
   EmailPhoneVerificationWrapper,
 } from "../../../sdk/profile/index.jsx";
-import { EmailProfileComponent, UpdatePhoneProfileComponent } from "@loginradius/loginradius-react-sdk";
+import { AddEmail, EditPhone } from "@loginradius/loginradius-react";
 
 function EmailMock({ onSuccess, onError }) {
   const verificationProps = { embedded: true, onSuccess, onError };
@@ -86,9 +86,9 @@ export function ContactTab({ onSuccess, onError }) {
   const wrapperProps = { embedded: true, onSuccess, onError };
   return (
     <div className="col" style={{ gap: 16 }}>
-      <EmailProfileComponent embedded onSuccess={onSuccess} onError={onError} fallback={<EmailMock onSuccess={onSuccess} onError={onError} />} />
+      <AddEmail embedded onSuccess={onSuccess} onError={onError} fallback={<EmailMock onSuccess={onSuccess} onError={onError} />} />
 
-      <UpdatePhoneProfileComponent embedded onSuccess={onSuccess} onError={onError} fallback={<PhoneMock onSuccess={onSuccess} onError={onError} />} />
+      <EditPhone embedded onSuccess={onSuccess} onError={onError} fallback={<PhoneMock onSuccess={onSuccess} onError={onError} />} />
     </div>
   );
 }

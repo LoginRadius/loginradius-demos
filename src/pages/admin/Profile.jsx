@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useLRAuth } from "@loginradius/loginradius-react-sdk";
+import { useLRAuth } from "@loginradius/loginradius-react";
 
 import { PageHeader } from "../../components/UI.jsx";
 import { I } from "../../components/Icons.jsx";

@@ -1,5 +1,5 @@
 import { NavLink } from "react-router-dom";
-import { OrganizationSwitcher } from "@loginradius/loginradius-react-sdk";
+import { OrganizationSwitcher } from "@loginradius/loginradius-react";
 import { I } from "./Icons.jsx";
 import { useAccountProfile } from "../hooks/useAccountProfile.jsx";
 

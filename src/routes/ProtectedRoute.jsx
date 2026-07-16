@@ -2,7 +2,7 @@ import { Navigate, useLocation } from "react-router-dom";
 import {
   useLoginRadiusSDK,
   useLRAuth,
-} from "@loginradius/loginradius-react-sdk";
+} from "@loginradius/loginradius-react";
 import { I } from "../components/Icons.jsx";
 
 // Auth guard for /admin/*. Waits for the SDK to finish bootstrapping (it must

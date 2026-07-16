@@ -1,6 +1,6 @@
 import { SDKCard } from "./SDKCard.jsx";
 import { SocialProviderWrapper } from "../../../sdk/profile/index.jsx";
-import { SocialProviderProfileComponent } from "@loginradius/loginradius-react-sdk";
+import { LinkAccount } from "@loginradius/loginradius-react";
 
 const PROVIDERS = [
   { name: "Google", color: "#4285F4", connected: true, meta: "aria.chen@northwind.io · connected Mar 14, 2026" },
@@ -61,7 +61,7 @@ function SocialMock() {
 export function ConnectedTab({ onSuccess, onError }) {
   return (
     <div className="col" style={{ gap: 16 }}>
-      <SocialProviderProfileComponent  embedded />
+      <LinkAccount embedded />
     </div>
   );
 }

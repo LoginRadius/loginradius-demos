@@ -7,7 +7,7 @@
 // All wrappers also funnel `onError` through useSessionGuard so any widget API
 // call returning "Access Unauthorized" (or equivalent) triggers ssoLogout.
 
-import * as SDK from "@loginradius/loginradius-react-sdk";
+import * as SDK from "@loginradius/loginradius-react";
 import { USE_SDK } from "../config/features.js";
 import { SDKBoundary } from "./SDKBoundary.jsx";
 import { useSessionGuard } from "../hooks/useSessionGuard.jsx";

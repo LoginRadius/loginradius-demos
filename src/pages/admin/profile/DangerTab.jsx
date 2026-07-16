@@ -1,6 +1,5 @@
 import { I } from "../../../components/Icons.jsx";
-import { DeleteProfileComponent } from "@loginradius/loginradius-react-sdk";
-
+import { DeleteAccount } from "@loginradius/loginradius-react";
 function DeleteMock() {
   return (
     <div className="card card-danger">
@@ -42,7 +41,7 @@ function DeleteMock() {
 export function DangerTab({ onSuccess, onError }) {
   return (
     <div className="col" style={{ gap: 16 }}>
-      <DeleteProfileComponent
+      <DeleteAccount
         embedded
         onSuccess={onSuccess}
         onError={onError}
