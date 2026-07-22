@@ -44,10 +44,20 @@ export default function Home() {
       process.env.NEXT_PUBLIC_LOGINRADIUS_LOCALIZATION === 'false',
     OtpType: 'email',
     OtpLength: 6,
+    // Phone input — show flag emojis and pin frequently used countries
+    showPhoneFlag: true,
+    pinnedCountryCodes: ['1', '91', '44'],
+    defaultPhonePrefix: '1',
   };
 
   return (
-    <LoginRadiusProvider options={loginRadiusOptions} onLoading={onLoading}>
+    <LoginRadiusProvider
+      options={loginRadiusOptions}
+      onLoading={onLoading}
+      onRedirectCallback={() => {
+        window.history.replaceState({}, document.title, window.location.pathname);
+      }}
+    >
       <main className="relative flex min-h-screen flex-col items-center justify-center">
         <div
           className={`thin-scrollbar w-[400px] rounded-2xl bg-white transition-transform duration-500 ${

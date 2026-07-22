@@ -32,13 +32,24 @@ const loginRadiusOptions = {
     import.meta.env.VITE_LOGINRADIUS_LOCALIZATION === "false",
   // AppName: import.meta.env.VITE_LOGINRADIUS_APPNAME || 'dev-sanjay',
   // templateName: "v3brand"
+  // Phone input — show flag emojis and pin frequently used countries
+  showPhoneFlag: true,
+  pinnedCountryCodes: ["1", "91", "44"],
+  defaultPhonePrefix: "1",
 };
 // console.log('LoginRadius Options:', loginRadiusOptions);
 // Log options to debug
 // console.log('LoginRadius Options:', loginRadiusOptions);
 console.log("options", loginRadiusOptions);
 root.render(
-  <LoginRadiusProvider options={loginRadiusOptions} onLoading={onLoading}>
+  <LoginRadiusProvider
+    options={loginRadiusOptions}
+    onLoading={onLoading}
+    onRedirectCallback={() => {
+      // Clean URL params after PKCE/social login redirect
+      window.history.replaceState({}, document.title, window.location.pathname);
+    }}
+  >
     <StrictMode>
       <BrowserRouter>
         <Routes>

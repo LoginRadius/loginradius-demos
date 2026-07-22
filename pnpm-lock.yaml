@@ -213,9 +213,9 @@ importers:
 
   loginradius-react/next:
     dependencies:
-      '@loginradius/loginradius-react-sdk':
+      '@loginradius/loginradius-react':
         specifier: latest
-        version: 3.0.0-rc.1.1(@loginradius/loginradius-core@3.0.0-rc.2)(preact@10.29.2)(react-dom@19.2.3(react@19.2.3))(react@19.2.3)
+        version: 3.0.0-rc.3(@loginradius/loginradius-core@3.0.0-rc.2)(preact@10.29.2)(react-dom@19.2.3(react@19.2.3))(react@19.2.3)
       next:
         specifier: 16.1.6
         version: 16.1.6(react-dom@19.2.3(react@19.2.3))(react@19.2.3)(sass@1.97.3)
@@ -254,8 +254,8 @@ importers:
   loginradius-react/react:
     dependencies:
       '@loginradius/loginradius-react':
-        specifier: 3.0.0-rc.2
-        version: 3.0.0-rc.2(@loginradius/loginradius-core@3.0.0-rc.2)(preact@10.29.2)(react-dom@19.2.3(react@19.2.3))(react@19.2.3)
+        specifier: latest
+        version: 3.0.0-rc.3(@loginradius/loginradius-core@3.0.0-rc.2)(preact@10.29.2)(react-dom@19.2.3(react@19.2.3))(react@19.2.3)
       js-cookie:
         specifier: ^3.0.5
         version: 3.0.7
@@ -1763,6 +1763,14 @@ packages:
     resolution: {integrity: sha512-2GDuFYCT5Ygeh14kO8mJDOjhg4aFYKwiBnMBnpWkaI2vr3Uz3SU+TZK8AD5yNTFOC3gwuuRRqFkLEhS0A7mSAA==}
     peerDependencies:
       '@loginradius/loginradius-core': ^3.0.0-rc.2
+      preact: ^10.27.2
+      react: ^16.0.0 || ^17.0.0 || ^18.0.0 || ^19.0.0 || ^19.0.0-0
+      react-dom: ^16.0.0 || ^17.0.0 || ^18.0.0 || ^19.0.0 || ^19.0.0-0
+
+  '@loginradius/loginradius-react@3.0.0-rc.3':
+    resolution: {integrity: sha512-qTHizfl0AbnoW5YespTAoukLuuXRN7TQe+bKSYBrjvpcn8FJR8I2B4io0klIgwhhAUSzz/fAEu1jNlKyUgM3QQ==}
+    peerDependencies:
+      '@loginradius/loginradius-core': ^3.0.0-rc.3
       preact: ^10.27.2
       react: ^16.0.0 || ^17.0.0 || ^18.0.0 || ^19.0.0 || ^19.0.0-0
       react-dom: ^16.0.0 || ^17.0.0 || ^18.0.0 || ^19.0.0 || ^19.0.0-0
@@ -9448,15 +9456,14 @@ snapshots:
       react-dom: 19.2.3(react@19.2.3)
       react-google-recaptcha: 3.1.0(react@19.2.3)
 
-  '@loginradius/loginradius-react-sdk@3.0.0-rc.1.1(@loginradius/loginradius-core@3.0.0-rc.2)(preact@10.29.2)(react-dom@19.2.3(react@19.2.3))(react@19.2.3)':
+  '@loginradius/loginradius-react@3.0.0-rc.2(@loginradius/loginradius-core@3.0.0-rc.2)(preact@10.29.2)(react-dom@19.2.3(react@19.2.3))(react@19.2.3)':
     dependencies:
       '@loginradius/loginradius-core': 3.0.0-rc.2
       preact: 10.29.2
       react: 19.2.3
       react-dom: 19.2.3(react@19.2.3)
-      react-google-recaptcha: 3.1.0(react@19.2.3)
 
-  '@loginradius/loginradius-react@3.0.0-rc.2(@loginradius/loginradius-core@3.0.0-rc.2)(preact@10.29.2)(react-dom@19.2.3(react@19.2.3))(react@19.2.3)':
+  '@loginradius/loginradius-react@3.0.0-rc.3(@loginradius/loginradius-core@3.0.0-rc.2)(preact@10.29.2)(react-dom@19.2.3(react@19.2.3))(react@19.2.3)':
     dependencies:
       '@loginradius/loginradius-core': 3.0.0-rc.2
       preact: 10.29.2

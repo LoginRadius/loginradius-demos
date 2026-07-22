@@ -1,31 +1,58 @@
-import React, { useState, useEffect } from 'react';
-import { Sun, Moon, LogOut } from 'lucide-react';
+import React, { useState } from 'react';
+import { Sun, Moon, LogOut, RefreshCw, Shield, ExternalLink } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useLRAuth } from '@loginradius/loginradius-react';
+
 const UserProfile: React.FC = () => {
   const [isDarkMode, setIsDarkMode] = useState(false);
-  const [data, setData] = useState<any>(null);
-  const { getUser, isAuthenticated, logout } = useLRAuth();
+  const [claims, setClaims] = useState<Record<string, unknown> | null>(null);
   const navigate = useNavigate();
 
-  useEffect(() => {
-    if (!isAuthenticated) {
-      navigate('/');
-    }
-  }, [isAuthenticated, navigate]);
-  useEffect(() => {
-    const handleFetchUser = async () => {
-      const user = await getUser();
-      setData(user);
-      // console.log('User profile:', user);
-    };
-    handleFetchUser();
-  }, [getUser]);
+  const {
+    user,
+    loading,
+    error,
+    refreshUser,
+    getIdTokenClaims,
+    getSocialLoginURL,
+    isAuthenticated,
+    logout,
+  } = useLRAuth();
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <p className="text-gray-500">Loading...</p>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <p className="text-red-500 font-semibold">SDK Error</p>
+          <p className="text-gray-500 text-sm mt-1">{error.message}</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (!isAuthenticated) {
+    navigate('/');
+    return null;
+  }
 
   const toggleDarkMode = () => setIsDarkMode((prev) => !prev);
+
   const handleLogout = () => {
     logout();
     navigate('/');
+  };
+
+  const handleShowClaims = () => {
+    const tokenClaims = getIdTokenClaims();
+    setClaims(tokenClaims);
   };
 
   return (
@@ -44,7 +71,6 @@ const UserProfile: React.FC = () => {
             : 'bg-white border-gray-200'
         }`}
       >
-        {/* Dark Mode Toggle */}
         <div className="flex justify-end mb-4">
           <button
             onClick={toggleDarkMode}
@@ -58,32 +84,66 @@ const UserProfile: React.FC = () => {
           </button>
         </div>
 
-        {/* Profile Picture */}
         <div className="flex justify-center mb-6">
           <img
-            src="/api/placeholder/150/150"
+            src={user?.ImageUrl || '/api/placeholder/150/150'}
             alt="Profile"
             className="w-32 h-32 rounded-full border-4 object-cover"
           />
         </div>
-        <div></div>
-        {/* Profile Details */}
+
         <div className="space-y-4">
-          <ProfileDetail label="Name" value={`${data?.Fullname || 'User'}`} />
-          <ProfileDetail label="Location" value={data?.Lastloginlocation} />
+          <ProfileDetail label="Name" value={user?.Fullname || 'User'} />
+          <ProfileDetail label="Location" value={user?.Lastloginlocation} />
           <ProfileDetail
             label="Gender"
-            value={data?.Gender === 'M' ? 'Male' : 'Female'}
+            value={user?.Gender === 'M' ? 'Male' : user?.Gender === 'F' ? 'Female' : undefined}
           />
           <ProfileDetail
             label="Email"
-            value={data?.Email?.[0]?.Value || 'N/A'}
+            value={user?.Email?.[0]?.Value || 'N/A'}
           />
-          <ProfileDetail label="Phone" value={data?.Phoneid || 'N/A'} />
+          <ProfileDetail label="Phone" value={user?.Phoneid || 'N/A'} />
         </div>
 
-        {/* Logout Button */}
-        <div className="mt-8 text-center">
+        <div className="mt-6 space-y-2">
+          <button
+            onClick={() => refreshUser()}
+            className="w-full py-2 rounded-lg flex items-center justify-center space-x-2 border border-gray-300 hover:bg-gray-50 transition-colors text-sm"
+          >
+            <RefreshCw size={16} />
+            <span>Refresh Profile</span>
+          </button>
+
+          <button
+            onClick={handleShowClaims}
+            className="w-full py-2 rounded-lg flex items-center justify-center space-x-2 border border-gray-300 hover:bg-gray-50 transition-colors text-sm"
+          >
+            <Shield size={16} />
+            <span>Show Token Claims</span>
+          </button>
+
+          <button
+            onClick={() => {
+              const url = getSocialLoginURL('google');
+              if (url) window.location.href = url;
+            }}
+            className="w-full py-2 rounded-lg flex items-center justify-center space-x-2 border border-gray-300 hover:bg-gray-50 transition-colors text-sm"
+          >
+            <ExternalLink size={16} />
+            <span>Link Google Account</span>
+          </button>
+        </div>
+
+        {claims && (
+          <div className="mt-4 p-3 rounded-lg bg-gray-50 border text-xs overflow-auto max-h-40">
+            <pre className="whitespace-pre-wrap break-all">
+              {JSON.stringify(claims, null, 2)}
+            </pre>
+          </div>
+        )}
+
+        <div className="mt-4 text-center">
           <button
             onClick={handleLogout}
             className={`w-full py-3 rounded-lg flex items-center justify-center space-x-2 ${
