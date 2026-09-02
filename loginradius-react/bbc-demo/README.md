@@ -16,6 +16,9 @@ Companion to `../helix-demo`, which shows the **B2B** path (org context, admin p
 > Not affiliated with or endorsed by the BBC. The branding stands in for a real
 > consumer property so the identity flow can be seen in a realistic context.
 
+See [FEATURES.md](./FEATURES.md) for a technical walkthrough of every
+implemented feature — flows, data model, decisions and known limitations.
+
 ## Setup
 
 ```bash
