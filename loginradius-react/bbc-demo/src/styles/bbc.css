@@ -1,0 +1,1006 @@
+/* ─────────────────────────────────────────────────────────────
+   BBC — B2C identity demo
+   Palette and type approximate bbc.com. BBC Reith Sans/Serif are
+   proprietary, so we fall back to the same stack the BBC itself
+   declares after Reith: Helvetica Neue / Helvetica / Arial.
+   ───────────────────────────────────────────────────────────── */
+
+:root {
+  --bbc-black: #000000;
+  --bbc-ink: #141414;
+  --bbc-ink-2: #3f3f42;
+  --bbc-ink-3: #6e6e73;
+  --bbc-red: #b80000;
+  --bbc-red-hover: #8c0000;
+  --bbc-news-red: #bb1919;
+  --bbc-white: #ffffff;
+  --bbc-grey-bg: #f6f6f6;
+  --bbc-grey-line: #dcdcdc;
+  --bbc-grey-line-soft: #ebebeb;
+  --bbc-focus: #1c7ef3;
+  --bbc-green: #167f4c;
+
+  --bbc-sans: "BBC Reith Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --bbc-serif: "BBC Reith Serif", Georgia, "Times New Roman", serif;
+
+  --bbc-shell: 1280px;
+  --bbc-gutter: 16px;
+}
+
+* { box-sizing: border-box; }
+
+html, body, #root {
+  margin: 0;
+  padding: 0;
+  min-height: 100%;
+}
+
+body {
+  background: var(--bbc-white);
+  color: var(--bbc-ink);
+  font-family: var(--bbc-sans);
+  font-size: 16px;
+  line-height: 1.4;
+  -webkit-font-smoothing: antialiased;
+}
+
+a { color: inherit; }
+
+:focus-visible {
+  outline: 3px solid var(--bbc-focus);
+  outline-offset: 2px;
+}
+
+.shell {
+  max-width: var(--bbc-shell);
+  margin: 0 auto;
+  padding: 0 var(--bbc-gutter);
+  width: 100%;
+}
+
+.skip-link {
+  position: absolute;
+  left: -9999px;
+  background: var(--bbc-black);
+  color: #fff;
+  padding: 10px 16px;
+  z-index: 100;
+}
+.skip-link:focus { left: 8px; top: 8px; }
+
+/* ── Masthead ─────────────────────────────────────────────── */
+
+.masthead {
+  background: var(--bbc-black);
+  color: #fff;
+  border-bottom: 1px solid #2a2a2a;
+}
+
+.masthead-top {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  height: 60px;
+}
+
+.bbc-blocks {
+  display: block;
+  height: 24px;
+  width: auto;
+  fill: #fff;
+}
+
+.masthead-logo {
+  display: inline-flex;
+  align-items: center;
+  text-decoration: none;
+  padding: 4px 0;
+}
+
+.masthead-spacer { flex: 1; }
+
+.masthead-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.masthead-user {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  padding: 6px 8px;
+  border-radius: 2px;
+}
+.masthead-user:hover { background: #1f1f1f; }
+
+.masthead-user-name {
+  font-size: 14px;
+  font-weight: 700;
+  max-width: 160px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.avatar {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: var(--bbc-red);
+  color: #fff;
+  display: grid;
+  place-items: center;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  flex: none;
+}
+
+.avatar-lg { width: 64px; height: 64px; font-size: 24px; }
+
+/* Global nav row */
+.globalnav {
+  background: var(--bbc-black);
+  border-bottom: 1px solid #2a2a2a;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.globalnav::-webkit-scrollbar { display: none; }
+
+.globalnav-list {
+  display: flex;
+  align-items: stretch;
+  gap: 0;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  min-height: 44px;
+}
+
+.globalnav-link {
+  display: inline-flex;
+  align-items: center;
+  padding: 0 14px;
+  color: #fff;
+  text-decoration: none;
+  font-size: 15px;
+  font-weight: 700;
+  white-space: nowrap;
+  border-bottom: 4px solid transparent;
+}
+.globalnav-link:hover { background: #1f1f1f; border-bottom-color: #fff; }
+.globalnav-link.active { border-bottom-color: var(--bbc-news-red); }
+
+/* ── Buttons ──────────────────────────────────────────────── */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-family: inherit;
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 1;
+  padding: 12px 18px;
+  border: 2px solid transparent;
+  border-radius: 0;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background-color 0.12s ease, color 0.12s ease, border-color 0.12s ease;
+}
+.btn:disabled { opacity: 0.55; cursor: not-allowed; }
+
+.btn-primary {
+  background: var(--bbc-black);
+  color: #fff;
+  border-color: var(--bbc-black);
+}
+.btn-primary:hover:not(:disabled) { background: var(--bbc-red); border-color: var(--bbc-red); }
+
+.btn-secondary {
+  background: transparent;
+  color: var(--bbc-ink);
+  border-color: var(--bbc-ink);
+}
+.btn-secondary:hover:not(:disabled) { background: var(--bbc-grey-bg); }
+
+.btn-onblack {
+  background: #fff;
+  color: var(--bbc-black);
+  border-color: #fff;
+  font-size: 14px;
+  padding: 9px 16px;
+}
+.btn-onblack:hover:not(:disabled) { background: #d9d9d9; border-color: #d9d9d9; }
+
+.btn-ghost {
+  background: transparent;
+  color: var(--bbc-ink-2);
+  border-color: transparent;
+  padding: 8px 10px;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.btn-ghost:hover:not(:disabled) { color: var(--bbc-red); }
+
+.btn-lg { font-size: 17px; padding: 15px 24px; }
+.btn-block { width: 100%; }
+
+/* ── Section headings (BBC red rule) ──────────────────────── */
+
+.section-head {
+  border-top: 3px solid var(--bbc-news-red);
+  padding-top: 10px;
+  margin: 40px 0 18px;
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+}
+
+.section-title {
+  font-size: 24px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  margin: 0;
+}
+
+.section-sub {
+  font-size: 14px;
+  color: var(--bbc-ink-3);
+  margin: 0;
+}
+
+/* ── Home ─────────────────────────────────────────────────── */
+
+.home-main { padding-bottom: 56px; }
+
+.hero-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 28px;
+  padding: 28px 0 8px;
+  align-items: start;
+}
+
+@media (max-width: 900px) {
+  .hero-grid { grid-template-columns: 1fr; }
+}
+
+.lead-story { text-decoration: none; display: block; }
+
+.lead-media {
+  aspect-ratio: 16 / 9;
+  background: linear-gradient(135deg, #1f2933 0%, #3d4a57 60%, #6b7785 100%);
+  position: relative;
+  overflow: hidden;
+}
+
+.lead-media::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 70% 30%, rgba(255,255,255,0.16), transparent 55%),
+    repeating-linear-gradient(115deg, rgba(255,255,255,0.05) 0 2px, transparent 2px 22px);
+}
+
+.lead-title {
+  font-family: var(--bbc-serif);
+  font-size: 34px;
+  line-height: 1.15;
+  font-weight: 700;
+  margin: 14px 0 8px;
+  letter-spacing: -0.015em;
+}
+.lead-story:hover .lead-title { text-decoration: underline; text-decoration-thickness: 2px; }
+
+.lead-standfirst {
+  font-size: 16px;
+  color: var(--bbc-ink-2);
+  margin: 0 0 10px;
+  max-width: 62ch;
+}
+
+.meta {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13px;
+  color: var(--bbc-ink-3);
+}
+
+.meta-cat {
+  color: var(--bbc-news-red);
+  font-weight: 700;
+}
+
+.story-list {
+  display: grid;
+  gap: 0;
+  border-top: 1px solid var(--bbc-grey-line);
+}
+
+.story-row {
+  display: grid;
+  grid-template-columns: 1fr 96px;
+  gap: 14px;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--bbc-grey-line);
+  text-decoration: none;
+  align-items: start;
+}
+.story-row:hover .story-title { text-decoration: underline; text-decoration-thickness: 2px; }
+
+.story-title {
+  font-family: var(--bbc-serif);
+  font-size: 17px;
+  font-weight: 700;
+  line-height: 1.25;
+  margin: 0 0 6px;
+}
+
+.story-thumb {
+  aspect-ratio: 1 / 1;
+  background: var(--bbc-grey-bg);
+}
+
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+}
+
+@media (max-width: 1000px) { .card-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 560px) { .card-grid { grid-template-columns: 1fr; } }
+
+.story-card { text-decoration: none; display: block; }
+.story-card .story-media { aspect-ratio: 16 / 9; }
+.story-card h3 {
+  font-family: var(--bbc-serif);
+  font-size: 18px;
+  line-height: 1.25;
+  margin: 12px 0 6px;
+}
+.story-card:hover h3 { text-decoration: underline; text-decoration-thickness: 2px; }
+
+/* Image stand-ins. Declared last so they win over the neutral
+   .story-thumb / .lead-media backgrounds set above. */
+.media-tint-a { background: linear-gradient(135deg, #4a1f22 0%, #7e2b2b 60%, #b04b3f 100%); }
+.media-tint-b { background: linear-gradient(135deg, #17323d 0%, #2a5b63 60%, #4d8c88 100%); }
+.media-tint-c { background: linear-gradient(135deg, #2c2340 0%, #4a3a6b 60%, #7c66a8 100%); }
+.media-tint-d { background: linear-gradient(135deg, #3a3218 0%, #6b5a24 60%, #a3903f 100%); }
+
+/* ── Sign-in panel ────────────────────────────────────────── */
+
+.signin-panel {
+  background: var(--bbc-black);
+  color: #fff;
+  padding: 28px;
+}
+
+.signin-panel h2 {
+  font-size: 24px;
+  line-height: 1.2;
+  margin: 0 0 10px;
+  letter-spacing: -0.01em;
+}
+
+.signin-panel p {
+  font-size: 15px;
+  color: #cfcfcf;
+  margin: 0 0 18px;
+}
+
+.signin-benefits {
+  list-style: none;
+  margin: 0 0 22px;
+  padding: 0;
+  display: grid;
+  gap: 10px;
+}
+
+.signin-benefits li {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  font-size: 14px;
+  color: #e6e6e6;
+}
+
+.signin-benefits svg { flex: none; margin-top: 2px; color: #fff; }
+
+.signin-foot {
+  font-size: 12.5px;
+  color: #9c9c9c;
+  margin: 16px 0 0;
+  line-height: 1.5;
+}
+.signin-foot a { color: #fff; }
+
+.panel-note {
+  background: #1f1f1f;
+  border-left: 4px solid var(--bbc-news-red);
+  padding: 12px 14px;
+  font-size: 13px;
+  color: #e6e6e6;
+  margin-bottom: 18px;
+}
+.panel-note code { font-size: 12px; color: #fff; }
+
+/* Signed-in personalisation strip */
+.welcome-strip {
+  background: var(--bbc-grey-bg);
+  border-bottom: 1px solid var(--bbc-grey-line);
+  padding: 24px 0;
+}
+
+.welcome-inner {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.welcome-text h1 {
+  font-size: 26px;
+  margin: 0 0 4px;
+  letter-spacing: -0.015em;
+}
+
+.welcome-text p {
+  margin: 0;
+  color: var(--bbc-ink-3);
+  font-size: 14px;
+}
+
+.welcome-actions { margin-left: auto; display: flex; gap: 10px; flex-wrap: wrap; }
+
+.topic-chips { display: flex; flex-wrap: wrap; gap: 8px; }
+
+.chip {
+  border: 1px solid var(--bbc-grey-line);
+  background: #fff;
+  padding: 8px 14px;
+  font-size: 14px;
+  font-weight: 700;
+  text-decoration: none;
+  border-radius: 999px;
+}
+.chip:hover { background: var(--bbc-grey-bg); border-color: var(--bbc-ink-3); }
+
+/* ── Account ──────────────────────────────────────────────── */
+
+.account-hero {
+  background: var(--bbc-black);
+  color: #fff;
+  padding: 32px 0;
+}
+
+.account-hero-inner {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  flex-wrap: wrap;
+}
+
+.account-hero h1 {
+  font-size: 28px;
+  margin: 0 0 4px;
+  letter-spacing: -0.015em;
+}
+
+.account-hero p { margin: 0; color: #bdbdbd; font-size: 14px; }
+
+.account-hero-actions { margin-left: auto; }
+
+.account-layout {
+  display: grid;
+  grid-template-columns: 240px 1fr;
+  gap: 40px;
+  padding: 32px 0 72px;
+  align-items: start;
+}
+
+@media (max-width: 880px) {
+  .account-layout { grid-template-columns: 1fr; gap: 20px; }
+}
+
+.account-rail {
+  position: sticky;
+  top: 16px;
+  display: grid;
+  gap: 2px;
+}
+
+@media (max-width: 880px) {
+  .account-rail {
+    position: static;
+    grid-auto-flow: column;
+    grid-auto-columns: max-content;
+    overflow-x: auto;
+    border-bottom: 1px solid var(--bbc-grey-line);
+  }
+}
+
+.rail-link {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 14px;
+  font-size: 15px;
+  font-weight: 700;
+  text-decoration: none;
+  color: var(--bbc-ink);
+  border-left: 4px solid transparent;
+  background: none;
+  border-top: 0;
+  border-right: 0;
+  border-bottom: 0;
+  font-family: inherit;
+  cursor: pointer;
+  text-align: left;
+  white-space: nowrap;
+}
+.rail-link:hover { background: var(--bbc-grey-bg); }
+.rail-link.active { border-left-color: var(--bbc-news-red); background: var(--bbc-grey-bg); }
+.rail-link.danger.active { border-left-color: var(--bbc-red); }
+.rail-link svg { flex: none; color: var(--bbc-ink-3); }
+.rail-link.active svg { color: var(--bbc-ink); }
+
+@media (max-width: 880px) {
+  .rail-link {
+    border-left: 0;
+    border-bottom: 4px solid transparent;
+  }
+  .rail-link.active { border-left: 0; border-bottom-color: var(--bbc-news-red); }
+}
+
+.account-panel { min-width: 0; }
+
+.panel-head { margin-bottom: 20px; }
+
+.panel-head h2 {
+  font-size: 24px;
+  margin: 0 0 6px;
+  letter-spacing: -0.01em;
+}
+
+.panel-head p {
+  margin: 0;
+  color: var(--bbc-ink-3);
+  font-size: 15px;
+  max-width: 68ch;
+}
+
+.stack { display: grid; gap: 20px; }
+
+/* Card chrome the demo owns; the SDK widget renders inside it. */
+.acct-card {
+  border: 1px solid var(--bbc-grey-line);
+  background: #fff;
+}
+
+.acct-card-head {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--bbc-grey-line-soft);
+}
+
+.acct-card-head h3 {
+  font-size: 17px;
+  margin: 0 0 3px;
+}
+
+.acct-card-head p {
+  font-size: 13.5px;
+  color: var(--bbc-ink-3);
+  margin: 0;
+}
+
+.acct-card-body { padding: 8px 20px 16px; }
+
+.tag {
+  font-size: 11.5px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  padding: 4px 8px;
+  border: 1px solid var(--bbc-grey-line);
+  color: var(--bbc-ink-3);
+  margin-left: auto;
+  flex: none;
+  white-space: nowrap;
+}
+.tag-on { color: var(--bbc-green); border-color: #b6dcc6; background: #eef7f1; }
+.tag-danger { color: var(--bbc-red); border-color: #f0c4c4; background: #fdf1f1; }
+
+/* Static fallback rows (NEXT_PUBLIC_USE_SDK=false, or a widget that fails to mount) */
+.read-row {
+  display: grid;
+  grid-template-columns: 200px 1fr auto;
+  gap: 12px;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--bbc-grey-line-soft);
+  font-size: 15px;
+  align-items: center;
+}
+.read-row:last-child { border-bottom: 0; }
+.read-row-label { color: var(--bbc-ink-3); font-size: 14px; }
+.read-row-value { font-weight: 700; }
+
+@media (max-width: 620px) {
+  .read-row { grid-template-columns: 1fr; gap: 2px; }
+}
+
+.notice {
+  border: 1px solid var(--bbc-grey-line);
+  border-left: 4px solid var(--bbc-news-red);
+  background: #fdf1f1;
+  padding: 14px 16px;
+  font-size: 14px;
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+}
+.notice svg { flex: none; color: var(--bbc-red); margin-top: 1px; }
+
+.loading-screen {
+  min-height: 60vh;
+  display: grid;
+  place-items: center;
+  text-align: center;
+  padding: 40px 16px;
+}
+
+.loading-screen h2 { font-size: 20px; margin: 16px 0 6px; }
+.loading-screen p { color: var(--bbc-ink-3); margin: 0; font-size: 14px; }
+
+.spinner {
+  width: 28px;
+  height: 28px;
+  border: 3px solid var(--bbc-grey-line);
+  border-top-color: var(--bbc-news-red);
+  border-radius: 50%;
+  margin: 0 auto;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin { to { transform: rotate(360deg); } }
+
+@media (prefers-reduced-motion: reduce) {
+  .spinner { animation-duration: 3s; }
+}
+
+/* ── Footer ───────────────────────────────────────────────── */
+
+.footer {
+  background: var(--bbc-black);
+  color: #b7b7b7;
+  padding: 32px 0 40px;
+  margin-top: auto;
+}
+
+.footer-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 20px;
+  list-style: none;
+  padding: 0;
+  margin: 0 0 20px;
+}
+
+.footer-links a {
+  color: #fff;
+  font-size: 14px;
+  font-weight: 700;
+  text-decoration: none;
+}
+.footer-links a:hover { text-decoration: underline; }
+
+.footer-note { font-size: 12.5px; line-height: 1.6; margin: 0; max-width: 78ch; }
+
+.page-shell {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.page-body { flex: 1; }
+
+/* ─────────────────────────────────────────────────────────────
+   SDK widget theming.
+
+   LoginRadiusCore writes its --sdk-* theme values as INLINE styles on
+   <html> at init (LoginradiusCore.ts ~line 499), so a :root rule here
+   would lose to them. Declaring the same custom properties on a
+   descendant wrapper wins for that subtree instead — hence this scope
+   class around every embedded widget.
+   ───────────────────────────────────────────────────────────── */
+
+.bbc-sdk-scope {
+  --sdk-font-family: var(--bbc-sans);
+  --sdk-body-bg-color: #ffffff;
+  --sdk-body-font-size: 15px;
+
+  --sdk-brand-primary-color: var(--bbc-black);
+  --sdk-primary-color: var(--bbc-black);
+  --sdk-brand-primary-ring-color: rgba(28, 126, 243, 0.4);
+
+  --sdk-card-bg-color: #ffffff;
+  --sdk-card-text-color: var(--bbc-ink);
+  --sdk-card-subtext-color: var(--bbc-ink-3);
+  --sdk-card-box-shadow: none;
+  --sdk-card-border-color: transparent;
+  --sdk-card-border-top-width: 0px;
+  --sdk-card-border-right-width: 0px;
+  --sdk-card-border-bottom-width: 0px;
+  --sdk-card-border-left-width: 0px;
+  --sdk-card-border-radius-top-left: 0px;
+  --sdk-card-border-radius-top-right: 0px;
+  --sdk-card-border-radius-bottom-left: 0px;
+  --sdk-card-border-radius-bottom-right: 0px;
+  --sdk-card-padding-top: 0px;
+  --sdk-card-padding-right: 0px;
+  --sdk-card-padding-bottom: 0px;
+  --sdk-card-padding-left: 0px;
+  --sdk-card-width: 100%;
+
+  --sdk-header-font-size: 17px;
+  --sdk-header-font-weight: 700;
+  --sdk-subheader-font-size: 13.5px;
+  --sdk-subheader-font-weight: 400;
+  --sdk-text-align: left;
+
+  --sdk-button-primary-bg-color: var(--bbc-black);
+  --sdk-button-primary-text-color: #ffffff;
+  --sdk-button-primary-border-color: var(--bbc-black);
+  --sdk-button-primary-radius: 0px;
+  --sdk-button-primary-shadow: none;
+  --sdk-button-secondary-bg-color: transparent;
+  --sdk-button-secondary-text-color: var(--bbc-ink);
+  --sdk-button-secondary-border-color: var(--bbc-ink);
+  --sdk-button-secondary-radius: 0px;
+  --sdk-button-secondary-shadow: none;
+
+  --sdk-input-bg-color: #ffffff;
+  --sdk-input-text-color: var(--bbc-ink);
+  --sdk-input-border-color: #767676;
+  --sdk-input-bg-disabled-color: var(--bbc-grey-bg);
+  --sdk-input-disabled-bg-color: var(--bbc-grey-bg);
+
+  --sdk-link-color: var(--bbc-ink);
+  --sdk-link-text-color: var(--bbc-ink);
+  --sdk-link-font-weight: 700;
+
+  --sdk-error-color: var(--bbc-red);
+  --sdk-alert-error-bg-color: #fdf1f1;
+  --sdk-alert-error-border-color: #f0c4c4;
+  --sdk-alert-error-text-color: #8c0000;
+  --sdk-alert-error-icon-color: var(--bbc-red);
+  --sdk-alert-success-bg-color: #eef7f1;
+  --sdk-alert-success-border-color: #b6dcc6;
+  --sdk-alert-success-text-color: #0f5c37;
+  --sdk-alert-success-icon-color: var(--bbc-green);
+
+  --sdk-social-bg-color: #ffffff;
+  --sdk-social-text-color: var(--bbc-ink);
+  --sdk-social-border-color: var(--bbc-grey-line);
+  --sdk-social-border-radius: 0px;
+  --sdk-social-box-shadow: none;
+
+  --sdk-hover-bg-color: var(--bbc-grey-bg);
+  --sdk-secondary-text-color: var(--bbc-ink-3);
+  --sdk-footer-bg-color: transparent;
+  --sdk-footer-text-color: var(--bbc-ink-3);
+  --sdk-footer-border-top: 1px solid var(--bbc-grey-line);
+  --sdk-show-logo: none;
+}
+
+/* Each profile widget ships its own card shell (.loginradius-profile-container
+   .lr-card — 1px border, 16px radius, 24px padding). Ours already draws the
+   border and heading, so flatten theirs instead of nesting two cards. */
+.bbc-sdk-scope .loginradius-profile-container,
+.bbc-sdk-scope .lr-card {
+  box-shadow: none;
+  border: 0;
+  border-radius: 0;
+  padding: 0;
+  background: transparent;
+}
+
+/* BBC chrome is square-cornered throughout; the --sdk-*-radius tokens don't
+   reach every control the widgets render. */
+.bbc-sdk-scope input,
+.bbc-sdk-scope select,
+.bbc-sdk-scope textarea,
+.bbc-sdk-scope button {
+  border-radius: 0;
+}
+
+/* ── Linked accounts section ──────────────────────────────── */
+
+.linked-banner {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border-left: 4px solid var(--bbc-news-red);
+  background: var(--bbc-grey-bg);
+  padding: 14px 16px;
+}
+
+.linked-banner-title { font-weight: 700; font-size: 15px; }
+.linked-banner-sub { font-size: 13.5px; color: var(--bbc-ink-3); margin-top: 2px; }
+
+.linked-list { list-style: none; margin: 0; padding: 0; }
+
+.linked-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--bbc-grey-line-soft);
+}
+.linked-row:last-child { border-bottom: 0; }
+
+.linked-row-main { min-width: 0; }
+
+.linked-row-name {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  font-weight: 700;
+  font-size: 15px;
+}
+
+.linked-row-name .tag { margin-left: 0; }
+
+.linked-row-meta {
+  font-size: 13.5px;
+  color: var(--bbc-ink-3);
+  margin-top: 3px;
+  overflow-wrap: anywhere;
+}
+
+.linked-empty { color: var(--bbc-ink-3); font-size: 14px; margin: 12px 0; }
+
+.linked-skel {
+  height: 13px;
+  background: var(--bbc-grey-line-soft);
+  margin: 8px 0;
+  max-width: 100%;
+}
+
+/* Add-profile form */
+.profile-form {
+  display: grid;
+  gap: 14px;
+  padding: 4px 0 12px;
+  border-bottom: 1px solid var(--bbc-grey-line-soft);
+  margin-bottom: 8px;
+  max-width: 460px;
+}
+
+.profile-form-row { display: grid; gap: 6px; }
+
+.profile-form-row label { font-size: 13.5px; font-weight: 700; }
+
+.profile-form-row input {
+  font-family: inherit;
+  font-size: 15px;
+  padding: 10px 12px;
+  border: 1px solid #767676;
+  border-radius: 0;
+  background: #fff;
+  color: var(--bbc-ink);
+}
+.profile-form-row input:focus-visible { border-color: var(--bbc-ink); }
+
+.profile-check {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 14.5px;
+}
+/* The SDK injects its stylesheet at runtime (a <style> element, not a file
+   import), and it carries a blanket `button, input, select, textarea {
+   appearance: none; border: none; background: transparent }` reset. That
+   erases a checkbox entirely — the box reserves its 18px but paints nothing —
+   so these opt back into native rendering explicitly. */
+.profile-check input[type="checkbox"] {
+  appearance: auto;
+  -webkit-appearance: checkbox;
+  width: 16px;
+  height: 16px;
+  margin: 0;
+  accent-color: var(--bbc-black);
+}
+
+.profile-form-actions { display: flex; gap: 8px; align-items: center; margin-top: 2px; }
+
+/* ── Profiles gate (/profiles) ────────────────────────────── */
+
+.profiles-screen { background: var(--bbc-grey-bg); }
+
+.profiles-inner {
+  max-width: var(--bbc-shell);
+  margin: 0 auto;
+  padding: 56px var(--bbc-gutter) 72px;
+}
+
+.profiles-title {
+  font-size: 34px;
+  letter-spacing: -0.02em;
+  margin: 0 0 8px;
+}
+
+.profiles-sub { color: var(--bbc-ink-3); font-size: 16px; margin: 0; }
+
+.tile-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  margin: 32px 0 8px;
+}
+
+.profile-tile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  width: 148px;
+  padding: 18px 12px;
+  background: #fff;
+  border: 1px solid var(--bbc-grey-line);
+  cursor: pointer;
+  font-family: inherit;
+  text-align: center;
+}
+.profile-tile:hover { border-color: var(--bbc-ink); }
+.profile-tile.active { border-color: var(--bbc-news-red); border-width: 2px; }
+
+.tile-avatar {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: var(--bbc-red);
+  color: #fff;
+  display: grid;
+  place-items: center;
+  font-size: 28px;
+  font-weight: 700;
+}
+.tile-avatar.add {
+  background: transparent;
+  color: var(--bbc-ink-3);
+  border: 2px dashed var(--bbc-grey-line);
+  font-size: 32px;
+}
+
+.tile-name { font-weight: 700; font-size: 15px; }
+.tile-sub { font-size: 12.5px; color: var(--bbc-ink-3); }
+
+.profiles-linked { margin-top: 40px; max-width: 720px; }
+
+/* Active-profile chip in the masthead */
+.masthead-profile {
+  background: none;
+  border: 0;
+  cursor: pointer;
+  font-family: inherit;
+  color: #fff;
+}
+.masthead-switch {
+  font-size: 11.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: #b7b7b7;
+  border-left: 1px solid #3a3a3a;
+  padding-left: 10px;
+}
+.masthead-profile:hover .masthead-switch { color: #fff; }

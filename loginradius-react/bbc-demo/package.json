@@ -1,0 +1,20 @@
+{
+  "name": "@loginradius/demo-react-bbc",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "next dev -p 5174",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "test": "node tests/shapeAccountGraph.test.mjs && node tests/profiles.test.mjs && node tests/gate.test.mjs"
+  },
+  "dependencies": {
+    "@loginradius/loginradius-react": "latest",
+    "next": "^15.5.24",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
+    "server-only": "^0.0.1"
+  }
+}
