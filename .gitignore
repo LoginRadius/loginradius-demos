@@ -24,6 +24,7 @@
 *.jks
 *.keystore
 secrets.json
+.npmrc
 credentials.json
 serviceAccount*.json
 gha-creds-*.json
