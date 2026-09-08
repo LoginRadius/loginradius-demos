@@ -36,6 +36,41 @@ export function normalizeProfile(p) {
   };
 }
 
+/**
+ * A kids profile must never be the account default.
+ *
+ * The default is what someone lands on unattended, and a kids profile carries
+ * restricted content plus different personalisation consent. This is a
+ * correctness rule rather than a security boundary — kids is the *more*
+ * restrictive mode, and the picker can select any profile regardless — but
+ * keeping it in one place stops the two surfaces disagreeing.
+ */
+export function canBeDefault(profile) {
+  if (!profile) return false;
+  if (profile.isMinimumAge) return false;
+  return profile.status !== "deleted";
+}
+
+/**
+ * Reconcile the stored DefaultProfileId against the profiles that actually
+ * exist and are still eligible. A profile deleted elsewhere, or edited into a
+ * kids profile, leaves a dangling id — resolve it to "no default" rather than
+ * to a reference every consumer then has to defend against.
+ */
+export function resolveDefaultProfileId(storedId, profiles) {
+  if (!storedId) return null;
+  const match = (profiles || []).find((p) => p.id === storedId);
+  return match && canBeDefault(match) ? storedId : null;
+}
+
+/** Default first, then creation order — the picker shows it in the lead slot. */
+export function sortProfilesForPicker(profiles, defaultProfileId) {
+  if (!defaultProfileId) return profiles;
+  const rest = profiles.filter((p) => p.id !== defaultProfileId);
+  const first = profiles.find((p) => p.id === defaultProfileId);
+  return first ? [first, ...rest] : profiles;
+}
+
 /** Pull the links and profiles out of a custom-object response. */
 export function readLinkObject(objectResponse) {
   // No record yet is a normal state, not an error — the identity simply has
@@ -48,6 +83,10 @@ export function readLinkObject(objectResponse) {
       (l) => l?.ReferenceId,
     ),
     profiles: Array.isArray(custom.Profiles) ? custom.Profiles : [],
+    // Stored as a top-level scalar rather than a flag on each profile: only
+    // one value can exist, so "exactly one default" cannot be violated, and
+    // setting it writes one key instead of rewriting the whole Profiles array.
+    defaultProfileId: custom.DefaultProfileId ?? null,
   };
 }
 
@@ -85,16 +124,26 @@ export function shapeAccountGraph(viewerUid, parsed, settled) {
   const children = linkedAccounts.filter((l) => l.linkType === "child");
   const parents = linkedAccounts.filter((l) => l.linkType === "parent");
 
-  // Holding "child" links makes you a parent; holding "parent" links, a child.
-  // Neither is a standalone account with nothing linked yet.
-  const role = children.length ? "parent" : parents.length ? "child" : "unlinked";
+  // Role precedence follows the linking spec: a single "parent" link is enough
+  // to make this identity a child, and that test runs FIRST. A record holding
+  // both kinds would otherwise resolve to parent and hand a child account the
+  // parent permission set — so the more restrictive reading wins.
+  //
+  // "unlinked" (nothing linked yet) is a display distinction only; for
+  // permissions it is treated as a parent, via isChild below.
+  const role = parents.length ? "child" : children.length ? "parent" : "unlinked";
+  const isChild = role === "child";
+
+  const profiles = parsed.profiles.map(normalizeProfile);
+  const defaultProfileId = resolveDefaultProfileId(parsed.defaultProfileId, profiles);
 
   return {
-    viewer: { uid: viewerUid, role },
+    viewer: { uid: viewerUid, role, isChild },
     objectRecordId: parsed.objectRecordId,
     children,
     parents,
-    profiles: parsed.profiles.map(normalizeProfile),
+    defaultProfileId,
+    profiles: sortProfilesForPicker(profiles, defaultProfileId),
     counts: {
       children: children.length,
       parents: parents.length,

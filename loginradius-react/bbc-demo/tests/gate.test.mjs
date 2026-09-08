@@ -3,8 +3,8 @@
 import assert from "node:assert/strict";
 import { resolveGateState, safeNext } from "../src/views/profiles/gate.js";
 
-const g = (status, profiles, activeProfileId = null) =>
-  resolveGateState({ status, profiles, activeProfileId });
+const g = (status, profiles, activeProfileId = null, isChild = false) =>
+  resolveGateState({ status, profiles, activeProfileId, isChild });
 
 // ── scenario 1: new user, no profiles ────────────────────────────────────
 assert.equal(g("ready", []), "add-first");
@@ -19,6 +19,13 @@ console.log("✓ scenario 2 — single profile adopted, then ready");
 assert.equal(g("ready", [{ id: "a" }, { id: "b" }]), "choose");
 assert.equal(g("ready", [{ id: "a" }, { id: "b" }], "b"), "ready", "choice sticks");
 console.log("✓ scenario 3 — multiple profiles ⇒ choose, then ready");
+
+// ── child accounts are never gated ───────────────────────────────────────
+assert.equal(g("ready", [], null, true), "child", "no profiles, but never asked to create one");
+assert.equal(g("ready", [{ id: "a" }, { id: "b" }], null, true), "child", "never offered the picker");
+assert.equal(g("ready", [{ id: "a" }], null, true), "child", "not auto-adopted either");
+assert.equal(g("error", [], null, true), "error", "error still beats the child short-circuit");
+console.log("✓ child accounts bypass the gate entirely");
 
 // ── the gate must fail open, never trap ──────────────────────────────────
 assert.equal(g("error", []), "error", "a failed graph never forces add-first");

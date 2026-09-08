@@ -7,6 +7,7 @@ import { I } from "../components/Icons.jsx";
 import { useProfiles } from "../context/ProfileContext.jsx";
 import { AddProfileForm } from "./profiles/AddProfileForm.jsx";
 import { resolveGateState, safeNext } from "./profiles/gate.js";
+import { useSetDefault } from "./profiles/useSetDefault.js";
 
 // The profile gate: who's watching, plus the linked accounts behind it.
 //
@@ -19,13 +20,16 @@ export function Profiles() {
     status, error, graph, profiles, accessToken,
     activeProfileId, selectProfile, applyGraph, reload,
   } = useProfiles();
+  const { setDefault, pendingId, error: defaultError } = useSetDefault();
+  const defaultProfileId = graph?.defaultProfileId ?? null;
 
   const router = useRouter();
   const searchParams = useSearchParams();
   const [adding, setAdding] = useState(false);
 
   const next = safeNext(searchParams.get("next"));
-  const gate = resolveGateState({ status, profiles, activeProfileId });
+  const isChild = !!graph?.viewer?.isChild;
+  const gate = resolveGateState({ status, profiles, activeProfileId, isChild });
 
   const autoSelected = useRef(false);
 
@@ -33,6 +37,11 @@ export function Profiles() {
 
   // Exactly one profile and nothing chosen: adopt it and move on. Guarded by
   // a ref so a re-render mid-navigation can't fire it twice.
+  // A child account has no business on this screen at all.
+  useEffect(() => {
+    if (gate === "child") router.replace(next);
+  }, [gate, router, next]);
+
   useEffect(() => {
     if (gate !== "adopt-one" || autoSelected.current) return;
     autoSelected.current = true;
@@ -45,7 +54,7 @@ export function Profiles() {
     if (selectProfile(id)) proceed();
   };
 
-  if (gate === "loading") {
+  if (gate === "loading" || gate === "child") {
     return (
       <Shell>
         <LoadingScreen title="Loading your profiles" sub="Fetching the accounts linked to yours." />
@@ -118,23 +127,45 @@ export function Profiles() {
             <h1 className="profiles-title">Who&apos;s watching?</h1>
             <p className="profiles-sub">Choose a profile to continue.</p>
 
+            {defaultError && (
+              <div className="notice" style={{ marginTop: 16, maxWidth: 520 }}>
+                <I.Alert width={18} height={18} />
+                <div>{defaultError}</div>
+              </div>
+            )}
+
             <div className="tile-grid">
               {profiles.map((p) => (
-                <button
-                  key={p.id}
-                  type="button"
-                  className={`profile-tile${p.id === activeProfileId ? " active" : ""}`}
-                  onClick={() => choose(p.id)}
-                >
-                  <span className="tile-avatar" aria-hidden="true">
-                    {(p.displayName || "?")[0].toUpperCase()}
-                  </span>
-                  <span className="tile-name">{p.displayName}</span>
-                  <span className="tile-sub">
-                    {p.isMinimumAge ? "Kids" : "Standard"}
-                    {p.id === activeProfileId ? " · active" : ""}
-                  </span>
-                </button>
+                <div className="tile-wrap" key={p.id}>
+                  <button
+                    type="button"
+                    className={`profile-tile${p.id === activeProfileId ? " active" : ""}`}
+                    onClick={() => choose(p.id)}
+                  >
+                    <span className="tile-avatar" aria-hidden="true">
+                      {(p.displayName || "?")[0].toUpperCase()}
+                    </span>
+                    <span className="tile-name">{p.displayName}</span>
+                    <span className="tile-sub">
+                      {p.isMinimumAge ? "Kids" : "Standard"}
+                      {p.id === activeProfileId ? " · active" : ""}
+                    </span>
+                    {p.id === defaultProfileId && (
+                      <span className="tile-default">Default</span>
+                    )}
+                  </button>
+                  {/* A kids profile is never offered as the default. */}
+                  {p.id !== defaultProfileId && !p.isMinimumAge && (
+                    <button
+                      type="button"
+                      className="btn btn-ghost tile-action"
+                      onClick={() => setDefault(p.id)}
+                      disabled={pendingId === p.id}
+                    >
+                      {pendingId === p.id ? "Saving…" : "Make default"}
+                    </button>
+                  )}
+                </div>
               ))}
 
               <button

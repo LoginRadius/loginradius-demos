@@ -148,6 +148,31 @@ const fail = (m) => ({ status: "rejected", reason: new Error(m) });
   console.log("✓ malformed entries: dropped/normalised without throwing");
 }
 
+// ── mixed record: precedence must favour the restrictive reading ─────────
+{
+  const parsed = readLinkObject({
+    data: [{ CustomObject: { LinkedAccounts: [
+      { LinkType: "child", ReferenceId: "c1" },
+      { LinkType: "parent", ReferenceId: "p1" },
+    ] } }],
+  });
+  const graph = shapeAccountGraph("v", parsed, [ok(account()), ok(account())]);
+  assert.equal(graph.viewer.role, "child", "a single parent link wins over child links");
+  assert.equal(graph.viewer.isChild, true, "isChild drives the permission checks");
+  console.log("\u2713 mixed links resolve to child (restrictive precedence)");
+}
+
+{
+  const parent = shapeAccountGraph("v", readLinkObject({
+    data: [{ CustomObject: { LinkedAccounts: [{ LinkType: "child", ReferenceId: "c1" }] } }],
+  }), [ok(account())]);
+  assert.equal(parent.viewer.isChild, false);
+  const unlinked = shapeAccountGraph("v", readLinkObject(null), []);
+  assert.equal(unlinked.viewer.role, "unlinked");
+  assert.equal(unlinked.viewer.isChild, false, "unlinked is treated as a parent for permissions");
+  console.log("\u2713 isChild false for parent and unlinked");
+}
+
 // ── missing-record detection (LoginRadius 1057, served as HTTP 403) ──────
 {
   const { isMissingRecordError, CUSTOM_OBJECT_RECORD_NOT_EXIST } = await import(
