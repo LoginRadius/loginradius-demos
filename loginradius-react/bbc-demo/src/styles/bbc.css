@@ -1004,3 +1004,123 @@ a { color: inherit; }
   padding-left: 10px;
 }
 .masthead-profile:hover .masthead-switch { color: #fff; }
+
+/* Child-account promotion + credentials handoff */
+.field-hint { font-size: 12.5px; color: var(--bbc-ink-3); margin: 2px 0 0; }
+.field-hint code { font-size: 12px; }
+
+.profile-form-row select {
+  font-family: inherit;
+  font-size: 15px;
+  padding: 10px 12px;
+  border: 1px solid #767676;
+  border-radius: 0;
+  background: #fff;
+  color: var(--bbc-ink);
+  appearance: auto;
+}
+
+.handoff { padding: 4px 0 12px; max-width: 480px; }
+
+.handoff-fields {
+  display: grid;
+  grid-template-columns: 110px 1fr;
+  gap: 8px 14px;
+  margin: 0 0 18px;
+  font-size: 15px;
+}
+.handoff-fields dt { color: var(--bbc-ink-3); font-size: 13.5px; }
+.handoff-fields dd { margin: 0; font-weight: 700; overflow-wrap: anywhere; }
+
+.handoff-secret {
+  font-family: var(--bbc-mono, ui-monospace, "SF Mono", Menlo, monospace);
+  background: var(--bbc-grey-bg);
+  padding: 2px 6px;
+}
+
+/* ── Modal (child account management) ─────────────────────── */
+
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  display: grid;
+  place-items: start center;
+  padding: 40px 16px;
+  overflow-y: auto;
+  z-index: 60;
+}
+
+.modal-panel {
+  background: #fff;
+  border: 1px solid var(--bbc-grey-line);
+  width: 100%;
+  max-width: 560px;
+}
+
+.modal-head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--bbc-grey-line);
+}
+.modal-head h2 { font-size: 20px; margin: 0; letter-spacing: -0.01em; }
+
+.modal-close {
+  margin-left: auto;
+  background: none;
+  border: 0;
+  font-size: 18px;
+  line-height: 1;
+  cursor: pointer;
+  padding: 6px 8px;
+  color: var(--bbc-ink-3);
+}
+.modal-close:hover { color: var(--bbc-ink); }
+
+.modal-body { padding: 18px 20px 22px; }
+
+.modal-section {
+  margin-top: 22px;
+  padding-top: 18px;
+  border-top: 1px solid var(--bbc-grey-line-soft);
+}
+.modal-section h3 { font-size: 16px; margin: 0 0 4px; }
+
+.detail-grid {
+  display: grid;
+  grid-template-columns: 150px 1fr;
+  gap: 10px 16px;
+  margin: 0;
+  font-size: 14.5px;
+}
+.detail-grid dt { color: var(--bbc-ink-3); font-size: 13.5px; }
+.detail-grid dd { margin: 0; overflow-wrap: anywhere; }
+.detail-mono { font-family: ui-monospace, "SF Mono", Menlo, monospace; font-size: 13px; }
+
+@media (max-width: 560px) {
+  .detail-grid { grid-template-columns: 1fr; gap: 2px 0; }
+  .detail-grid dd { margin-bottom: 10px; }
+}
+
+.linked-row .btn-row { margin-left: auto; flex: none; font-size: 14px; padding: 8px 14px; }
+
+/* Default-profile affordances */
+.tile-wrap { display: flex; flex-direction: column; align-items: center; gap: 6px; }
+.profile-tile { position: relative; }
+
+.tile-default {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  background: var(--bbc-news-red);
+  color: #fff;
+  padding: 2px 6px;
+}
+
+.tile-action { font-size: 13px; padding: 4px 8px; }

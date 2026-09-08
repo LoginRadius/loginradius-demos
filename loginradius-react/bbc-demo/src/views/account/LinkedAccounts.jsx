@@ -1,13 +1,20 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
 import { I } from "../../components/Icons.jsx";
 import { useProfiles } from "../../context/ProfileContext.jsx";
+import { PromoteProfile } from "./PromoteProfile.jsx";
+import { ManageChild } from "./ManageChild.jsx";
+import { useSetDefault } from "../profiles/useSetDefault.js";
 
 // Read-only summary on the account page. Managing profiles lives at
 // /profiles — one surface owns that so the two can't drift apart.
 export function LinkedAccounts() {
-  const { status, error, graph, profiles, activeProfile, reload } = useProfiles();
+  const { status, error, graph, profiles, activeProfile, accessToken, applyGraph, reload } =
+    useProfiles();
+  const [managing, setManaging] = useState(null);
+  const { setDefault, pendingId, error: defaultError } = useSetDefault();
 
   if (status === "loading" || status === "idle") {
     return (
@@ -44,6 +51,14 @@ export function LinkedAccounts() {
 
   return (
     <div className="stack">
+      {managing && (
+        <ManageChild
+          child={managing}
+          accessToken={accessToken}
+          onClose={() => setManaging(null)}
+        />
+      )}
+
       <div className="linked-banner">
         <div>
           <div className="linked-banner-title">
@@ -59,6 +74,7 @@ export function LinkedAccounts() {
         </div>
       </div>
 
+      {role !== "child" && (
       <section className="acct-card">
         <div className="acct-card-head">
           <div>
@@ -83,8 +99,11 @@ export function LinkedAccounts() {
                     <div className="linked-row-name">
                       {p.displayName}
                       {p.isMinimumAge && <span className="tag">Kids</span>}
+                      {p.id === graph.defaultProfileId && (
+                        <span className="tag tag-on">Default</span>
+                      )}
                       {p.id === activeProfile?.id && (
-                        <span className="tag tag-on">Active</span>
+                        <span className="tag">Active</span>
                       )}
                     </div>
                     <div className="linked-row-meta">
@@ -93,16 +112,59 @@ export function LinkedAccounts() {
                         : "No date of birth on file"}
                     </div>
                   </div>
+                  {p.id !== graph.defaultProfileId && !p.isMinimumAge && (
+                    <button
+                      type="button"
+                      className="btn btn-ghost btn-row"
+                      onClick={() => setDefault(p.id)}
+                      disabled={pendingId === p.id}
+                    >
+                      {pendingId === p.id ? "Saving…" : "Make default"}
+                    </button>
+                  )}
                 </li>
               ))}
             </ul>
           )}
 
-          <Link href="/profiles" className="btn btn-secondary" style={{ marginTop: 14 }}>
-            Manage profiles <I.Arrow width={18} height={18} />
-          </Link>
+          {defaultError && (
+            <div className="notice" style={{ marginTop: 12 }}>
+              <I.Alert width={18} height={18} />
+              <div>{defaultError}</div>
+            </div>
+          )}
+
+          <div
+            style={{ marginTop: 14, display: "flex", gap: 10, flexWrap: "wrap" }}
+          >
+            <Link href="/profiles" className="btn btn-secondary">
+              Manage profiles <I.Arrow width={18} height={18} />
+            </Link>
+          </div>
         </div>
       </section>
+      )}
+
+      {role !== "child" && (
+        <section className="acct-card">
+          <div className="acct-card-head">
+            <div>
+              <h3>Standalone child accounts</h3>
+              <p>
+                Give a profile its own email and password so they can sign in on
+                their own device. You&apos;ll manage the account from here.
+              </p>
+            </div>
+          </div>
+          <div className="acct-card-body">
+            <PromoteProfile
+              profiles={profiles}
+              accessToken={accessToken}
+              onLinked={(nextGraph) => nextGraph && applyGraph(nextGraph)}
+            />
+          </div>
+        </section>
+      )}
 
       {linked.length > 0 && (
         <section className="acct-card">
@@ -131,6 +193,15 @@ export function LinkedAccounts() {
                             .join(" · ") || a.uid}
                     </div>
                   </div>
+                  {role !== "child" && !a.unresolved && (
+                    <button
+                      type="button"
+                      className="btn btn-secondary btn-row"
+                      onClick={() => setManaging(a)}
+                    >
+                      Manage
+                    </button>
+                  )}
                 </li>
               ))}
             </ul>

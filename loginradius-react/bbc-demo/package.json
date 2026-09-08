@@ -8,7 +8,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "test": "node tests/shapeAccountGraph.test.mjs && node tests/profiles.test.mjs && node tests/gate.test.mjs"
+    "test": "node tests/shapeAccountGraph.test.mjs && node tests/profiles.test.mjs && node tests/gate.test.mjs && node tests/childAccounts.test.mjs && node tests/defaultProfile.test.mjs"
   },
   "dependencies": {
     "@loginradius/loginradius-react": "latest",

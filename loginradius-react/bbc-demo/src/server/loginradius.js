@@ -232,4 +232,42 @@ export async function updateLinkAccountObject(uid, objectRecordId, partialObject
   );
 }
 
+/**
+ * Create an identity.
+ * POST /identity/v2/manage/account
+ *
+ * The payload carries a plaintext password. It is never logged here, and
+ * manageFetch's error path reports only the provider's message — never the
+ * request body.
+ */
+export async function createAccount(payload) {
+  return manageFetch("/identity/v2/manage/account", {
+    method: "POST",
+    body: JSON.stringify(payload),
+  });
+}
+
+/**
+ * Update an identity by uid — used for the parent-led password reset and by
+ * the promotion rollback.
+ * PUT /identity/v2/manage/account/{uid}
+ */
+export async function updateAccountByUid(uid, payload) {
+  return manageFetch(`/identity/v2/manage/account/${encodeURIComponent(uid)}`, {
+    method: "PUT",
+    body: JSON.stringify(payload),
+  });
+}
+
+/**
+ * Delete an identity by uid. Only ever called to clean up an account this
+ * request just created — never on an account that pre-existed.
+ * DELETE /identity/v2/manage/account/{uid}
+ */
+export async function deleteAccountByUid(uid) {
+  return manageFetch(`/identity/v2/manage/account/${encodeURIComponent(uid)}`, {
+    method: "DELETE",
+  });
+}
+
 export { LINK_OBJECT_NAME };

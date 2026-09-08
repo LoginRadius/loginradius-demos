@@ -112,7 +112,7 @@ mount with data rather than each firing its own `getAccount`.
 Nothing renews a B2C access token. The OIDC `refresh_token` from the exchange is
 written to the org snapshot, but the React layer's refresh path is gated behind
 `isB2BEnabled`. The session simply ends when the token expires — see
-[§7](#7-session-handling).
+[§8](#8-session-handling).
 
 ---
 
@@ -136,7 +136,7 @@ section is BBC card chrome the demo owns, wrapping an SDK widget.
 | Contact details | `AddEmail` | — |
 | " | `EditPhone` | `phoneLogin` |
 | Connected accounts | `LinkAccount` | social providers + verified email |
-| Linked accounts | *(not a widget — see §4)* | `link_account` custom object |
+| Linked accounts | *(not a widget — see §4, §6)* | `link_account` custom object |
 | Close account | `DeleteAccount` | — |
 
 Two naming traps the `WIDGETS` map in `src/sdk/index.jsx` exists to avoid:
@@ -272,7 +272,192 @@ same value.
 
 ---
 
-## 6. The profile gate
+## 6. Child accounts (promotion & linking)
+
+**Files:** `src/server/childAccounts.js` (pure), `src/server/linkedAccounts.js`
+(`promoteProfileToChildAccount`), `src/app/api/linked-accounts/create-child/route.js`,
+`src/views/account/PromoteProfile.jsx`
+
+Implements §§2–5 of the child-account linking spec: a parent turns one of their
+viewing profiles into a standalone LoginRadius identity with its own email and
+password, linked bidirectionally.
+
+### Role determination
+
+Precedence is deliberately **restrictive-first**, matching the spec:
+
+| `LinkedAccounts` contains | Role | `isChild` |
+|---|---|---|
+| any `LinkType: "parent"` | `child` | `true` |
+| only `LinkType: "child"` | `parent` | `false` |
+| empty / absent | `unlinked` | `false` |
+
+The `parent` test runs first, so a record holding **both** kinds resolves to
+child. The earlier implementation checked `child` first and would have handed a
+child account the parent permission set.
+
+### Restriction matrix — enforced server-side
+
+The spec frames these as UI restrictions. A child's browser can call the routes
+directly, so each is enforced in the handler as well as hidden in the UI:
+
+| Capability | Enforcement |
+|---|---|
+| View/choose profiles (`/profiles`) | `resolveGateState` returns `child`; the view redirects away and `ProfileGate` never holds them |
+| Create viewing profiles | `addProfile` throws for a child caller |
+| Promote / link a child account | `assertCanPromote` throws 403 for a child caller |
+
+### The transaction
+
+LoginRadius has no cross-user transaction, so promotion is a sequence with
+compensating rollback. The write order is **the reverse of the spec's sketch**:
+
+```
+1. POST /identity/v2/manage/account          create the child identity
+2. POST …/{childUid}/customobject            child link object → points at parent
+3. PUT  …/{parentUid}/customobject/{recId}   parent link object → points at child  ← last
+```
+
+The parent's `LinkedAccounts` array **is** the capability — every child-admin
+route authorises by finding the childUid in it. Granting it last means the worst
+partial state is an orphaned child identity that grants nobody anything. Writing
+the parent first, as the spec sketches, leaves a window where the parent holds
+admin rights — including password reset — over an account whose own record never
+recorded the relationship.
+
+Failure at step 2 or 3 deletes the identity created at step 1. If that cleanup
+itself fails, the orphan uid is logged for reconciliation; the read path already
+degrades an unresolvable `ReferenceId` to a single greyed row.
+
+### Data written
+
+The parent's link entry carries the association:
+
+```jsonc
+{ "LinkType": "child", "ReferenceId": "<childUid>", "ProfileId": "prf_01H…" }
+```
+
+The child's object mirrors the link and **copies** the profile record into its
+own `Profiles[]`. Copying was chosen over referencing so the profile travels
+with the account — the trade-off is that the two records drift the moment either
+side edits, and nothing reconciles them.
+
+### Validation
+
+`validateChildInput` normalises before anything reaches the API:
+
+- Email lowercased and trimmed. The regex permits `+`, so a parent without a
+  separate mailbox can use `you+jamie@example.com`.
+- Password 8–128 characters, confirmation must match.
+- **The selected profile must exist on the caller's own record** — taking
+  `profileId` on trust would let a parent copy a profile they were never shown.
+- Link cap `LOGINRADIUS_LINK_CAP` (default 20), separate from `PROFILE_CAP`.
+- A duplicate email is mapped to **409**, not 500.
+
+### Credentials handling
+
+The parent chooses the child's password, so it transits this app.
+
+- Never logged — the 5xx path logs `err.message` only, never the body.
+- Every response on the route carries `Cache-Control: no-store`, including the
+  early 401/400 returns.
+- On the handoff screen it lives in **component state only** — not
+  localStorage, not sessionStorage, not the URL — and is dropped on dismiss.
+  It cannot be retrieved afterwards, only reset.
+- The server never echoes the password back; the UI shows what the parent typed.
+
+### Parent-led administration (§6)
+
+`/api/linked-accounts/child/[uid]` — `GET` for telemetry, `PUT` to reset the
+password. Children cannot recover their own credentials, so the parent does it.
+
+Both are gated **twice**: the caller is resolved from their own access token
+(never from the request), and then `assertParentOf` requires the target uid to
+appear in **that caller's own** `LinkedAccounts` with `LinkType: "child"`.
+Reading the caller's links rather than the target's is what stops one parent
+reaching another household by guessing a uid — it is the entire authorisation
+model for these routes.
+
+`projectChildAccount` is an **allowlist**, not a denylist: the raw management
+record carries password metadata, provider tokens and security answers, and a
+denylist would leak whatever the API adds next. The exact key set is pinned by
+a test, so widening it has to be deliberate.
+
+Modelled on the admin console's equivalents — `AccountInfo`'s field list and
+`UserActionPopup`'s reset form, which reach the same
+`PUT /identity/v2/manage/account/{uid}` with `{ Password }`. One difference
+worth noting: the admin console validates against the tenant's
+`PasswordComplexity` policy before calling. This demo applies a length floor
+(8–128, shared with account creation via `validatePassword`) and lets
+LoginRadius reject anything else its policy forbids.
+
+### Default profile
+
+One profile can be marked as the account default. It is stored as a top-level
+scalar, `CustomObject.DefaultProfileId`, rather than an `IsDefault` flag on each
+profile — two reasons:
+
+- "exactly one default" becomes structurally impossible to violate, where a
+  per-profile flag needs every other flag cleared on each change and a partial
+  write leaves two defaults;
+- setting it writes one key via `partialreplace`, so it cannot race with a
+  concurrent profile add the way rewriting the whole `Profiles` array would.
+
+**A kids profile can never be the default.** The default is what someone lands
+on unattended, and a kids profile carries restricted content and different
+personalisation consent. This is a correctness rule, not a security boundary —
+kids is the *more* restrictive mode, and the picker can select any profile
+regardless — so it lives in one place (`canBeDefault`) and is enforced
+server-side rather than only hidden in the UI.
+
+Behaviour:
+
+| Situation | Result |
+|---|---|
+| First profile created is standard | Becomes the default automatically |
+| First profile created is a kids profile | No default; none until a standard one exists |
+| Every profile is a kids profile | No default possible; the picker always asks |
+| Default profile deleted, or edited into a kids profile | The stored id resolves to "no default" on read |
+| Multiple profiles, default set | Picker still asks — the default leads the grid and is badged |
+
+That last row is deliberate: the default **does not** auto-select on sign-in.
+Choosing who is watching stays an explicit act on a shared device, matching the
+three gate scenarios in §7.
+
+`resolveDefaultProfileId` reconciles the stored id against the profiles that
+actually exist and are still eligible, the same defensive pattern used for the
+localStorage active profile. `PUT /api/linked-accounts/default` is the single
+write path, shared by the picker and the account section through
+`useSetDefault`.
+
+### Switching profiles
+
+The masthead chip appears only when a profile is active, and offers **Switch**
+only when there is more than one profile to switch to.
+
+Switching navigates to `/profiles?next=<current>` **without clearing the
+selection first**. Clearing first raced: `ProfileGate` would see "ready,
+nothing active" on the page you were still on and fire its own redirect
+alongside the explicit push, and whichever won decided whether `?next=`
+survived. Not clearing also means backing out of the picker leaves the current
+profile intact.
+
+### Deliberate gaps
+
+- **`EmailVerified: true` on creation** bypasses verification. Reasonable when
+  the parent owns a sub-addressed mailbox; a real gap if they mistype the
+  address, since the identity is then marked verified for a mailbox nobody
+  proved. Recorded as a product decision rather than an accident.
+- **Same read-modify-write race** as profiles, now spanning two identities.
+- **Password policy is not read from the tenant.** The admin console validates
+  against `PasswordComplexity` before calling the same API; this demo applies a
+  length floor and defers the rest to LoginRadius's own rejection.
+- **Not implemented:** unlinking a child, deleting a child account, and
+  re-sending verification.
+
+---
+
+## 7. The profile gate
 
 **Files:** `src/context/ProfileContext.jsx`, `src/components/ProfileGate.jsx`,
 `src/views/Profiles.jsx`, `src/views/profiles/gate.js`
@@ -341,7 +526,7 @@ place decides what "active" means.
 
 ---
 
-## 7. Session handling
+## 8. Session handling
 
 **File:** `src/hooks/useSessionGuard.jsx`
 
@@ -354,7 +539,7 @@ simultaneously.
 
 ---
 
-## 8. Theming
+## 9. Theming
 
 **File:** `src/styles/bbc.css`
 
@@ -385,7 +570,7 @@ and paints nothing at all.
 
 ---
 
-## 9. Tests
+## 10. Tests
 
 `pnpm test` — plain `node:assert`, no framework. The pure logic is deliberately
 split out of the I/O modules so it can be exercised directly.
@@ -394,14 +579,15 @@ split out of the I/O modules so it can be exercised directly.
 |---|---|
 | `tests/shapeAccountGraph.test.mjs` | Parent and child payload shaping against the real object format; unresolved links; missing/empty record; malformed entries; 1057 detection |
 | `tests/profiles.test.mjs` | Validation including the `"false"` coercion trap; record shape and ULID format; append non-mutation; duplicate names; cap boundary |
-| `tests/gate.test.mjs` | The three scenarios; fail-open on error/loading; `?next=` open-redirect rejection |
+| `tests/gate.test.mjs` | The three scenarios; child accounts bypassing the gate; fail-open on error/loading; `?next=` open-redirect rejection |
+| `tests/childAccounts.test.mjs` | Email normalisation and sub-addressing; password bounds; profile-ownership check; promote guards and link cap; registration payload; mirrored link + profile copy; delegation gate; projection allowlist pinned against credential leakage |
 
 Not covered: anything requiring a live tenant — the PKCE round trip, the M2M
 exchange, and the write path against the real API.
 
 ---
 
-## 10. Known limitations
+## 11. Known limitations
 
 - **Read-modify-write races.** The Custom Object endpoint has no ETag or
   If-Match, so two profile adds racing on the same identity can lose one write.
@@ -422,7 +608,7 @@ exchange, and the write path against the real API.
 
 ---
 
-## 11. File map
+## 12. File map
 
 ```
 src/
@@ -455,6 +641,7 @@ src/
 │   ├── SetupRequired.jsx             shown when apiKey is unset
 │   ├── account/                      sections.jsx, LinkedAccounts.jsx, Fallbacks.jsx
 │   └── profiles/                     AddProfileForm.jsx, gate.js (pure)
+│       account/PromoteProfile.jsx, account/ManageChild.jsx
 ├── sdk/                              SdkWidget (theme scope + boundary), SDKBoundary
 ├── config/features.js                LOGIN_RADIUS_OPTIONS + missing-config detection
 ├── content/stories.js                placeholder editorial content

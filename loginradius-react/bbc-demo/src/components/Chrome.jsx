@@ -21,15 +21,20 @@ const NAV = [
 export function Masthead() {
   const { isAuthenticated, loading, user, startSignIn, signingIn, signOut } =
     useBbcAuth();
-  const { activeProfile, clearProfile } = useProfiles();
+  const { activeProfile, profiles } = useProfiles();
+  // Switching is only meaningful when there is something to switch to.
+  const canSwitch = profiles.length > 1;
   const pathname = usePathname();
   const router = useRouter();
 
-  // Switching is "forget the choice, ask again" — the picker owns selection,
-  // so there is only one place that decides what active means.
+  // Navigate to the picker and let it own the change. Clearing the selection
+  // here first would race: ProfileGate would see "ready, nothing active" on
+  // this page and fire its own redirect alongside this push, and whichever
+  // won decided whether ?next= survived. Not clearing also means backing out
+  // of the picker leaves the current profile intact.
   const switchProfile = () => {
-    clearProfile();
-    router.push("/profiles");
+    const next = pathname && pathname !== "/profiles" ? pathname : "/";
+    router.push(`/profiles?next=${encodeURIComponent(next)}`);
   };
 
   return (
@@ -44,22 +49,24 @@ export function Masthead() {
         <div className="masthead-actions">
           {loading ? null : isAuthenticated ? (
             <>
-              {activeProfile && (
-                <button
-                  type="button"
-                  className="masthead-user masthead-profile"
-                  onClick={switchProfile}
-                  title="Switch profile"
-                >
-                  <span className="avatar">
-                    {(activeProfile.displayName || "?")[0].toUpperCase()}
+              {activeProfile &&
+                (canSwitch ? (
+                  <button
+                    type="button"
+                    className="masthead-user masthead-profile"
+                    onClick={switchProfile}
+                    title="Switch profile"
+                  >
+                    <ProfileChipBody profile={activeProfile} />
+                    <span className="masthead-switch">Switch</span>
+                  </button>
+                ) : (
+                  // Sole profile: show who's watching, but there is nothing to
+                  // switch to, so don't offer it.
+                  <span className="masthead-user masthead-profile">
+                    <ProfileChipBody profile={activeProfile} />
                   </span>
-                  <span className="masthead-user-name">
-                    {activeProfile.displayName}
-                  </span>
-                  <span className="masthead-switch">Switch</span>
-                </button>
-              )}
+                ))}
               <Link href="/account" className="masthead-user">
                 <span className="avatar">{user?.initials || "B"}</span>
                 <span className="masthead-user-name">
@@ -102,6 +109,17 @@ export function Masthead() {
         </div>
       </nav>
     </header>
+  );
+}
+
+function ProfileChipBody({ profile }) {
+  return (
+    <>
+      <span className="avatar">
+        {(profile.displayName || "?")[0].toUpperCase()}
+      </span>
+      <span className="masthead-user-name">{profile.displayName}</span>
+    </>
   );
 }
 

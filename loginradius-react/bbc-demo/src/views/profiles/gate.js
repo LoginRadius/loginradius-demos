@@ -10,11 +10,16 @@
  *   "add-first" no profiles exist; one must be created to continue
  *   "adopt-one" exactly one profile and nothing selected; take it silently
  *   "choose"    several profiles and nothing selected; ask
+ *   "child"     a child account — never gated, never offered profiles
  *   "ready"     a profile is already active
  */
-export function resolveGateState({ status, profiles, activeProfileId }) {
+export function resolveGateState({ status, profiles, activeProfileId, isChild }) {
   if (status === "error") return "error";
   if (status !== "ready") return "loading";
+  // A child account owns no profiles and must never be offered the picker or
+  // the create-profile form (linking spec, UI restriction matrix). Treat it as
+  // already resolved so the gate lets it straight through.
+  if (isChild) return "child";
   if (activeProfileId) return "ready";
   const count = Array.isArray(profiles) ? profiles.length : 0;
   if (count === 0) return "add-first";

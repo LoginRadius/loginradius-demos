@@ -14,7 +14,9 @@ import { useProfiles } from "../context/ProfileContext.jsx";
 const EXEMPT = ["/profiles"];
 
 export function ProfileGate({ children }) {
-  const { status, isAuthenticated, authLoading, activeProfileId } = useProfiles();
+  const { status, isAuthenticated, authLoading, activeProfileId, graph } =
+    useProfiles();
+  const isChild = !!graph?.viewer?.isChild;
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const router = useRouter();
@@ -28,13 +30,16 @@ export function ProfileGate({ children }) {
     // Only act once the graph is known to be good and genuinely empty of a
     // selection. status "error" and "loading" both fall through.
     if (status !== "ready" || activeProfileId) return;
+    // Child accounts own no profiles — gating them would strand them on a
+    // picker they are not allowed to use.
+    if (isChild) return;
 
     // Remember where they were headed so selection can return them there.
     const qs = searchParams.toString();
     const next = qs ? `${pathname}?${qs}` : pathname;
     router.replace(`/profiles?next=${encodeURIComponent(next)}`);
   }, [
-    exempt, authLoading, isAuthenticated, status, activeProfileId,
+    exempt, authLoading, isAuthenticated, status, activeProfileId, isChild,
     pathname, searchParams, router,
   ]);
 
