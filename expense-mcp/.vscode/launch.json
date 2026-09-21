@@ -1,0 +1,55 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Server: Local Debug",
+            "type": "node",
+            "request": "launch",
+            "runtimeExecutable": "pnpm",
+            "runtimeArgs": [
+                "run",
+                "dev"
+            ],
+            "cwd": "${workspaceFolder}/apps/expenses-server",
+            "console": "integratedTerminal",
+            "autoAttachChildProcesses": true,
+            "sourceMaps": true,
+            "skipFiles": [
+                "<node_internals>/**"
+            ]
+        },
+        {
+            "name": "Web: Vite Dev Server",
+            "type": "node",
+            "request": "launch",
+            "runtimeExecutable": "pnpm",
+            "runtimeArgs": [
+                "run",
+                "dev"
+            ],
+            "cwd": "${workspaceFolder}/apps/expense-client",
+            "console": "integratedTerminal",
+            "autoAttachChildProcesses": true,
+            "sourceMaps": true,
+            "skipFiles": [
+                "<node_internals>/**"
+            ]
+        },
+        {
+            "name": "Web: Browser",
+            "type": "chrome",
+            "request": "launch",
+            "url": "http://localhost:5173",
+            "webRoot": "${workspaceFolder}/apps/expense-client"
+        }
+    ],
+    "compounds": [
+        {
+            "name": "Debug All (Server + Web)",
+            "configurations": [
+                "Server: Local Debug",
+                "Web: Vite Dev Server"
+            ]
+        }
+    ]
+}
